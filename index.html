@@ -19,6 +19,8 @@
     --gold: #a8843f;
     --on-dark: #f6f1e6;
     --dark: #2a1316;
+    --blue: #1f3d66;
+    --blue-soft: #e3e8ef;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -30,6 +32,8 @@
       --bordeaux: #c46a6f;
       --gold: #cfaa62;
       --dark: #0f0c0a;
+      --blue: #8fb0dc;
+      --blue-soft: #1a2230;
     }
   }
   :root[data-theme="dark"] {
@@ -41,6 +45,8 @@
     --bordeaux: #c46a6f;
     --gold: #cfaa62;
     --dark: #0f0c0a;
+    --blue: #8fb0dc;
+    --blue-soft: #1a2230;
   }
 
   * { box-sizing: border-box; }
@@ -63,12 +69,12 @@
   .orn.center { max-width: 320px; margin-left: auto; margin-right: auto; }
 
   /* Top bar */
-  .top { border-bottom: 1px solid var(--line); }
+  .top { border-top: 4px solid var(--blue); border-bottom: 1px solid var(--line); }
   .top .wrap { display: flex; justify-content: space-between; align-items: center; height: 60px; gap: 16px; }
-  .brand { font: 600 22px "Cormorant Garamond", serif; letter-spacing: .02em; }
+  .brand { font: 600 22px "Cormorant Garamond", serif; letter-spacing: .02em; color: var(--blue); }
   .top nav { display: flex; gap: 22px; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
   .top nav a { color: var(--muted); text-decoration: none; }
-  .top nav a:hover { color: var(--bordeaux); }
+  .top nav a:hover { color: var(--blue); }
   @media (max-width: 760px) { .top nav { display: none; } }
 
   /* Hero */
@@ -76,7 +82,7 @@
   .hero h1 { font-size: clamp(42px, 7vw, 88px); font-weight: 600; margin: 14px 0 0; }
   .hero h1 em { font-style: italic; color: var(--bordeaux); font-weight: 500; }
   .hero .sub { max-width: 640px; margin: 0 auto; color: var(--muted); font-size: 19px; }
-  .dates { display: inline-flex; gap: 28px; margin-top: 26px; font: 600 22px "Cormorant Garamond", serif; color: var(--bordeaux); }
+  .dates { display: inline-flex; gap: 28px; margin-top: 26px; font: 600 22px "Cormorant Garamond", serif; color: var(--blue); }
   .dates span + span::before { content: "—"; margin-right: 28px; color: var(--gold); }
 
   /* Photo slot: image from img/ if present, otherwise an engraving-style placeholder */
@@ -96,8 +102,8 @@
     background:
       linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
       linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
-      radial-gradient(circle at 50% 50%, var(--gold) 0 2px, transparent 2.5px) 0 0 / 56px 56px,
-      var(--stone);
+      radial-gradient(circle at 50% 50%, var(--blue) 0 3px, transparent 3.5px) 28px 28px / 56px 56px,
+      var(--blue-soft);
   }
 
   section { padding: 88px 0; }
@@ -108,7 +114,7 @@
   @media (max-width: 640px) { .sec-head { grid-template-columns: 1fr; } .sec-head p { grid-column: 1; } .sec-head .no { font-size: 34px; margin-bottom: 6px; } }
 
   /* Figures */
-  .figures { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line); }
+  .figures { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--blue); border-bottom: 1px solid var(--line); }
   .figures div { padding: 28px 22px; border-right: 1px solid var(--line); }
   .figures div:last-child { border-right: 0; }
   .figures b { display: block; font: 600 50px/1 "Cormorant Garamond", serif; color: var(--bordeaux); margin-bottom: 10px; }
@@ -130,9 +136,10 @@
   /* Comparison table */
   .table { width: 100%; border-collapse: collapse; }
   .table th, .table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  .table thead th { border-bottom: 2px solid var(--ink); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .table thead th { border-bottom: 2px solid var(--blue); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
   .table td:first-child { font: 600 21px "Cormorant Garamond", serif; width: 22%; }
   .table td:nth-child(2) { color: var(--muted); }
+  .table td:last-child { color: var(--blue); }
   @media (max-width: 640px) {
     .table thead { display: none; }
     .table tr { display: block; border-bottom: 1px solid var(--line); padding: 12px 0; }
@@ -161,19 +168,20 @@
   /* Services */
   .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
   .services div { padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .services h3 { font-size: 23px; margin-bottom: 6px; }
+  .services h3 { font-size: 23px; margin-bottom: 6px; color: var(--blue); }
   .services p { margin: 0; color: var(--muted); font-size: 15px; }
 
   /* Chronicle */
   .chron { list-style: none; margin: 0; padding: 0; }
   .chron li { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
-  .chron li:first-child { border-top: 2px solid var(--ink); }
-  .chron time { font: 600 24px "Cormorant Garamond", serif; color: var(--bordeaux); }
+  .chron li:first-child { border-top: 2px solid var(--blue); }
+  .chron time { font: 600 24px "Cormorant Garamond", serif; color: var(--blue); }
   .chron p { margin: 0; }
   @media (max-width: 600px) { .chron li { grid-template-columns: 1fr; gap: 4px; } }
-  .note { margin-top: 28px; padding: 16px 20px; background: var(--stone); border-left: 2px solid var(--gold); color: var(--muted); font-size: 15px; }
+  .note { margin-top: 28px; padding: 16px 20px; background: var(--blue-soft); border-left: 3px solid var(--blue); color: var(--muted); font-size: 15px; }
 
-  footer { border-top: 1px solid var(--line); padding: 48px 0 64px; font-size: 14px; color: var(--muted); }
+  footer a { color: var(--blue); }
+  footer { border-top: 4px solid var(--blue); padding: 48px 0 64px; font-size: 14px; color: var(--muted); }
   footer h2 { font-size: 26px; color: var(--ink); margin-bottom: 12px; }
   footer ul { padding-left: 18px; margin: 0; columns: 2; column-gap: 40px; }
   @media (max-width: 760px) { footer ul { columns: 1; } }
