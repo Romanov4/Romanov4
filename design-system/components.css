@@ -200,8 +200,11 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
   .topbar { position: static; }
   .topbar__inner { flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); padding-block: var(--sp-2); min-height: 0; }
   .topnav { order: 3; width: 100%; }
-  .topnav ul { flex-wrap: wrap; gap: 0 var(--sp-4); }
-  .topnav a { font-size: var(--fs-xs); white-space: nowrap; padding-block: var(--sp-1); }
+  /* Одна строка; если пунктов больше, чем помещается, строка прокручивается сама */
+  .topnav { overflow-x: auto; scrollbar-width: none; }
+  .topnav ul { gap: var(--sp-3); }
+  .topnav a { font-size: var(--fs-xs); letter-spacing: 0.02em; white-space: nowrap; padding-block: var(--sp-1); }
+  .brand { font-size: 1.25rem; }
 }
 
 /* ---------- Переключатель темы ---------- */
@@ -589,7 +592,8 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
 /* ---------- Печать ---------- */
 @page { margin: 18mm 16mm 20mm; }
 @media print {
-  :root, [data-theme] {
+  /* :not(#print) поднимает специфичность выше правил тёмной темы */
+  :root:not(#print), [data-theme]:not(#print) {
     --paper: #fff; --stone: #fff; --raised: #fff; --night: #fff;
     --ink: #000; --muted: #333; --line: #999; --line-strong: #666;
     --bordeaux: #000; --blue: #000; --gold: #555; --gold-text: #333;
