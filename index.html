@@ -7,39 +7,42 @@
 <meta name="description" content="Что изменилось на Ленинградском вокзале Москвы после реконструкции 2024–2026 годов">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f1e7;
-    --surface: #fffaf0;
-    --ink: #22201c;
-    --muted: #6b6458;
-    --line: #e2d8c6;
-    --accent: #8f2a1e;
-    --accent-soft: #f1ddd5;
-    --gold: #a77a2c;
+    --bg: #ffffff;
+    --surface: #f2f3f5;
+    --ink: #121212;
+    --muted: #63676e;
+    --line: #dfe1e5;
+    --red: #d6281e;
+    --red-soft: #fdecea;
+    --l1: #e4231c;   /* Сокольническая линия */
+    --l5: #8d5b2d;   /* Кольцевая линия */
+    --sign: #1b1f24; /* навигационная плашка */
+    --sign-ink: #ffffff;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #17140f;
-      --surface: #211d17;
-      --ink: #efe8db;
-      --muted: #a79e8f;
-      --line: #3a342a;
-      --accent: #e0775f;
-      --accent-soft: #3a211b;
-      --gold: #d4a654;
+      --bg: #111316;
+      --surface: #1c1f23;
+      --ink: #f2f3f5;
+      --muted: #9aa0a8;
+      --line: #2e3238;
+      --red: #ff4a3d;
+      --red-soft: #3a1c1a;
+      --sign: #2a2e34;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #17140f;
-    --surface: #211d17;
-    --ink: #efe8db;
-    --muted: #a79e8f;
-    --line: #3a342a;
-    --accent: #e0775f;
-    --accent-soft: #3a211b;
-    --gold: #d4a654;
+    --bg: #111316;
+    --surface: #1c1f23;
+    --ink: #f2f3f5;
+    --muted: #9aa0a8;
+    --line: #2e3238;
+    --red: #ff4a3d;
+    --red-soft: #3a1c1a;
+    --sign: #2a2e34;
   }
 
   * { box-sizing: border-box; }
@@ -48,130 +51,162 @@
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    font: 17px/1.6 Inter, system-ui, sans-serif;
+    font: 17px/1.55 "Golos Text", system-ui, sans-serif;
   }
-  h1, h2, h3 { font-family: "PT Serif", Georgia, serif; line-height: 1.15; margin: 0; }
-  a { color: var(--accent); }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 700; letter-spacing: -.01em; }
+  a { color: var(--red); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* Line badges, like on Moscow transport signage */
+  .badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 30px; height: 30px; padding: 0 8px;
+    border-radius: 15px; color: #fff; font-weight: 700; font-size: 15px; font-style: normal;
+  }
+  .b1 { background: var(--l1); }
+  .b5 { background: var(--l5); }
+  .bt { background: var(--red); }
+
+  /* Top bar */
+  .topbar { background: var(--red); color: #fff; }
+  .topbar .wrap { display: flex; align-items: center; gap: 12px; height: 56px; font-weight: 600; }
+  .topbar svg { flex: none; }
+  .topbar span { opacity: .85; font-weight: 500; margin-left: auto; font-size: 15px; }
+  @media (max-width: 520px) { .topbar span { display: none; } }
 
   /* Hero */
-  .hero {
-    border-bottom: 1px solid var(--line);
-    padding: 72px 0 56px;
-    background:
-      repeating-linear-gradient(90deg, transparent 0 46px, var(--line) 46px 47px) bottom / 100% 10px no-repeat;
-  }
-  .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: .14em;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-  }
-  .hero h1 { font-size: clamp(40px, 7vw, 76px); margin: 14px 0 20px; }
+  .hero { padding: 56px 0 48px; }
+  .hero h1 { font-size: clamp(38px, 6.5vw, 72px); font-weight: 800; margin: 0 0 20px; max-width: 900px; }
   .hero p { max-width: 640px; font-size: 19px; color: var(--muted); margin: 0; }
-  .facade { margin-top: 40px; color: var(--ink); }
-  .facade svg { width: 100%; height: auto; display: block; }
 
-  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
-  section h2 { font-size: clamp(28px, 4vw, 40px); margin-bottom: 12px; }
+  .sign {
+    margin-top: 40px; background: var(--sign); color: var(--sign-ink);
+    border-radius: 16px; padding: 20px 24px;
+    display: grid; grid-template-columns: auto 1fr; gap: 14px 20px; align-items: center;
+  }
+  .sign .pict {
+    width: 56px; height: 56px; border-radius: 12px; background: #fff;
+    display: grid; place-items: center; grid-row: span 2;
+  }
+  .sign .name { font-size: 26px; font-weight: 700; }
+  .sign .name small { display: block; font-size: 15px; font-weight: 400; opacity: .7; }
+  .sign .transfers { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 15px; }
+  .sign .transfers > span { display: inline-flex; align-items: center; gap: 8px; }
+  @media (max-width: 520px) {
+    .sign { grid-template-columns: 1fr; }
+    .sign .pict { grid-row: auto; }
+  }
+
+  section { padding: 64px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .head .ico {
+    flex: none; width: 44px; height: 44px; border-radius: 10px;
+    background: var(--red); color: #fff; display: grid; place-items: center;
+  }
+  section h2 { font-size: clamp(28px, 4vw, 40px); }
   .lead { color: var(--muted); max-width: 680px; margin: 0 0 32px; }
 
   /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
-  .stat b { display: block; font-family: "PT Serif", serif; font-size: 40px; color: var(--accent); line-height: 1.1; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .stat { background: var(--surface); border-radius: 16px; padding: 22px; }
+  .stat b { display: block; font-size: 38px; font-weight: 800; line-height: 1.1; margin-bottom: 6px; }
+  .stat b em { font-style: normal; color: var(--red); }
   .stat span { color: var(--muted); font-size: 15px; }
 
   /* Before / after */
-  .compare { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .compare { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
   .compare th, .compare td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  .compare thead th { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  .compare thead th { background: var(--sign); color: var(--sign-ink); font-size: 14px; font-weight: 600; }
+  .compare thead th:last-child { background: var(--red); }
   .compare tr:last-child td { border-bottom: 0; }
-  .compare td:first-child { font-weight: 600; width: 22%; }
-  .compare td:last-child { background: var(--accent-soft); }
+  .compare td:first-child { font-weight: 600; width: 20%; }
+  .compare td:nth-child(2) { color: var(--muted); }
+  .compare td:last-child { background: var(--red-soft); font-weight: 500; }
   @media (max-width: 640px) {
     .compare thead { display: none; }
     .compare tr { display: block; border-bottom: 1px solid var(--line); }
+    .compare tr:last-child { border-bottom: 0; }
     .compare td { display: block; border: 0; padding: 6px 16px; width: auto !important; }
     .compare td:first-child { padding-top: 14px; }
     .compare td:last-child { padding-bottom: 14px; }
-    .compare td:nth-child(2)::before { content: "Было: "; color: var(--muted); }
-    .compare td:nth-child(3)::before { content: "Стало: "; color: var(--accent); font-weight: 600; }
+    .compare td:nth-child(2)::before { content: "Было: "; }
+    .compare td:nth-child(3)::before { content: "Стало: "; color: var(--red); font-weight: 700; }
   }
 
   /* Features */
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
-  .card h3 { font-size: 22px; margin-bottom: 8px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .card { background: var(--surface); border-radius: 16px; padding: 24px; }
+  .card .badge { margin-bottom: 16px; }
+  .card h3 { font-size: 21px; margin-bottom: 8px; }
   .card p { margin: 0; color: var(--muted); }
-  .card .num { font-size: 13px; color: var(--gold); font-weight: 600; letter-spacing: .1em; }
 
   /* Mosaic */
   .mosaic { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; }
   @media (max-width: 760px) { .mosaic { grid-template-columns: 1fr; } }
-  .tiles { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; aspect-ratio: 12 / 7; }
-  .tiles i { border-radius: 2px; }
+  .tiles { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; aspect-ratio: 12 / 7; border-radius: 16px; overflow: hidden; }
 
-  /* Timeline */
-  .timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
-  .timeline li { position: relative; padding: 0 0 28px 28px; }
-  .timeline li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
-  .timeline li:last-child { padding-bottom: 0; }
-  .timeline li:last-child::before { background: var(--accent); }
-  .timeline time { font-weight: 600; color: var(--accent); display: block; }
-  .timeline p { margin: 2px 0 0; color: var(--muted); }
+  /* Timeline drawn as a metro line */
+  .route { list-style: none; margin: 0; padding: 0; position: relative; }
+  .route::before { content: ""; position: absolute; left: 11px; top: 12px; bottom: 12px; width: 8px; border-radius: 4px; background: var(--red); }
+  .route li { position: relative; padding: 0 0 30px 52px; }
+  .route li:last-child { padding-bottom: 0; }
+  .route li::before {
+    content: ""; position: absolute; left: 3px; top: 2px; width: 24px; height: 24px;
+    border-radius: 50%; background: var(--bg); border: 6px solid var(--red); box-sizing: border-box;
+  }
+  .route li.now::before { background: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
+  .route time { font-weight: 700; font-size: 19px; display: block; }
+  .route p { margin: 2px 0 0; color: var(--muted); }
 
-  .note { font-size: 15px; color: var(--muted); border-left: 3px solid var(--gold); padding: 4px 0 4px 14px; margin-top: 28px; max-width: 720px; }
+  .note {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--surface); border-radius: 12px; padding: 16px 18px;
+    font-size: 15px; color: var(--muted); margin-top: 32px; max-width: 760px;
+  }
+  .note b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-size: 14px; }
 
-  footer { padding: 40px 0 56px; font-size: 14px; color: var(--muted); }
+  footer { background: var(--sign); color: #c9ccd1; padding: 40px 0 56px; font-size: 14px; }
+  footer strong { color: #fff; }
+  footer a { color: #fff; }
   footer ul { padding-left: 18px; margin: 8px 0 0; }
   footer li { margin-bottom: 4px; overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
 
+<div class="topbar">
+  <div class="wrap">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l-2 0M15 21h2M8 17l-2 4M16 17l2 4"/><circle cx="9" cy="14" r=".5"/><circle cx="15" cy="14" r=".5"/></svg>
+    Ленинградский вокзал
+    <span>Москва · Комсомольская площадь, 3</span>
+  </div>
+</div>
+
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">Москва · Комсомольская площадь · с 1851 года</div>
     <h1>Ленинградский вокзал после реконструкции</h1>
     <p>Самый старый вокзал Москвы почти два года был закрыт и в мае 2026 года открылся снова. Пассажирских площадей стало почти вдвое больше, в главном зале появились огромные мозаики, а исторический фасад Константина Тона отреставрировали.</p>
-    <div class="facade" aria-hidden="true">
-      <svg viewBox="0 0 1000 220" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="0" y1="210" x2="1000" y2="210"/>
-        <rect x="80" y="110" width="840" height="100"/>
-        <rect x="430" y="70" width="140" height="140"/>
-        <rect x="470" y="22" width="60" height="48"/>
-        <circle cx="500" cy="46" r="13"/>
-        <path d="M466 22 L500 4 L534 22"/>
-        <path d="M80 110 L80 96 L920 96 L920 110"/>
-        <g stroke-width="1.5">
-          <path d="M115 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M175 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M235 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M295 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M355 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M615 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M675 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M735 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M795 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M855 200 V150 a15 15 0 0 1 30 0 V200"/>
-          <path d="M470 210 V140 a30 30 0 0 1 60 0 V210"/>
-          <rect x="450" y="85" width="22" height="30"/>
-          <rect x="528" y="85" width="22" height="30"/>
-        </g>
-      </svg>
+    <div class="sign">
+      <div class="pict" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#d6281e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 17l-2 4M16 17l2 4"/></svg>
+      </div>
+      <div class="name">Ленинградский вокзал<small>Поезда на Санкт-Петербург, Тверь и север страны</small></div>
+      <div class="transfers">
+        <span><i class="badge b1">1</i>Комсомольская</span>
+        <span><i class="badge b5">5</i>Комсомольская</span>
+      </div>
     </div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <h2>Главное в цифрах</h2>
+    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h2>Главное в цифрах</h2></div>
     <p class="lead">Масштаб модернизации, по данным РЖД и правительства Москвы.</p>
     <div class="stats">
-      <div class="stat"><b>8,8 → 16</b><span>тыс. м² пассажирских помещений, почти вдвое больше</span></div>
-      <div class="stat"><b>700 → 1000+</b><span>посадочных мест для ожидания</span></div>
+      <div class="stat"><b>8,8 <em>→</em> 16</b><span>тыс. м² пассажирских помещений, почти вдвое больше</span></div>
+      <div class="stat"><b>700 <em>→</em> 1000+</b><span>посадочных мест для ожидания</span></div>
       <div class="stat"><b>800+ м²</b><span>занимают два мозаичных панно из смальты</span></div>
       <div class="stat"><b>~2 года</b><span>вокзал был закрыт, с августа 2024 по май 2026</span></div>
     </div>
@@ -180,7 +215,7 @@
 
 <section>
   <div class="wrap">
-    <h2>Было и стало</h2>
+    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-4-4M20 16H6l4 4"/></svg></div><h2>Было и стало</h2></div>
     <p class="lead">Что изменилось для пассажира.</p>
     <table class="compare">
       <thead><tr><th>Что</th><th>До реконструкции</th><th>После</th></tr></thead>
@@ -199,15 +234,15 @@
 
 <section>
   <div class="wrap">
-    <h2>Что появилось</h2>
+    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div><h2>Что появилось</h2></div>
     <p class="lead">Новые пространства и сервисы.</p>
     <div class="grid">
-      <div class="card"><div class="num">01</div><h3>Верхние этажи для людей</h3><p>Раньше второй и третий этажи были закрыты для пассажиров. Теперь там залы ожидания, кафе и рестораны.</p></div>
-      <div class="card"><div class="num">02</div><h3>Свободный первый этаж</h3><p>Магазины и фуд-корты переехали на минус первый этаж. Наверху остался прямой и короткий путь к платформам.</p></div>
-      <div class="card"><div class="num">03</div><h3>Сервисы для семей</h3><p>На первом этаже работают комната для семей с детьми и детский клуб «Союзмультфильм». Рядом кассы дальнего следования, медпункт и информационные стойки.</p></div>
-      <div class="card"><div class="num">04</div><h3>Два бизнес-зала</h3><p>Диваны и кресла, свои санузлы, табло с расписанием и Wi-Fi.</p></div>
-      <div class="card"><div class="num">05</div><h3>Новые входы</h3><p>Вокзал теснее связали с городским транспортом и добавили дополнительные входы и выходы.</p></div>
-      <div class="card"><div class="num">06</div><h3>Фасад и кровля</h3><p>Историческое здание отреставрировали. Работы над кровлей основных залов начались летом 2025 года.</p></div>
+      <div class="card"><i class="badge bt">1</i><h3>Верхние этажи для людей</h3><p>Раньше второй и третий этажи были закрыты для пассажиров. Теперь там залы ожидания, кафе и рестораны.</p></div>
+      <div class="card"><i class="badge bt">2</i><h3>Свободный первый этаж</h3><p>Магазины и фуд-корты переехали на минус первый этаж. Наверху остался прямой и короткий путь к платформам.</p></div>
+      <div class="card"><i class="badge bt">3</i><h3>Сервисы для семей</h3><p>На первом этаже работают комната для семей с детьми и детский клуб «Союзмультфильм». Рядом кассы дальнего следования, медпункт и информационные стойки.</p></div>
+      <div class="card"><i class="badge bt">4</i><h3>Два бизнес-зала</h3><p>Диваны и кресла, свои санузлы, табло с расписанием и Wi-Fi.</p></div>
+      <div class="card"><i class="badge bt">5</i><h3>Новые входы</h3><p>Вокзал теснее связали с городским транспортом и добавили дополнительные входы и выходы.</p></div>
+      <div class="card"><i class="badge bt">6</i><h3>Фасад и кровля</h3><p>Историческое здание отреставрировали. Работы над кровлей основных залов начались летом 2025 года.</p></div>
     </div>
   </div>
 </section>
@@ -215,7 +250,7 @@
 <section>
   <div class="wrap mosaic">
     <div>
-      <h2>Две столицы в смальте</h2>
+      <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div><h2>Две столицы в смальте</h2></div>
       <p class="lead" style="margin-bottom:16px">Главное украшение обновлённого вокзала — два мозаичных панно общей площадью больше 800 м², с видами Москвы и Санкт-Петербурга.</p>
       <p>Около 30 художников под руководством монументалиста Максима Козлова выложили их вручную из смальты. Это крупнейшие мозаики на транспортных объектах России. На панно есть Кремль, Исаакиевский собор и «Лахта-центр», а также спрятанные «пасхалки», например кот Бегемот. Их можно поискать, пока ждёте поезд.</p>
     </div>
@@ -225,16 +260,16 @@
 
 <section>
   <div class="wrap">
-    <h2>Хронология</h2>
+    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h2>Хронология</h2></div>
     <p class="lead">От проекта Тона до открытия в 2026 году.</p>
-    <ol class="timeline">
+    <ol class="route">
       <li><time>1849–1851</time><p>По проекту Константина Тона строят Николаевский вокзал, первый в Москве. Парное ему здание стоит в Петербурге, это Московский вокзал.</p></li>
       <li><time>11 августа 2024</time><p>Здание вокзала закрывают для пассажиров и начинают комплексную модернизацию.</p></li>
       <li><time>Февраль 2025</time><p>РЖД показывают проект: верхние этажи для пассажиров, торговля под землёй, панно с видами двух столиц.</p></li>
       <li><time>Июнь 2025</time><p>Начинаются работы над кровлей основных залов.</p></li>
-      <li><time>Май 2026</time><p>Сергей Собянин и глава РЖД Олег Белозеров открывают обновлённый вокзал.</p></li>
+      <li class="now"><time>Май 2026</time><p>Сергей Собянин и глава РЖД Олег Белозеров открывают обновлённый вокзал.</p></li>
     </ol>
-    <p class="note">Источники называют разные даты открытия, 22 и 25 мая 2026 года. В первых обзорах после открытия писали, что часть сервисов ещё не заработала: камеры хранения, душевые и залы на третьем этаже. Перед поездкой лучше проверить их на сайте РЖД.</p>
+    <div class="note"><b>i</b><span>Источники называют разные даты открытия, 22 и 25 мая 2026 года. В первых обзорах после открытия писали, что часть сервисов ещё не заработала: камеры хранения, душевые и залы на третьем этаже. Перед поездкой лучше проверить их на сайте РЖД.</span></div>
   </div>
 </section>
 
@@ -256,8 +291,8 @@
 <script>
   // Decorative smalt pattern: left half reads as "Moscow" (warm reds), right half as "Petersburg" (cool blues)
   (function () {
-    var warm = ["#8f2a1e", "#b5462f", "#c96a3c", "#d9a441", "#a77a2c", "#e6c27a"];
-    var cool = ["#1f3b5c", "#2e5a85", "#4a7fa8", "#7fa9c6", "#b9cfdc", "#d9a441"];
+    var warm = ["#b3221a", "#d6281e", "#e2573a", "#e8a33a", "#c27a1f", "#f0c873"];
+    var cool = ["#1f3b5c", "#2e5a85", "#4a7fa8", "#7fa9c6", "#b9cfdc", "#e8a33a"];
     var box = document.getElementById("tiles");
     for (var r = 0; r < 7; r++) {
       for (var c = 0; c < 12; c++) {
