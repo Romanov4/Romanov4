@@ -290,16 +290,15 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
 }
 .coffers--sm { --c: 40px; }
 
-/* Кладка фасада: два тона и белые известковые швы (декор) */
-/* Нечётные ряды смещены на полкирпича */
-.masonry {
-  height: 60px; /* 6 + 2 ряда по 24 + 6: box-sizing border-box */
+/* Рустовка фасада: оштукатуренная стена в два тона с горизонтальными рустами (декор) */
+.rustication {
+  height: 60px; /* 6 + 3 ряда по 16 + 6: box-sizing border-box */
   border-block: 6px solid var(--facade-trim);
   background:
-    linear-gradient(var(--facade-joint) 2px, transparent 2px) 0 0 / 100% 24px,
-    repeating-linear-gradient(90deg, var(--facade-joint) 0 2px, transparent 2px 72px) 0 0 / 100% 24px no-repeat,
-    repeating-linear-gradient(90deg, var(--facade-joint) 0 2px, transparent 2px 72px) 36px 24px / 100% 24px no-repeat,
-    var(--facade-field);
+    repeating-linear-gradient(180deg,
+      var(--facade-field) 0 13px,
+      color-mix(in srgb, var(--ink) 25%, var(--facade-field)) 13px 15px,
+      var(--facade-trim) 15px 16px);
 }
 
 /* Полоса смальты (мозаика «Две столицы»), декор */
@@ -604,7 +603,7 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
   html { scroll-padding-top: 0; }
   body { background: #fff; color: #000; font-size: 11pt; line-height: 1.45; }
   .topbar, .topnav, .theme-switch, .skip-link,
-  .orn, .coffers, .masonry, .smalt-band, .btn { display: none !important; }
+  .orn, .coffers, .rustication, .smalt-band, .btn { display: none !important; }
   .section { padding-block: 8mm; }
   .section--night {
     --bg: #fff; --text: #000; --text-muted: #333; --accent: #000; --accent-2: #000;
