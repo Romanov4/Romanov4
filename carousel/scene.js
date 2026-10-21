@@ -64,7 +64,7 @@ const ERAS = [
     era: 'Настоящее', short: '2026', year: '2026', period: 'после реконструкции 2024–2026',
     title: 'Настоящее',
     text: 'Закрытый 11 августа 2024 года вокзал вновь открылся 22 мая 2026-го. Фасаду вернули цвета, зафиксированные на снимке 1873 года, на башне восстановили исторический флагшток. Выходы к поездам — под новым стеклянным дебаркадером.',
-    desc: 'синие сумерки, тёплая подсветка фасада и фонари в стиле масляных, два тона фасада и кирпичная кладка первого этажа с белыми швами, флагшток с флагом, стеклянный дебаркадер и «Сапсан»',
+    desc: 'синие сумерки, тёплая подсветка фасада и фонари в стиле масляных, двухцветный оштукатуренный фасад со светлыми тягами и наличниками, флагшток с флагом, стеклянный дебаркадер и «Сапсан»',
     train: 'sapsan',
     filter: 'sepia(0) saturate(1.04) contrast(1.03)',
     vignette: 0.26,
@@ -80,13 +80,13 @@ const ERAS = [
     },
     feat: {
       gasSq: 1, gasHigh: 1, canopy: 1, pole: 1, flag: 1, catenary: 1, trees: 1, annex: 1, superstr: 1,
-      sign: 1, brick: 1, platHigh: 1, tracksX: 1, cityMid: 1, cityHigh: 1, neighbors: 1, people3: 1,
+      sign: 1, platHigh: 1, tracksX: 1, cityMid: 1, cityHigh: 1, neighbors: 1, people3: 1,
     },
   },
 ];
 const N = ERAS.length;
 const FEATS = ['gasSq', 'gasLow', 'gasHigh', 'electric', 'carriages', 'cars', 'trees', 'annex', 'superstr', 'sign',
-  'pole', 'flag', 'catenary', 'shed', 'canopy', 'brick', 'platLow', 'platHigh', 'tracksX', 'cityLow', 'cityMid',
+  'pole', 'flag', 'catenary', 'shed', 'canopy', 'platLow', 'platHigh', 'tracksX', 'cityLow', 'cityMid',
   'cityHigh', 'neighbors', 'people1', 'people2', 'people3'];
 const COLOR_KEYS = ['skyTop', 'skyHorizon', 'skyBottom', 'fog', 'cloudC', 'sun', 'hemiSky', 'hemiGround', 'ground',
   'paving', 'road', 'edgeC', 'wallA', 'wallB', 'trim', 'plinth', 'roof', 'city', 'winGlow', 'lampColor'];
@@ -447,17 +447,13 @@ const T = {
       g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(x + S / 170, 0, Math.max(1, S / 256), S);
     }
   }),
-  brick: () => canvasTex((g, S) => {
-    const r = rng(5);
-    g.fillStyle = '#f1ede4'; g.fillRect(0, 0, S, S);
-    const rows = 14, cols = 4, h = S / rows, w = S / cols, j = Math.max(1, S / 110);
-    for (let y = 0; y < rows; y++) {
-      for (let x = -1; x < cols; x++) {
-        const off = (y % 2) * w / 2;
-        const l = 40 + r() * 12, s = 40 + r() * 14, hue = 14 + r() * 8;
-        g.fillStyle = `hsl(${hue} ${s}% ${l}%)`;
-        g.fillRect(x * w + off + j, y * h + j, w - 2 * j, h - 2 * j);
-      }
+  rust: () => canvasTex((g, S) => {
+    noise(g, S, 236, 8, 6, 13);
+    const n = 5, c = S / n; // горизонтальные русты через 0,6 м при тайле 3 м
+    for (let k = 0; k < n; k++) {
+      const y = k * c;
+      g.fillStyle = 'rgba(0,0,0,0.22)'; g.fillRect(0, y, S, Math.max(2, S / 120));
+      g.fillStyle = 'rgba(255,255,255,0.35)'; g.fillRect(0, y + Math.max(2, S / 120), S, Math.max(1, S / 256));
     }
   }),
   cobble: () => canvasTex((g, S) => {
@@ -556,7 +552,7 @@ function createWorld() {
 
   /* ---------- Текстуры и материалы ---------- */
   const tx = {
-    plaster: T.plaster(), roof: T.roof(), brick: T.brick(), cobble: T.cobble(), asphalt: T.asphalt(),
+    plaster: T.plaster(), roof: T.roof(), rust: T.rust(), cobble: T.cobble(), asphalt: T.asphalt(),
     granite: T.granite(), cityWalls: T.cityWalls(), cityLit: T.cityLit(), contact: T.contact(),
   };
   const ENV = []; // [материал, базовая envMapIntensity]
@@ -580,7 +576,8 @@ function createWorld() {
     gold: M_('#c9a24a', 0.35, 0.8, {}, 1.0),
     bronze: M_('#6b5a3a', 0.45, 0.7, {}, 0.9),
     clockFace: M_('#f4eedf', 0.5, 0, { emissive: new THREE.Color('#fff1cf'), emissiveIntensity: 0 }, 0.5),
-    brick: M_('#ffffff', 0.9, 0, { map: tx.brick, bumpMap: tx.brick, bumpScale: 1.5 }, 0.35, 1.04),
+    rustA: M_('#dcc39a', 0.92, 0, { map: tx.rust, bumpMap: tx.rust, bumpScale: 1.2 }, 0.45, 3),
+    rustB: M_('#b98a5e', 0.92, 0, { map: tx.rust, bumpMap: tx.rust, bumpScale: 1.2 }, 0.45, 3),
     ground: M_('#8f7e62', 1, 0, {}, 0.3),
     paving: M_('#b5a58a', 0.95, 0, { map: tx.cobble, bumpMap: tx.cobble, bumpScale: 1.2 }, 0.35, 3),
     road: M_('#55555a', 0.95, 0, { map: tx.asphalt }, 0.3, 6),
@@ -754,7 +751,6 @@ function createWorld() {
 
   /* ---------- Здание вокзала (≈54 × 22 м, этажи ≈6 и ≈5,4 м) ---------- */
   const bld = new Batch();
-  const brickB = new Batch();
   const clockHands = [];
 
   const Y_MID = 6.6, Y_TOP = 12.0;
@@ -799,8 +795,9 @@ function createWorld() {
       alt = !alt;
     }
   }
-  function brickSkin(f, u, len, v0 = 0.9, v1 = Y_MID - 0.2) {
-    brickB.face('brick', box(len, v1 - v0, 0.02), f, u, (v0 + v1) / 2, 0.012);
+  /** Рустовка 1-го этажа: горизонтальные русты по окрашенной штукатурке (не кирпич). */
+  function rustSkin(f, u, len, key = 'rustA', v0 = 0.9, v1 = Y_MID - 0.2) {
+    bld.face(key, box(len, v1 - v0, 0.02), f, u, (v0 + v1) / 2, 0.012);
   }
   /** Объём с цоколем, тягой, фризом, сухариками и двухступенчатым карнизом. */
   function volume(key, cx, cz, w, d, h, { parapet = true } = {}) {
@@ -840,7 +837,7 @@ function createWorld() {
         column(f, x * sgn, Y_MID + 0.18, Y_TOP - 0.8, 0.16);
         bld.face('trim', box(0.7, 1.1, 0.5), f, x * sgn, Y_TOP + 1.2, 0.0); // тумбы парапета
       }
-      brickSkin(f, 13.5 * sgn, 15);
+      rustSkin(f, 13.5 * sgn, 15);
     }
   }
 
@@ -857,7 +854,7 @@ function createWorld() {
       }
       quoins(f, 2.95, 0.9, Y_TOP - 0.8);
       quoins(f, -2.95, 0.9, Y_TOP - 0.8);
-      brickSkin(f, 0, 6);
+      rustSkin(f, 0, 6, 'rustB');
     }
     const side = { x: 27 * sx, z: 0, ry: (sx * Math.PI) / 2 };
     for (const u of [-7.5, -4.5, -1.5, 1.5, 4.5, 7.5]) {
@@ -866,7 +863,7 @@ function createWorld() {
     }
     quoins(side, 10.55, 0.9, Y_TOP - 0.8);
     quoins(side, -10.55, 0.9, Y_TOP - 0.8);
-    brickSkin(side, 0, 21.2);
+    rustSkin(side, 0, 21.2, 'rustB');
   }
 
   // центральный ризалит с аттиком
@@ -891,7 +888,7 @@ function createWorld() {
       bld.face('trim', box(8.6, 1.9, 0.14), f, 0, 14.05, 0.08); // доска аттика
       bld.face('bronze', box(8.2, 0.08, 0.05), f, 0, 13.2, 0.17);
       bld.face('bronze', box(8.2, 0.08, 0.05), f, 0, 14.9, 0.17);
-      brickSkin(f, 0, 12);
+      rustSkin(f, 0, 12, 'rustB');
     }
     for (const x of [-5.55, -1.8, 1.8, 5.55]) {
       for (const z of [d / 2 - 0.2, -d / 2 + 0.2]) {
@@ -949,7 +946,7 @@ function createWorld() {
       clockHands.push({ hourH, minH });
     }
   }
-  scene.add(bld.build(MK, { noShadow: ['trimN', 'wallN', 'wallNB', 'glass', 'door', 'clockFace'] }));
+  scene.add(bld.build(MK, { noShadow: ['trimN', 'wallN', 'wallNB', 'rustA', 'rustB', 'glass', 'door', 'clockFace'] }));
 
   // контактная тень под зданием
   {
@@ -959,8 +956,6 @@ function createWorld() {
     scene.add(cs);
   }
 
-  /* ---------- Кирпичная кладка 1-го этажа с белыми швами (2026) ---------- */
-  featGroup('brick').add(brickB.build(MK, { cast: false }));
 
   /* ---------- Пути и перроны (тупиковый вокзал: пути заканчиваются у задней стороны) ---------- */
   const TRACKS = [-16.1, -7.9, -0.1, 8.1, 13.9, 22.1];
@@ -1803,6 +1798,8 @@ function createWorld() {
     hemi.intensity = l.hemiInt;
 
     for (const k of ['ground', 'paving', 'road', 'wallA', 'wallB', 'trim', 'plinth', 'roof', 'city']) M[k].color.copy(l[k]);
+    M.rustA.color.copy(l.wallA);
+    M.rustB.color.copy(l.wallB);
     M.edge.color.copy(l.edgeC);
     M.cityRoof.color.copy(l.roof).multiplyScalar(0.9);
     M.city.emissiveIntensity = l.cityGlow * 0.9;
