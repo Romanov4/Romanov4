@@ -11,110 +11,50 @@ import { OrbitControls } from './vendor/OrbitControls.js';
 /* ------------------------------------------------------------------ */
 const ERAS = [
   {
-    year: '1851', label: '1851',
-    title: 'Петербургский вокзал',
-    text: 'Вокзал открыт в 1851 году по проекту архитектора Константина Тона — это первый вокзал Москвы. К перрону подходят паровоз с высокой трубой и деревянные вагоны.',
-    desc: 'тёплая сепия, паровоз с высокой трубой и деревянные вагоны у перрона, масляные фонари на площади',
+    year: '1851', era: 'Царская', short: '1851',
+    title: 'Царская эпоха',
+    text: 'Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона. С 1855 года он называется Николаевским. К перрону подходят паровозы с высокой трубой и деревянные вагоны.',
+    desc: 'тёплая сепия, паровоз с трубой-воронкой и деревянные вагоны у перрона, масляные фонари и конные экипажи на площади',
     train: 'steam51',
-    filter: 'sepia(0.82) saturate(0.85) contrast(1.03) brightness(1.02)',
-    vignette: 0.55,
+    filter: 'sepia(0.78) saturate(0.85) contrast(1.03) brightness(1.02)',
+    vignette: 0.5,
     fb: { sky: '#e6d3ad', wall: '#c4a275', wall2: '#b08c60', glow: '#5a4630' },
     look: {
-      skyTop: '#9fb0bd', skyHorizon: '#f1dcb4', skyBottom: '#cbb894', fog: '#e8d6b2', fogNear: 70, fogFar: 300,
-      sun: '#ffd9a8', sunInt: 2.7, sunAz: 0.55, sunEl: 0.55,
-      hemiSky: '#f4e4c6', hemiGround: '#6d5a40', hemiInt: 1.0,
-      ground: '#8f7d60', paving: '#ab9877',
-      wallA: '#d4b07c', wallB: '#c49d6c', trim: '#efe4cc', plinth: '#8f8676', roof: '#5e5a52',
-      city: '#bba98a', winGlow: '#ffcf8a', win: 0.12, lampColor: '#ffc070', lamp: 0.8, halo: 0.25,
-      facade: 0, exposure: 1.0, seams: 0, sunGlow: 0.6,
-    },
-    feat: { gas: 1 },
-  },
-  {
-    year: '1855', label: '1855',
-    title: 'Николаевский вокзал',
-    text: 'Вокзал переименован в Николаевский — в честь императора Николая I. На площади перед зданием — фонари и конные экипажи.',
-    desc: 'светлая сепия, конные экипажи и фонари на площади, паровоз с деревянными вагонами',
-    train: 'steam55',
-    filter: 'sepia(0.55) saturate(0.9) contrast(1.02)',
-    vignette: 0.42,
-    fb: { sky: '#ece0c6', wall: '#cdae80', wall2: '#ba9767', glow: '#4f4234' },
-    look: {
-      skyTop: '#a9bccb', skyHorizon: '#f2e4c6', skyBottom: '#d3c4a6', fog: '#ece0c4', fogNear: 90, fogFar: 350,
-      sun: '#ffe2b8', sunInt: 2.9, sunAz: 0.75, sunEl: 0.68,
-      hemiSky: '#f4e8d0', hemiGround: '#6f5e46', hemiInt: 1.05,
-      ground: '#94846a', paving: '#b3a283',
-      wallA: '#d8b887', wallB: '#c7a273', trim: '#f1e8d4', plinth: '#958c7c', roof: '#5b5852',
-      city: '#c2b394', winGlow: '#ffcf8a', win: 0.1, lampColor: '#ffc070', lamp: 0.7, halo: 0.2,
-      facade: 0, exposure: 1.02, seams: 0, sunGlow: 0.5,
+      skyTop: '#a3b4c2', skyHorizon: '#f1dfba', skyBottom: '#cfbc98', fog: '#eadab6', fogNear: 70, fogFar: 300,
+      sun: '#ffdcac', sunInt: 2.8, sunAz: 0.62, sunEl: 0.6,
+      hemiSky: '#f4e6c9', hemiGround: '#6e5c42', hemiInt: 1.02,
+      ground: '#917f62', paving: '#ae9b7a',
+      wallA: '#d6b37f', wallB: '#c59f6e', trim: '#f0e6cf', plinth: '#928979', roof: '#5d5a52',
+      city: '#bfae8f', annex: '#c9c0ae', winGlow: '#ffcf8a', win: 0.12, lampColor: '#ffc070', lamp: 0.8, halo: 0.22,
+      facade: 0, exposure: 1.0, seams: 0, sunGlow: 0.55,
     },
     feat: { gas: 1, carriages: 1 },
   },
   {
-    year: '1923–1924', label: '1923',
-    title: 'Октябрьский → Ленинградский',
-    text: 'В 1923 году вокзал переименован в Октябрьский, а затем — в Ленинградский. Это имя он носит до сих пор.',
-    desc: 'приглушённые цвета 1920–30-х годов, пасмурное небо, чёрный советский паровоз с красной звездой',
-    train: 'soviet',
-    filter: 'sepia(0.28) saturate(0.6) contrast(0.98)',
-    vignette: 0.35,
-    fb: { sky: '#d3d0c6', wall: '#ac9f86', wall2: '#9b8b72', glow: '#3d3a35' },
+    year: '1920–1970-е', era: 'Советская', short: 'XX век',
+    title: 'Советская эпоха',
+    text: 'В 1923 году вокзал переименовали в Октябрьский, а затем — в Ленинградский. В 1949 году интерьеры реставрировали по проекту архитектора Алексея Душкина. Позднее, в 1960–1970-е, вокзал расширяли: слева появилась трёхэтажная пристройка.',
+    desc: 'приглушённые цвета середины века, слева трёхэтажная пристройка с ленточными окнами, контактная сеть, тёмно-красный электровоз с зелёными вагонами, электрические фонари и деревья',
+    train: 'electro',
+    filter: 'sepia(0.16) saturate(0.72) contrast(1.02)',
+    vignette: 0.22,
+    fb: { sky: '#d9dcd6', wall: '#d2b277', wall2: '#bf9c62', glow: '#3e3a33' },
     look: {
-      skyTop: '#8e979e', skyHorizon: '#cfcbc0', skyBottom: '#a8a396', fog: '#c6c2b6', fogNear: 60, fogFar: 270,
-      sun: '#efe7da', sunInt: 1.7, sunAz: 0.95, sunEl: 0.85,
-      hemiSky: '#d8d6cf', hemiGround: '#5b564c', hemiInt: 1.45,
-      ground: '#6f6a5f', paving: '#8d877b',
-      wallA: '#b4a68c', wallB: '#a29177', trim: '#d8d1c1', plinth: '#7c776e', roof: '#4a4a46',
-      city: '#9b978c', winGlow: '#ffd9a0', win: 0.08, lampColor: '#ffcf8a', lamp: 0.45, halo: 0.12,
-      facade: 0, exposure: 1.0, seams: 0, sunGlow: 0.0,
-    },
-    feat: { gas: 1 },
-  },
-  {
-    year: '1949', label: '1949',
-    title: 'Реставрация интерьеров',
-    text: 'Интерьеры вокзала реставрированы по проекту архитектора Алексея Душкина. Наступает время электрического света.',
-    desc: 'цвета середины века, ясное небо, зелёный паровоз и вагоны, электрические фонари-шары',
-    train: 'p36',
-    filter: 'sepia(0.12) saturate(0.85) contrast(1.02)',
-    vignette: 0.2,
-    fb: { sky: '#d6e0e8', wall: '#d6b373', wall2: '#c39e5f', glow: '#3e3a33' },
-    look: {
-      skyTop: '#6d97c4', skyHorizon: '#eadfc6', skyBottom: '#c9bfa8', fog: '#e0d8c4', fogNear: 80, fogFar: 320,
-      sun: '#fff1d6', sunInt: 3.0, sunAz: 0.45, sunEl: 0.62,
-      hemiSky: '#e9eef2', hemiGround: '#6b6250', hemiInt: 1.1,
-      ground: '#77736a', paving: '#a49c8e',
-      wallA: '#dcb978', wallB: '#cfa766', trim: '#f3ead6', plinth: '#8a857c', roof: '#5d6a60',
-      city: '#b8b2a3', winGlow: '#fff0c8', win: 0.12, lampColor: '#fff3d8', lamp: 0.6, halo: 0.18,
+      skyTop: '#7d9bbd', skyHorizon: '#e4ddcb', skyBottom: '#c3baa6', fog: '#dad4c3', fogNear: 80, fogFar: 320,
+      sun: '#fff0d6', sunInt: 2.9, sunAz: 0.45, sunEl: 0.62,
+      hemiSky: '#e6ebee', hemiGround: '#6a6252', hemiInt: 1.12,
+      ground: '#75726a', paving: '#a19a8d',
+      wallA: '#d9b878', wallB: '#cba567', trim: '#f1e8d4', plinth: '#8a857c', roof: '#5d6a60',
+      city: '#b6b1a5', annex: '#c8bea9', winGlow: '#fff0c8', win: 0.12, lampColor: '#fff3d8', lamp: 0.6, halo: 0.18,
       facade: 0, exposure: 1.0, seams: 0, sunGlow: 0.4,
     },
-    feat: { electric: 1, trees: 1 },
+    feat: { electric: 1, trees: 1, catenary: 1, annex: 1 },
   },
   {
-    year: '2009', label: '2009',
-    title: '«Сапсан»',
-    text: 'В декабре 2009 года начал курсировать скоростной поезд «Сапсан». В 2008–2013 годах шла реконструкция «Наземное метро».',
-    desc: 'современный дневной свет, бело-серый обтекаемый поезд «Сапсан» с красными акцентами, контактная сеть над путями',
-    train: 'sapsan',
-    filter: 'sepia(0) saturate(1.04) contrast(1.02)',
-    vignette: 0.0,
-    fb: { sky: '#cfe0ee', wall: '#e0c48a', wall2: '#d4b67a', glow: '#33404c' },
-    look: {
-      skyTop: '#3b74c0', skyHorizon: '#d6e6f2', skyBottom: '#9aa7ae', fog: '#cddcea', fogNear: 110, fogFar: 400,
-      sun: '#fffaf0', sunInt: 3.4, sunAz: 0.3, sunEl: 0.85,
-      hemiSky: '#dfeaf5', hemiGround: '#5d5a52', hemiInt: 1.15,
-      ground: '#5f6266', paving: '#a8a7a3',
-      wallA: '#e4c98f', wallB: '#dcbd80', trim: '#f7f2e6', plinth: '#8c8a86', roof: '#5f6669',
-      city: '#aab4bd', winGlow: '#fff4e0', win: 0.04, lampColor: '#f2f6ff', lamp: 0.0, halo: 0.0,
-      facade: 0, exposure: 1.0, seams: 0, sunGlow: 0.35,
-    },
-    feat: { modern: 1, trees: 1, catenary: 1 },
-  },
-  {
-    year: '2026', label: '2026',
-    title: 'Реконструкция',
-    text: 'Закрытый 11 августа 2024 года вокзал вновь открылся 22 мая 2026-го. Фасад восстановлен по снимку 1873 года, на башню вернули флагшток, над платформами — стеклянный дебаркадер площадью более 6,9 тыс. м².',
-    desc: 'вечерние сумерки, тёплая подсветка фасада и фонари, двухцветный фасад с белыми швами, флагшток на башне, стеклянный навес над платформами и «Сапсан»',
+    year: '2026', era: 'Настоящее', short: '2026',
+    title: 'Настоящее',
+    text: 'Закрытый 11 августа 2024 года вокзал вновь открылся 22 мая 2026-го. Фасад восстановлен по снимку 1873 года, на башню вернули флагшток, тёплая подсветка напоминает масляные фонари. Над платформами — стеклянный навес площадью более 6,9 тыс. м², к перрону приходит «Сапсан».',
+    desc: 'вечерние сумерки, тёплая подсветка фасада и фонари, двухцветный фасад с белыми швами, флагшток на башне, стеклянный навес над платформами и бело-серый «Сапсан» с красными акцентами',
     train: 'sapsan',
     filter: 'sepia(0) saturate(1.06) contrast(1.03)',
     vignette: 0.3,
@@ -125,16 +65,16 @@ const ERAS = [
       hemiSky: '#7488c0', hemiGround: '#40332e', hemiInt: 1.35,
       ground: '#4a4950', paving: '#7d746b',
       wallA: '#dcc196', wallB: '#b98a5e', trim: '#f6efe0', plinth: '#7f786f', roof: '#3f4a4a',
-      city: '#3a3848', winGlow: '#ffb35c', win: 0.9, lampColor: '#ffb45a', lamp: 3.2, halo: 0.95,
+      city: '#3a3848', annex: '#a69c8c', winGlow: '#ffb35c', win: 0.9, lampColor: '#ffb45a', lamp: 3.2, halo: 0.95,
       facade: 1, exposure: 1.25, seams: 1, sunGlow: 1.0,
     },
-    feat: { gas: 1, canopy: 1, flag: 1, catenary: 1, trees: 1 },
+    feat: { gas: 1, canopy: 1, flag: 1, catenary: 1, trees: 1, annex: 1 },
   },
 ];
 const N = ERAS.length;
-const FEATS = ['gas', 'carriages', 'electric', 'modern', 'canopy', 'flag', 'catenary', 'trees'];
+const FEATS = ['gas', 'carriages', 'electric', 'canopy', 'flag', 'catenary', 'trees', 'annex'];
 const COLOR_KEYS = ['skyTop', 'skyHorizon', 'skyBottom', 'fog', 'sun', 'hemiSky', 'hemiGround', 'ground', 'paving',
-  'wallA', 'wallB', 'trim', 'plinth', 'roof', 'city', 'winGlow', 'lampColor'];
+  'wallA', 'wallB', 'trim', 'plinth', 'roof', 'city', 'annex', 'winGlow', 'lampColor'];
 const NUM_KEYS = ['fogNear', 'fogFar', 'sunInt', 'sunAz', 'sunEl', 'hemiInt', 'win', 'lamp', 'halo', 'facade',
   'exposure', 'seams', 'sunGlow'];
 
@@ -166,8 +106,16 @@ const yearBtns = ERAS.map((e, i) => {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'year-btn';
-  b.textContent = e.label;
-  b.setAttribute('aria-label', `${e.year} — ${e.title}`);
+  const nm = document.createElement('span');
+  nm.className = 'yb-name';
+  nm.textContent = e.era;
+  const dot = document.createElement('span');
+  dot.className = 'visually-hidden';
+  dot.textContent = ' · ';
+  const yr = document.createElement('span');
+  yr.className = 'yb-years';
+  yr.textContent = e.short;
+  b.append(nm, dot, yr);
   b.addEventListener('click', () => { interact(); goTo(i, { user: true }); });
   li.appendChild(b);
   timeline.appendChild(li);
@@ -176,7 +124,7 @@ const yearBtns = ERAS.map((e, i) => {
 $('eraTotal').textContent = String(N);
 
 function canvasLabel(e) {
-  return `Трёхмерная модель Ленинградского вокзала, ${e.year}: ${e.title}. На сцене: ${e.desc}.`;
+  return `Трёхмерная модель Ленинградского вокзала. ${e.title}, ${e.year}. На сцене: ${e.desc}.`;
 }
 
 function goTo(i, { user = false, instant = false } = {}) {
@@ -210,7 +158,7 @@ function goTo(i, { user = false, instant = false } = {}) {
   fbs.setProperty('--fb-wall2', e.fb.wall2);
   fbs.setProperty('--fb-glow', e.fb.glow);
   // объявляем смену только по действию пользователя, чтобы автопрокрутка не «болтала»
-  if (user) $('announcer').textContent = `${e.year}. ${e.title}. ${e.text}`;
+  if (user) $('announcer').textContent = `${e.title}, ${e.year}. ${e.text}`;
   if (world) world.setEra(i, instant || reduce);
 }
 
@@ -418,6 +366,8 @@ function createWorld() {
     rail: std('#7a7a7a', 0.4, 0.8),
     sleeper: std('#4a3b2e', 1),
     city: std('#bba98a', 1),
+    annex: std('#c8bea9', 0.9),
+    annexDark: std('#6f6a62', 0.8),
     tree: std('#55703f', 0.95),
     trunk: std('#5a4632', 1),
     lampGlass: std('#fff1d0', 0.4, 0, { emissive: new THREE.Color('#ffc070'), emissiveIntensity: 0.8 }),
@@ -825,24 +775,36 @@ function createWorld() {
       g.add(l);
     }
   }
-  // Современные мачты освещения (2009)
+  // Советская трёхэтажная пристройка слева (1960-е): простой фасад, ленточные окна
   {
-    const g = featGroup('modern');
-    const proto = new Batch();
-    proto.add('steel', place(cyl(0.08, 0.13, 7.5, 8), 0, 3.75, 0));
-    proto.add('steel', place(box(0.08, 0.08, 1.5), 0, 7.4, 0.7));
-    proto.add('lampGlass', place(box(0.32, 0.1, 0.65), 0, 7.33, 1.35));
-    const lampMesh = proto.build(M, { receive: false });
-    for (const [x, z] of [...LAMP_SQUARE, ...LAMP_PLATFORM]) {
-      const l = new THREE.Group();
-      l.position.set(x, z < -2 ? 0.95 : 0.08, z);
-      if (z < -2) l.rotation.y = -Math.PI / 2;
-      l.add(lampMesh.clone());
-      const h = halo(2.0);
-      h.position.set(0, 7.2, 1.35);
-      l.add(h);
-      g.add(l);
+    const g = featGroup('annex');
+    const inner = new THREE.Group();
+    const ab = new Batch();
+    const x0 = -27.6, x1 = -15.45, z0 = -2.9, z1 = 2.9, H = 10.4;
+    const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2;
+    ab.add('annex', place(box(w, H, d), cx, H / 2, 0));
+    ab.add('annexDark', place(box(w + 0.1, 0.55, d + 0.1), cx, 0.275, 0));
+    ab.add('trim', place(box(w + 0.25, 0.32, d + 0.25), cx, H + 0.1, 0));
+    ab.add('annexDark', place(box(w - 2, 0.9, d - 2), cx, H + 0.6, 0)); // машинное помещение
+    const floors = [1.25, 4.55, 7.85];
+    for (const y of floors) {
+      for (const zf of [z1, z0]) {
+        const sgn = zf > 0 ? 1 : -1;
+        ab.add('glass', place(box(w - 1.2, 1.5, 0.08), cx, y + 0.75, zf + sgn * 0.03));
+        for (let x = x0 + 0.6 + 1.25; x < x1 - 0.7; x += 1.25) {
+          ab.add('trim', place(box(0.1, 1.5, 0.12), x, y + 0.75, zf + sgn * 0.06));
+        }
+        ab.add('trim', place(box(w - 1.0, 0.1, 0.22), cx, y - 0.02, zf + sgn * 0.1));
+      }
+      ab.add('glass', place(box(0.08, 1.5, d - 1.4), x0 - 0.03, y + 0.75, 0));
+      for (let z = z0 + 0.7 + 1.1; z < z1 - 0.7; z += 1.1) ab.add('trim', place(box(0.12, 1.5, 0.1), x0 - 0.06, y + 0.75, z));
+      ab.add('trim', place(box(0.22, 0.1, d - 1.2), x0 - 0.1, y - 0.02, 0));
     }
+    // вход с козырьком
+    ab.add('door', place(box(3.2, 2.3, 0.1), cx + 1.5, 1.15, z1 + 0.04));
+    ab.add('trim', place(box(4.4, 0.16, 1.6), cx + 1.5, 2.55, z1 + 0.8));
+    inner.add(ab.build(M, { skipShadow: ['glass', 'door'] }));
+    g.add(inner);
   }
   // Конные экипажи (1855)
   {
@@ -979,8 +941,8 @@ function createWorld() {
     let stack = null;
     let smokeColor = '#e9e4da';
     let mats;
-    if (type === 'steam51' || type === 'steam55') {
-      const v55 = type === 'steam55';
+    if (type === 'steam51') {
+      const v55 = false;
       mats = {
         body: std(v55 ? '#6e2a24' : '#2f5236', 0.5, 0.3), dark: std('#1f1d1b', 0.6, 0.4),
         brass: std('#c39a45', 0.3, 0.8), red: std('#8e2a22', 0.6), wheel: std(v55 ? '#2a2420' : '#7a2a20', 0.6, 0.3),
@@ -1018,53 +980,48 @@ function createWorld() {
       wheelsUnder(b, 'wheel', [-6.2, -7.8], 0.45, 0.88);
       carRow(b, 3, -8.8, 5.8, { body: ['wood', 'wood2', 'wood'], roof: 'roofc', win: 'win', belt: 'trimc', w: 2.2, h: 1.6, wins: 4 });
       if (v55) smokeColor = '#e2ddd2';
-    } else if (type === 'soviet' || type === 'p36') {
-      const p36 = type === 'p36';
+    } else if (type === 'electro') {
       mats = {
-        body: std(p36 ? '#2c5a40' : '#1d1c1b', 0.45, 0.35), dark: std('#161515', 0.6, 0.4),
-        red: std('#a32a22', 0.55), wheel: std('#a32a22', 0.55, 0.2), steel: std('#7b8288', 0.4, 0.7),
-        cream: std('#e8dcb8', 0.6), car: std(p36 ? '#2d5543' : '#6b3e2b', 0.75), car2: std(p36 ? '#2a4e3e' : '#5f3626', 0.75),
-        roofc: std('#3b3d3c', 0.8), win: std('#24282a', 0.35, 0.2, { emissive: new THREE.Color('#ffd9a0'), emissiveIntensity: 0.12 }),
+        body: std('#7a2a2a', 0.5, 0.25), dark: std('#1c1b1a', 0.6, 0.4), cream: std('#e8dcb8', 0.6),
+        steel: std('#7b8288', 0.4, 0.7), wheel: std('#2a2624', 0.55, 0.4), roofc: std('#4a4c4b', 0.7, 0.3),
+        car: std('#2d5543', 0.75), car2: std('#2a4e3e', 0.75),
+        win: std('#24282a', 0.3, 0.2, { emissive: new THREE.Color('#ffd9a0'), emissiveIntensity: 0.12 }),
+        lamp: std('#fff6dc', 0.3, 0, { emissive: new THREE.Color('#fff2cc'), emissiveIntensity: 1.2 }),
       };
-      b.add('dark', place(box(2.3, 0.4, 9.6), 0, 1.15, -4.8));
-      b.add('red', place(box(2.8, 0.45, 0.22), 0, 1.1, -0.1));
-      b.add('dark', place(box(2.2, 0.5, 0.7), 0, 0.5, 0.1, 0, -0.5)); // путеочиститель
-      b.add('dark', place(cylZ(0.14, 0.4), 0.95, 1.1, 0.15));
-      b.add('dark', place(cylZ(0.14, 0.4), -0.95, 1.1, 0.15));
-      b.add('body', place(cylZ(0.9, 6.0), 0, 2.45, -4.0));
-      b.add('dark', place(cylZ(0.96, 1.2), 0, 2.45, -1.0));
-      b.add('steel', place(cylZ(0.72, 0.06), 0, 2.45, -0.38));
-      b.add('red', new THREE.ShapeGeometry(starShape(0.36, 0.15)).translate(0, 2.5, -0.33));
-      b.add('dark', place(cyl(0.27, 0.32, 0.7, 12), 0, 3.6, -1.2));
-      stack = new THREE.Vector3(0, 4.05, -1.2);
-      b.add(p36 ? 'body' : 'dark', place(sphere(0.42, 12, 8), 0, 3.3, -3.0, 0, 0, 0, 1, 0.7, 1.3));
-      b.add(p36 ? 'body' : 'dark', place(sphere(0.4, 12, 8), 0, 3.28, -4.6, 0, 0, 0, 1, 0.7, 1.2));
-      b.add('dark', place(box(2.9, 0.07, 7.2), 0, 1.75, -4.2)); // площадки
-      b.add('red', place(box(2.92, 0.12, 7.2), 0, 1.68, -4.2));
-      if (p36) {
-        b.add('cream', place(box(1.86, 0.14, 6.0), 0, 2.45, -4.0));
-        b.add('body', place(box(0.06, 1.4, 1.9), 1.2, 2.6, -1.4));
-        b.add('body', place(box(0.06, 1.4, 1.9), -1.2, 2.6, -1.4));
+      const L = 14, zc = -L / 2 - 0.3;
+      b.add('body', place(box(3.0, 2.9, L), 0, 2.75, zc));
+      b.add('roofc', place(cylZ(1.5, L, 16), 0, 4.2, zc, 0, 0, 0, 1, 0.18, 1));
+      b.add('cream', place(box(3.02, 0.14, L + 0.02), 0, 2.15, zc));
+      b.add('cream', place(box(3.02, 0.1, L + 0.02), 0, 1.85, zc));
+      b.add('dark', place(box(2.8, 0.55, L - 0.6), 0, 1.15, zc));
+      // лобовая часть
+      b.add('win', place(box(2.5, 0.85, 0.06), 0, 3.45, -0.27));
+      b.add('dark', place(box(0.12, 0.9, 0.08), 0, 3.45, -0.25));
+      b.add('win', place(box(2.5, 0.85, 0.06), 0, 3.45, -L - 0.33));
+      b.add('lamp', place(sphere(0.16, 10, 8), 0, 4.15, -0.3));
+      b.add('lamp', place(sphere(0.12, 8, 6), 0.95, 1.7, -0.3));
+      b.add('lamp', place(sphere(0.12, 8, 6), -0.95, 1.7, -0.3));
+      b.add('dark', place(box(2.8, 0.4, 0.3), 0, 1.1, -0.15));
+      b.add('dark', place(cylZ(0.14, 0.4), 1.0, 1.1, 0.05));
+      b.add('dark', place(cylZ(0.14, 0.4), -1.0, 1.1, 0.05));
+      for (let k = 0; k < 4; k++) b.add('win', place(box(3.04, 0.6, 0.8), 0, 3.35, -2.6 - k * 3.0));
+      // тележки и колёса
+      for (const bz of [-3.0, -L + 2.4]) {
+        b.add('dark', place(box(2.5, 0.6, 3.6), 0, 0.65, bz));
+        wheelsUnder(b, 'wheel', [bz + 1.3, bz, bz - 1.3], 0.55, 1.0);
       }
-      wheelsUnder(b, 'wheel', [-1.1], 0.45, 0.95);
-      wheelsUnder(b, 'wheel', [-2.6, -4.0, -5.4, -6.8], 0.68, 0.95);
-      b.add('steel', place(box(0.06, 0.12, 4.4), 1.08, 0.75, -4.7));
-      b.add('steel', place(box(0.06, 0.12, 4.4), -1.08, 0.75, -4.7));
-      // будка
-      b.add('body', place(box(2.9, 2.1, 2.1), 0, 2.85, -8.5));
-      b.add('roofc', place(box(3.2, 0.14, 2.6), 0, 3.95, -8.5));
-      b.add('win', place(box(2.94, 0.6, 0.7), 0, 3.2, -8.3));
-      if (p36) b.add('cream', place(box(2.94, 0.14, 2.12), 0, 2.45, -8.5));
-      // тендер
-      b.add('body', place(box(2.8, 2.0, 5.0), 0, 2.15, -12.4));
-      b.add('dark', place(box(2.5, 0.35, 4.6), 0, 3.25, -12.6));
-      if (p36) b.add('cream', place(box(2.82, 0.14, 5.02), 0, 2.45, -12.4));
-      wheelsUnder(b, 'wheel', [-10.7, -11.7, -13.1, -14.1], 0.45, 0.95);
-      carRow(b, 4, -15.4, 8.5, {
-        body: ['car', 'car2'], roof: 'roofc', win: 'win', belt: p36 ? 'cream' : null,
-        w: 2.9, y0: 1.15, h: 2.45, wins: 6, winH: 0.75, winW: 0.85,
+      // крышевое оборудование и токоприёмники
+      b.add('steel', place(box(1.4, 0.35, 4.0), 0, 4.55, zc));
+      for (const pz of [-3.2, -L + 2.6]) {
+        b.add('dark', place(box(1.2, 0.18, 0.9), 0, 4.55, pz));
+        b.add('steel', place(box(0.07, 0.07, 1.7), 0, 5.05, pz - 0.2, 0, 0.85));
+        b.add('steel', place(box(0.07, 0.07, 1.7), 0, 5.05, pz + 0.2, 0, -0.85));
+        b.add('steel', place(box(1.7, 0.06, 0.12), 0, 5.7, pz));
+      }
+      carRow(b, 4, -L - 1.1, 9.0, {
+        body: ['car', 'car2'], roof: 'roofc', win: 'win', belt: 'cream',
+        w: 2.9, y0: 1.15, h: 2.5, wins: 7, winH: 0.75, winW: 0.85,
       });
-      smokeColor = p36 ? '#dedad2' : '#bdb7ad';
     } else {
       // «Сапсан»
       mats = {
@@ -1116,7 +1073,7 @@ function createWorld() {
     scene.add(group);
     return { group, stack, smokeColor, type, z: FAR_Z, mode: 'hidden', t0: 0, dur: 1, zFrom: FAR_Z, speed: 0 };
   }
-  const TRACK_OF = { steam51: 22.5, steam55: 17, soviet: 22.5, p36: 17, sapsan: 22.5 };
+  const TRACK_OF = { steam51: 22.5, electro: 17, sapsan: 22.5 };
   for (const t of Object.keys(TRACK_OF)) {
     trains[t] = buildTrain(t);
     trains[t].group.position.set(TRACK_OF[t], 0.4, FAR_Z);
@@ -1302,6 +1259,7 @@ function createWorld() {
     M.plinth.color.copy(l.plinth);
     M.roof.color.copy(l.roof);
     M.city.color.copy(l.city);
+    M.annex.color.copy(l.annex);
     M.glass.emissive.copy(l.winGlow);
     M.glass.emissiveIntensity = l.win;
     M.door.emissive.copy(l.winGlow);
@@ -1320,7 +1278,7 @@ function createWorld() {
       g.visible = v > 0.01;
       if (!g.visible) continue;
       const s = Math.max(v, 0.001);
-      if (f === 'canopy' || f === 'flag' || f === 'catenary') {
+      if (f === 'canopy' || f === 'flag' || f === 'catenary' || f === 'annex') {
         g.children[0].scale.set(1, s, 1);
       } else {
         g.children.forEach((c) => c.scale.setScalar(s));
@@ -1328,7 +1286,7 @@ function createWorld() {
       if (f === 'canopy') M.canopyGlass.opacity = 0.3 * v;
     }
     // ореолы фонарей: только у видимых групп
-    for (const f of ['gas', 'electric', 'modern']) {
+    for (const f of ['gas', 'electric']) {
       const v = l['f_' + f];
       feats[f].traverse((o) => { if (o.isSprite) o.material.opacity = Math.min(1, l.halo * v); });
     }

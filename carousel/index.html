@@ -16,8 +16,15 @@
 
     <!-- Фолбэк без WebGL: иллюстрация-силуэт вместо 3D -->
     <div class="fallback" id="fallback" hidden>
-      <svg class="fallback-art" viewBox="0 0 640 260" aria-hidden="true" focusable="false">
-        <rect x="0" y="236" width="640" height="24" class="fb-ground"/>
+      <svg class="fallback-art" viewBox="-130 0 770 260" aria-hidden="true" focusable="false">
+        <rect x="-130" y="236" width="770" height="24" class="fb-ground"/>
+        <g class="fb-annex">
+          <rect x="-110" y="104" width="142" height="132" class="fb-annex-wall"/>
+          <rect x="-114" y="100" width="150" height="6" class="fb-trim"/>
+          <rect x="-100" y="120" width="122" height="18" class="fb-annex-win"/>
+          <rect x="-100" y="160" width="122" height="18" class="fb-annex-win"/>
+          <rect x="-100" y="200" width="122" height="18" class="fb-annex-win"/>
+        </g>
         <rect x="40" y="132" width="560" height="104" class="fb-wall"/>
         <rect x="30" y="118" width="70" height="118" class="fb-wall2"/>
         <rect x="540" y="118" width="70" height="118" class="fb-wall2"/>
@@ -45,15 +52,15 @@
     <header class="brand">
       <p class="brand-kicker">Москва · Комсомольская площадь</p>
       <h1 class="brand-title">Ленинградский вокзал</h1>
-      <p class="brand-sub">Историческая карусель: 1851–2026</p>
+      <p class="brand-sub">Три эпохи: 1851 — XX век — 2026</p>
     </header>
 
     <section class="panel" id="panel" aria-roledescription="карусель" aria-label="Эпохи Ленинградского вокзала">
       <div class="card" id="card">
-        <p class="card-meta"><span>Эпоха</span> <span id="eraNum">1</span> <span>из</span> <span id="eraTotal">6</span></p>
+        <p class="card-meta"><span>Эпоха</span> <span id="eraNum">1</span> <span>из</span> <span id="eraTotal">3</span></p>
         <p class="card-year" id="eraYear">1851</p>
-        <h2 class="card-title" id="eraTitle">Петербургский вокзал</h2>
-        <p class="card-text" id="eraText">Вокзал открыт в 1851 году по проекту архитектора Константина Тона — это первый вокзал Москвы.</p>
+        <h2 class="card-title" id="eraTitle">Царская эпоха</h2>
+        <p class="card-text" id="eraText">Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона.</p>
       </div>
 
       <div class="controls">
@@ -82,12 +89,9 @@
     <div class="noscript">
       <h2>Ленинградский вокзал: эпохи</h2>
       <ol>
-        <li><b>1851 — Петербургский вокзал.</b> Открыт по проекту Константина Тона, первый вокзал Москвы.</li>
-        <li><b>1855 — Николаевский вокзал.</b> Переименован в честь Николая I.</li>
-        <li><b>1923–1924 — Октябрьский → Ленинградский.</b> Переименован в Октябрьский (1923), затем в Ленинградский.</li>
-        <li><b>1949 — Реставрация интерьеров</b> по проекту архитектора Алексея Душкина.</li>
-        <li><b>2009 — «Сапсан».</b> В декабре 2009 года начал курсировать скоростной поезд «Сапсан».</li>
-        <li><b>2026 — Реконструкция.</b> Закрыт 11.08.2024, открыт 22.05.2026; фасад восстановлен по снимку 1873 года.</li>
+        <li><b>Царская эпоха, 1851.</b> Петербургский вокзал (с 1855 года — Николаевский) открыт по проекту Константина Тона; это первый вокзал Москвы.</li>
+        <li><b>Советская эпоха, 1920–1970-е.</b> В 1923 году вокзал стал Октябрьским, затем Ленинградским; в 1949 году интерьеры реставрированы по проекту Алексея Душкина; в 1960–1970-е вокзал расширяли.</li>
+        <li><b>Настоящее, 2026.</b> Закрыт 11.08.2024, открыт 22.05.2026; фасад восстановлен по снимку 1873 года, над платформами — стеклянный навес более 6,9 тыс. м².</li>
       </ol>
     </div>
   </noscript>

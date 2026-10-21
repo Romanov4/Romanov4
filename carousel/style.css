@@ -201,10 +201,17 @@ body { overflow-x: hidden; }
   min-width: 100%;
   justify-content: space-between;
 }
+.timeline li { flex: 1 1 0; display: flex; }
 .year-btn {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   min-width: 44px;
-  min-height: 36px;
-  padding: 4px 8px;
+  min-height: 44px;
+  padding: 5px 10px;
   border: 1px solid transparent;
   border-radius: 2px;
   background: transparent;
@@ -216,6 +223,9 @@ body { overflow-x: hidden; }
   transition: background-color 0.25s, color 0.25s, border-color 0.25s;
 }
 .year-btn:hover { border-color: var(--bordo); color: var(--bordo); }
+.yb-name { font: 600 19px/1 var(--serif); }
+.yb-years { font: 400 12.5px/1.1 var(--sans); color: var(--muted); letter-spacing: 0.02em; }
+.year-btn[aria-current="true"] .yb-years { color: #f1e6d3; }
 .year-btn[aria-current="true"] {
   background: var(--bordo);
   border-color: var(--bordo);
@@ -270,6 +280,10 @@ button:focus-visible,
 .fb-roof { fill: #4c4a44; }
 .fb-trim { fill: #f3ead6; }
 .fb-win { fill: var(--fb-glow); transition: fill var(--fade); }
+.fb-annex { display: none; }
+.stage[data-era="1"] .fb-annex, .stage[data-era="2"] .fb-annex { display: inline; }
+.fb-annex-wall { fill: #c6bca8; }
+.fb-annex-win { fill: var(--fb-glow); transition: fill var(--fade); }
 .fb-clock { fill: #f8f2e2; stroke: var(--gold); stroke-width: 2; }
 .fb-hand { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
 .fallback-note {
@@ -320,9 +334,13 @@ button:focus-visible,
   .card-year { font-size: 40px; }
   .card-title { font-size: 24px; margin-bottom: 6px; }
   .card-text { font-size: 14.5px; line-height: 1.45; }
-  .controls { margin-top: 10px; padding-top: 10px; gap: 4px; }
+  .controls { margin-top: 10px; padding-top: 10px; gap: 6px; flex-wrap: wrap; }
+  .timeline-wrap { order: -1; flex: 1 1 100%; overflow: visible; }
+  .timeline { width: 100%; padding: 0; }
+  #playBtn { margin-left: auto; }
   .icon-btn { width: 40px; height: 40px; }
-  .year-btn { font-size: 17px; padding: 4px 6px; min-height: 40px; }
+  .year-btn { padding: 4px 4px; min-height: 46px; }
+  .yb-name { font-size: 18px; }
   .hint { display: none; }
   .fallback { padding: 110px 12px 360px; }
   .no-webgl .panel { left: 10px; transform: none; }
@@ -336,7 +354,7 @@ button:focus-visible,
 
 @media (prefers-reduced-motion: reduce) {
   :root { --fade: 0s; }
-  #scene, .vignette, .fallback, .fb-wall, .fb-wall2, .fb-win { transition: none; }
+  #scene, .vignette, .fallback, .fb-wall, .fb-wall2, .fb-win, .fb-annex-win { transition: none; }
   .card.is-changing .card-year,
   .card.is-changing .card-title,
   .card.is-changing .card-text { animation: none; }
