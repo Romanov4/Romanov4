@@ -11,10 +11,11 @@
 <meta property="og:locale" content="ru_RU">
 <meta property="og:title" content="Ленинградский вокзал после реконструкции">
 <meta property="og:description" content="Старейший вокзал Москвы снова открыт: фасад Тона по снимку 1873 года, пять залов ожидания, мозаики «Москва» и «Петербург», музей и прямой выход в метро.">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 28'%3E%3Cg fill='none' stroke='%236b1d24' stroke-width='1.6'%3E%3Cpath d='M11 1 18 7H4Z'/%3E%3Crect x='5' y='7' width='12' height='9'/%3E%3Ccircle cx='11' cy='11.5' r='3'/%3E%3Crect x='2' y='16' width='18' height='11'/%3E%3C/g%3E%3C/svg%3E">
 <script>
-  /* Тема до первой отрисовки: без мигания */
+  /* Тема до первой отрисовки: без мигания; класс js включает анимацию появления */
+  document.documentElement.classList.add("js");
   (function () {
     try {
       var t = localStorage.getItem("lv-theme");
@@ -49,6 +50,7 @@
       "@type": "Article",
       "headline": "Ленинградский вокзал после реконструкции 2024–2026",
       "inLanguage": "ru",
+      "datePublished": "2026-10-21",
       "dateModified": "2026-10-21",
       "about": { "@id": "#station" }
     }
@@ -113,8 +115,13 @@
   .footer li { margin-bottom: var(--sp-2); break-inside: avoid; overflow-wrap: anywhere; }
   .footer h2 { font-size: var(--fs-xl); margin: 0; }
 
+  /* Без JavaScript блоки видны сразу */
+  html:not(.js) .rv { opacity: 1; transform: none; }
+
   @media print {
-    .carousel-frame, .carousel-more, .hero-actions { display: none !important; }
+    .carousel-frame, .carousel-more, .hero-actions, #history { display: none !important; }
+    .ph__fallback { filter: grayscale(1); }
+    .section { padding-block: 4mm; }
   }
 </style>
 </head>
@@ -483,6 +490,7 @@
         <li><time datetime="1923">1923</time><p>Переименован в Октябрьский, затем — в Ленинградский.</p></li>
         <li><time datetime="1949">1949</time><p>Реставрация интерьеров по проекту архитектора Алексея Душкина.</p></li>
         <li><span class="chron__date"><time datetime="1974">1974</time>–<time datetime="1977">1977</time></span><p>Реконструкция: расширение вокзала и раздельные платформы.</p></li>
+        <li><time datetime="2009-12">Декабрь&nbsp;2009</time><p>От вокзала начал курсировать скоростной поезд «Сапсан» до Санкт-Петербурга.</p></li>
         <li><span class="chron__date"><time datetime="2008">2008</time>–<time datetime="2013">2013</time></span><p>Реконструкция, добавившая около 8000&nbsp;м² площадей.</p></li>
         <li><time datetime="2024-08-11">11&nbsp;августа&nbsp;2024</time><p>Здание закрыто для пассажиров, начата комплексная модернизация.</p></li>
         <li class="is-key"><time datetime="2026-05-22">22&nbsp;мая&nbsp;2026</time><p>Сергей Собянин и генеральный директор ОАО «РЖД» Олег Белозёров открывают обновлённый вокзал.</p></li>
