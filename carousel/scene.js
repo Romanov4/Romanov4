@@ -552,7 +552,7 @@ function createWorld() {
   pmrem.dispose();
 
   const camera = new THREE.PerspectiveCamera(36, 1, 1, 3000);
-  const TARGET = new THREE.Vector3(2, 9, -8);
+  const TARGET = new THREE.Vector3(2, 11.5, -8);
 
   /* ---------- Текстуры и материалы ---------- */
   const tx = {
