@@ -246,6 +246,7 @@
   --gutter-lg: 1.5rem;       /* 24 */
   --grid-gap: clamp(1.5rem, 1rem + 2vw, 3.5rem);
   --coffer: 56px;            /* шаг кессона */
+  --topbar-h: 65px;          /* высота закреплённой шапки (0 на мобильном) */
 
   /* Движение */
   --dur-fast: 120ms;
