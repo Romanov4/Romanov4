@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Историческая карусель — Ленинградский вокзал</title>
+  <meta name="description" content="Интерактивная 3D-сцена: Ленинградский вокзал в Москве от 1851 года до реконструкции 2026 года.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=PT+Sans:wght@400;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="stage" id="stage" data-era="0">
+    <canvas id="scene" role="img" aria-label="Трёхмерная модель Ленинградского вокзала"></canvas>
+
+    <!-- Фолбэк без WebGL: иллюстрация-силуэт вместо 3D -->
+    <div class="fallback" id="fallback" hidden>
+      <svg class="fallback-art" viewBox="0 0 640 260" aria-hidden="true" focusable="false">
+        <rect x="0" y="236" width="640" height="24" class="fb-ground"/>
+        <rect x="40" y="132" width="560" height="104" class="fb-wall"/>
+        <rect x="30" y="118" width="70" height="118" class="fb-wall2"/>
+        <rect x="540" y="118" width="70" height="118" class="fb-wall2"/>
+        <rect x="245" y="100" width="150" height="136" class="fb-wall2"/>
+        <rect x="285" y="60" width="70" height="40" class="fb-wall"/>
+        <rect x="295" y="22" width="50" height="40" class="fb-wall2"/>
+        <polygon points="300,22 320,2 340,22" class="fb-roof"/>
+        <circle cx="320" cy="42" r="13" class="fb-clock"/>
+        <line x1="320" y1="42" x2="320" y2="33" class="fb-hand"/>
+        <line x1="320" y1="42" x2="327" y2="45" class="fb-hand"/>
+        <rect x="36" y="128" width="568" height="5" class="fb-trim"/>
+        <rect x="36" y="182" width="568" height="4" class="fb-trim"/>
+        <g class="fb-win">
+          <path d="M60 230v-30a8 8 0 0 1 16 0v30z M92 230v-30a8 8 0 0 1 16 0v30z M130 230v-30a8 8 0 0 1 16 0v30z M164 230v-30a8 8 0 0 1 16 0v30z M198 230v-30a8 8 0 0 1 16 0v30z M426 230v-30a8 8 0 0 1 16 0v30z M460 230v-30a8 8 0 0 1 16 0v30z M494 230v-30a8 8 0 0 1 16 0v30z M532 230v-30a8 8 0 0 1 16 0v30z M564 230v-30a8 8 0 0 1 16 0v30z"/>
+          <path d="M60 172v-26a8 8 0 0 1 16 0v26z M92 172v-26a8 8 0 0 1 16 0v26z M130 172v-26a8 8 0 0 1 16 0v26z M164 172v-26a8 8 0 0 1 16 0v26z M198 172v-26a8 8 0 0 1 16 0v26z M426 172v-26a8 8 0 0 1 16 0v26z M460 172v-26a8 8 0 0 1 16 0v26z M494 172v-26a8 8 0 0 1 16 0v26z M532 172v-26a8 8 0 0 1 16 0v26z M564 172v-26a8 8 0 0 1 16 0v26z"/>
+          <path d="M262 236v-44a12 12 0 0 1 24 0v44z M308 236v-44a12 12 0 0 1 24 0v44z M354 236v-44a12 12 0 0 1 24 0v44z"/>
+          <path d="M264 174v-36a10 10 0 0 1 20 0v36z M310 174v-36a10 10 0 0 1 20 0v36z M356 174v-36a10 10 0 0 1 20 0v36z"/>
+        </g>
+      </svg>
+      <p class="fallback-note">3D-модель недоступна в этом браузере — показана текстовая версия карусели.</p>
+    </div>
+
+    <div class="vignette" aria-hidden="true"></div>
+
+    <header class="brand">
+      <p class="brand-kicker">Москва · Комсомольская площадь</p>
+      <h1 class="brand-title">Ленинградский вокзал</h1>
+      <p class="brand-sub">Историческая карусель: 1851–2026</p>
+    </header>
+
+    <section class="panel" id="panel" aria-roledescription="карусель" aria-label="Эпохи Ленинградского вокзала">
+      <div class="card" id="card">
+        <p class="card-meta"><span>Эпоха</span> <span id="eraNum">1</span> <span>из</span> <span id="eraTotal">6</span></p>
+        <p class="card-year" id="eraYear">1851</p>
+        <h2 class="card-title" id="eraTitle">Петербургский вокзал</h2>
+        <p class="card-text" id="eraText">Вокзал открыт в 1851 году по проекту архитектора Константина Тона — это первый вокзал Москвы.</p>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="icon-btn" id="prevBtn" aria-label="Предыдущая эпоха">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <nav class="timeline-wrap" aria-label="Шкала времени">
+          <ol class="timeline" id="timeline"></ol>
+        </nav>
+        <button type="button" class="icon-btn" id="nextBtn" aria-label="Следующая эпоха">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="playBtn" aria-label="Остановить автопрокрутку эпох">
+          <svg class="i-pause" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <svg class="i-play" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+      <p class="hint" id="hint">Вращайте модель мышью или пальцем · ← → листают эпохи</p>
+    </section>
+
+    <div class="visually-hidden" id="announcer" aria-live="polite" aria-atomic="true"></div>
+  </main>
+
+  <noscript>
+    <div class="noscript">
+      <h2>Ленинградский вокзал: эпохи</h2>
+      <ol>
+        <li><b>1851 — Петербургский вокзал.</b> Открыт по проекту Константина Тона, первый вокзал Москвы.</li>
+        <li><b>1855 — Николаевский вокзал.</b> Переименован в честь Николая I.</li>
+        <li><b>1923–1924 — Октябрьский → Ленинградский.</b> Переименован в Октябрьский (1923), затем в Ленинградский.</li>
+        <li><b>1949 — Реставрация интерьеров</b> по проекту архитектора Алексея Душкина.</li>
+        <li><b>2009 — «Сапсан».</b> В декабре 2009 года начал курсировать скоростной поезд «Сапсан».</li>
+        <li><b>2026 — Реконструкция.</b> Закрыт 11.08.2024, открыт 22.05.2026; фасад восстановлен по снимку 1873 года.</li>
+      </ol>
+    </div>
+  </noscript>
+
+  <script type="module" src="scene.js"></script>
+</body>
+</html>
