@@ -1346,9 +1346,12 @@ function createWorld() {
   controls.addEventListener('end', () => { lastUser = performance.now(); });
 
   function initialCamera(aspect) {
-    const r = aspect < 0.8 ? 86 : aspect < 1.2 ? 84 : 68;
-    const sph = new THREE.Spherical(r, 1.36, 0.74);
-    camera.position.copy(TARGET).add(new THREE.Vector3().setFromSpherical(sph));
+    const portrait = aspect < 0.8;
+    // на узком экране — более «боковой» ракурс: корпус и поезд выстраиваются по диагонали кадра
+    if (portrait) controls.target.set(4, 5, -8);
+    const r = portrait ? 104 : aspect < 1.2 ? 84 : 68;
+    const sph = new THREE.Spherical(r, portrait ? 1.3 : 1.36, portrait ? 0.9 : 0.74);
+    camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
     controls.update();
   }
 
@@ -1363,7 +1366,7 @@ function createWorld() {
     const narrow = W < 721;
     camera.fov = W / H < 0.8 ? 48 : 36;
     // сдвигаем кадр так, чтобы здание не пряталось под карточкой
-    if (narrow) camera.setViewOffset(W, H, -Math.round(W * 0.04), Math.round(H * 0.15), W, H);
+    if (narrow) camera.setViewOffset(W, H, 0, Math.round(H * 0.18), W, H);
     else camera.setViewOffset(W, H, -Math.round(W * 0.1), Math.round(H * 0.06), W, H);
     camera.updateProjectionMatrix();
     const ms = narrow ? 1024 : 2048;
