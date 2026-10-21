@@ -1,0 +1,275 @@
+/* ==========================================================================
+   Ленинградский вокзал — дизайн-токены
+   Классика К. Тона: бумага и камень, чернила, бордо, синий, золото как декор.
+
+   Слои:
+   1. Примитивы палитры (меняются по теме): --paper, --ink, --bordeaux …
+   2. Семантические алиасы (не меняются, ссылаются на примитивы): --text, --accent …
+   3. Шкалы: типографика, отступы, радиусы, линии, тени, сетка, движение, z-index.
+
+   Тёмная тема включается:
+   - автоматически по prefers-color-scheme: dark, если нет data-theme="light";
+   - принудительно через data-theme="dark" на <html> (или на любом блоке-«островке»).
+
+   Брейкпоинты (CSS-переменные нельзя использовать в @media, поэтому — справочно):
+   --bp-sm   480px   крупный телефон
+   --bp-md   640px   таблицы → карточки, заголовок раздела в одну колонку
+   --bp-lg   860px   цифры 4 → 2 колонки, «дуэт» текст+фото → одна колонка
+   --bp-xl  1120px   максимальная ширина контейнера
+   ========================================================================== */
+
+/* ---------- 1. Палитра: светлая тема (по умолчанию) ---------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Поверхности */
+  --paper: #f6f1e6;          /* основной фон, «бумага» */
+  --stone: #ece4d3;          /* вторичный фон, «камень», врезки */
+  --raised: #fbf8f1;         /* приподнятые карточки, поля таблиц */
+  --night: #2a1316;          /* тёмный «бархатный» раздел (мозаики) */
+
+  /* Текст */
+  --ink: #221d17;            /* основной текст            14.84:1 на paper */
+  --muted: #665d50;          /* вторичный текст            5.74:1 на paper, 5.11:1 на stone */
+
+  /* Акценты */
+  --bordeaux: #6b1d24;       /* главный акцент            10.21:1 на paper */
+  --bordeaux-strong: #4f141a;/* hover/active */
+  --bordeaux-soft: #f1e2df;  /* тонировка фона под акцент */
+  --blue: #1f3d66;           /* второй акцент, «служебный» 9.72:1 на paper */
+  --blue-strong: #142a49;
+  --blue-soft: #e3e8ef;      /* фон примечаний, кессонов */
+  --gold: #a8843f;           /* ТОЛЬКО декор и крупный текст на paper/raised (3.09:1) */
+  --gold-text: #7a5c20;      /* «старое золото» для мелкого текста 5.52:1 на paper, 4.91:1 на stone */
+
+  /* Линии */
+  --line: #d6cab3;           /* волосяные линии, разделители (декоративные) */
+  --line-strong: #8a7859;    /* границы элементов управления ≥3:1 на paper/stone */
+
+  /* На тёмном разделе (night) */
+  --on-night: #f6f1e6;       /* 15.50:1 */
+  --on-night-muted: #c9bca5; /*  9.33:1 */
+  --gold-on-night: #d9b26a;  /*  8.75:1 */
+  --line-on-night: #4a2d31;
+
+  /* Текст на акцентной заливке (кнопки) */
+  --on-accent: #f6f1e6;      /* 10.21:1 на bordeaux */
+
+  /* Фасад по снимку 1873 г. (интерпретация для декора, не для текста) */
+  --facade-field: #d9c29a;   /* основной тон стены */
+  --facade-trim: #efe6d3;    /* второй тон: тяги, наличники, пилястры */
+  --facade-joint: #fbfaf5;   /* белые известковые швы кладки */
+
+  /* Смальта «Две столицы» (только иллюстрации и орнамент) */
+  --smalt-blue: #24477c;
+  --smalt-gold: #b8892f;
+  --smalt-red: #7c2228;
+  --smalt-green: #2e5b4f;
+
+  /* Состояния */
+  --focus: #1f3d66;          /* кольцо фокуса 9.72:1 на paper */
+  --focus-halo: #f6f1e6;     /* внутренняя подложка кольца */
+  --selection: #e8d9b5;
+  --lamp: #f3d9a0;           /* «светильник» в кессоне */
+}
+
+/* ---------- 1b. Палитра: тёмная тема ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #16120f;
+    --stone: #201b16;
+    --raised: #29221c;
+    --night: #241012;
+    --ink: #eee6d6;            /* 15.01:1 на paper */
+    --muted: #ab9f8c;          /*  7.16:1 */
+    --bordeaux: #d88a8e;       /*  7.05:1 */
+    --bordeaux-strong: #e8a9ac;
+    --bordeaux-soft: #2c1a1b;
+    --blue: #9dbbe3;           /*  9.45:1 */
+    --blue-strong: #bcd2ee;
+    --blue-soft: #1a2230;
+    --gold: #cfaa62;           /*  8.50:1 — на тёмном золото допустимо и мелким */
+    --gold-text: #d4b06a;
+    --line: #3b332a;
+    --line-strong: #7a6a54;
+    --on-night: #eee6d6;
+    --on-night-muted: #bfb19a;
+    --gold-on-night: #d9b26a;
+    --line-on-night: #43292c;
+    --on-accent: #16120f;      /*  7.05:1 на bordeaux */
+    --facade-field: #8a7656;
+    --facade-trim: #b4a78f;
+    --facade-joint: #ddd6c8;
+    --smalt-blue: #6f93c8;
+    --smalt-gold: #d0a24a;
+    --smalt-red: #c0585e;
+    --smalt-green: #6fa08f;
+    --focus: #9dbbe3;
+    --focus-halo: #16120f;
+    --selection: #4a3a22;
+    --lamp: #f0cf86;
+  }
+}
+
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #16120f;
+  --stone: #201b16;
+  --raised: #29221c;
+  --night: #241012;
+  --ink: #eee6d6;
+  --muted: #ab9f8c;
+  --bordeaux: #d88a8e;
+  --bordeaux-strong: #e8a9ac;
+  --bordeaux-soft: #2c1a1b;
+  --blue: #9dbbe3;
+  --blue-strong: #bcd2ee;
+  --blue-soft: #1a2230;
+  --gold: #cfaa62;
+  --gold-text: #d4b06a;
+  --line: #3b332a;
+  --line-strong: #7a6a54;
+  --on-night: #eee6d6;
+  --on-night-muted: #bfb19a;
+  --gold-on-night: #d9b26a;
+  --line-on-night: #43292c;
+  --on-accent: #16120f;
+  --facade-field: #8a7656;
+  --facade-trim: #b4a78f;
+  --facade-joint: #ddd6c8;
+  --smalt-blue: #6f93c8;
+  --smalt-gold: #d0a24a;
+  --smalt-red: #c0585e;
+  --smalt-green: #6fa08f;
+  --focus: #9dbbe3;
+  --focus-halo: #16120f;
+  --selection: #4a3a22;
+  --lamp: #f0cf86;
+}
+
+/* ---------- 2. Семантические алиасы ----------
+   Объявлены и на [data-theme], чтобы «островок» другой темы пересчитал их. */
+:root,
+[data-theme] {
+  --bg: var(--paper);
+  --bg-alt: var(--stone);
+  --surface: var(--raised);
+  --text: var(--ink);
+  --text-muted: var(--muted);
+  --accent: var(--bordeaux);
+  --accent-hover: var(--bordeaux-strong);
+  --accent-2: var(--blue);
+  --ornament: var(--gold);
+  --rule: var(--line);
+  --focus-ring: 0 0 0 2px var(--focus-halo), 0 0 0 4px var(--focus);
+}
+
+/* ---------- 3. Шкалы (не зависят от темы) ---------- */
+:root {
+  /* Шрифты */
+  --font-display: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+  --font-text: "PT Sans", "PT Sans Caption", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Типографическая шкала (база 17px; ~1.25 на мобильном → ~1.333 на десктопе) */
+  --fs-xs: 0.8125rem;                                   /* 13 — подписи, кикер */
+  --fs-sm: 0.9375rem;                                   /* 15 — примечания */
+  --fs-base: 1.0625rem;                                 /* 17 — основной текст */
+  --fs-md: clamp(1.125rem, 1.08rem + 0.2vw, 1.1875rem); /* 18–19 — лид */
+  --fs-lg: clamp(1.375rem, 1.25rem + 0.55vw, 1.625rem); /* 22–26 — h3, даты хроники */
+  --fs-xl: clamp(1.75rem, 1.5rem + 1.1vw, 2.25rem);     /* 28–36 — h3 крупный, римская цифра моб. */
+  --fs-2xl: clamp(2rem, 1.45rem + 2.4vw, 3.25rem);      /* 32–52 — h2 раздела */
+  --fs-3xl: clamp(2.625rem, 1.6rem + 4.6vw, 5.5rem);    /* 42–88 — h1 */
+  --fs-figure: clamp(2.5rem, 2rem + 2vw, 3.25rem);      /* 40–52 — цифры показателей */
+  --fs-dropcap: 4rem;                                   /* 64 — буквица */
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Межстрочные */
+  --lh-tight: 1.05;   /* h1, цифры */
+  --lh-heading: 1.15; /* h2–h3 */
+  --lh-snug: 1.4;     /* подписи, таблицы */
+  --lh-text: 1.65;    /* основной текст */
+
+  /* Трекинг */
+  --tr-tight: -0.01em; /* крупный антиквенный кегль */
+  --tr-normal: 0;
+  --tr-wide: 0.06em;   /* навигация капителью */
+  --tr-caps: 0.14em;   /* заголовки таблиц */
+  --tr-kicker: 0.22em; /* кикер */
+
+  /* Мера строки */
+  --measure: 66ch;
+  --measure-narrow: 46ch;
+
+  /* Отступы: шкала 4/8 */
+  --sp-1: 0.25rem;  /*   4 */
+  --sp-2: 0.5rem;   /*   8 */
+  --sp-3: 0.75rem;  /*  12 */
+  --sp-4: 1rem;     /*  16 */
+  --sp-5: 1.5rem;   /*  24 */
+  --sp-6: 2rem;     /*  32 */
+  --sp-7: 2.5rem;   /*  40 */
+  --sp-8: 3rem;     /*  48 */
+  --sp-9: 4rem;     /*  64 */
+  --sp-10: 5rem;    /*  80 */
+  --sp-11: 6rem;    /*  96 */
+  --section-y: clamp(3.5rem, 2.5rem + 4vw, 5.5rem); /* 56–88 */
+
+  /* Радиусы: архитектура почти без скруглений */
+  --radius-0: 0;
+  --radius-1: 2px;  /* кнопки, поля */
+  --radius-2: 4px;  /* чипы, фокус */
+  --radius-round: 999px;
+
+  /* Линии */
+  --bw-hair: 1px;
+  --bw-rule: 2px;   /* «синяя» линия над таблицей/цифрами */
+  --bw-bar: 4px;    /* верхняя планка навигации, подвал */
+  --bw-note: 3px;   /* левая линия примечания */
+  --passe-gap: 6px; /* зазор двойной рамки паспарту */
+
+  /* Тени: минимальные, только для приподнятых слоёв */
+  --shadow-1: 0 1px 0 rgb(34 29 23 / 0.06);
+  --shadow-2: 0 1px 2px rgb(34 29 23 / 0.08), 0 4px 12px rgb(34 29 23 / 0.06);
+  --shadow-inset: inset 0 1px 2px rgb(34 29 23 / 0.12);
+
+  /* Сетка и контейнеры */
+  --container: 70rem;        /* 1120 */
+  --container-narrow: 47.5rem; /* 760 */
+  --gutter: 1rem;            /* 16 — поле страницы на телефоне */
+  --gutter-lg: 1.5rem;       /* 24 */
+  --grid-gap: clamp(1.5rem, 1rem + 2vw, 3.5rem);
+  --coffer: 56px;            /* шаг кессона */
+
+  /* Движение */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 600ms;
+  --dur-reveal: 900ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Слои */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-overlay: 500;
+  --z-modal: 900;
+  --z-skip: 1000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --dur-reveal: 0ms;
+  }
+}
