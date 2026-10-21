@@ -1294,7 +1294,7 @@ function createWorld() {
   function avoid(x, z) {
     if (x > -40 && x < 50 && z < 30) return true; // вокзал и пути
     if (x > -70 && x < 70 && z > -10 && z < 80) return true; // площадь
-    if (x > 55 && x < 135 && z > -25 && z < 30) return true; // Ярославский
+    if (x > 85 && x < 160 && z > -40 && z < 15) return true; // Ярославский
     if (x > -85 && x < 65 && z > 195 && z < 245) return true; // Казанский
     return false;
   }
@@ -1324,11 +1324,11 @@ function createWorld() {
     const g = featGroup('neighbors');
     const b = new Batch();
     // Ярославский — справа при взгляде с площади: светлые стены, высокая шатровая кровля
-    b.add('trim', place(box(48, 14, 22), 96, 7, 2));
-    b.add('roof', place(hipRoof(30, 18, 11), 100, 14, 2));
-    b.add('wallB', place(box(48.4, 1.2, 22.4), 96, 9.5, 2));
-    b.add('trim', place(box(9, 13, 9), 74, 13.5, 6));
-    b.add('roof', place(new THREE.ConeGeometry(7, 14, 4).rotateY(Math.PI / 4), 74, 27, 6));
+    b.add('trim', place(box(48, 14, 22), 122, 7, -12));
+    b.add('roof', place(hipRoof(30, 18, 11), 126, 14, -12));
+    b.add('wallB', place(box(48.4, 1.2, 22.4), 122, 9.5, -12));
+    b.add('trim', place(box(9, 13, 9), 100, 13.5, -8));
+    b.add('roof', place(new THREE.ConeGeometry(7, 14, 4).rotateY(Math.PI / 4), 100, 27, -8));
     // Казанский — напротив через площадь, с ярусной башней
     b.add('trim', place(box(120, 13, 22), -8, 6.5, 222));
     b.add('wallB', place(box(120.4, 1.0, 22.4), -8, 11.5, 222));
