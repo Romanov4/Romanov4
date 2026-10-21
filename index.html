@@ -7,275 +7,281 @@
 <meta name="description" content="Что изменилось на Ленинградском вокзале Москвы после реконструкции 2024–2026 годов">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #ffffff;
-    --surface: #f2f3f5;
-    --ink: #121212;
-    --muted: #63676e;
-    --line: #dfe1e5;
-    --red: #d6281e;
-    --red-soft: #fdecea;
-    --l1: #e4231c;   /* Сокольническая линия */
-    --l5: #8d5b2d;   /* Кольцевая линия */
-    --sign: #1b1f24; /* навигационная плашка */
-    --sign-ink: #ffffff;
+    --paper: #fff6e0;
+    --ink: #111111;
+    --yellow: #ffe100;
+    --pink: #ff2e88;
+    --cyan: #00bfff;
+    --red: #ff3b1f;
+    --card: #ffffff;
+    --dot: rgba(17, 17, 17, .18);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #111316;
-      --surface: #1c1f23;
-      --ink: #f2f3f5;
-      --muted: #9aa0a8;
-      --line: #2e3238;
-      --red: #ff4a3d;
-      --red-soft: #3a1c1a;
-      --sign: #2a2e34;
+      --paper: #16131c;
+      --card: #221e2b;
+      --dot: rgba(255, 255, 255, .08);
     }
+    :root:not([data-theme="light"]) body { color: #fff6e0; }
   }
-  :root[data-theme="dark"] {
-    --bg: #111316;
-    --surface: #1c1f23;
-    --ink: #f2f3f5;
-    --muted: #9aa0a8;
-    --line: #2e3238;
-    --red: #ff4a3d;
-    --red-soft: #3a1c1a;
-    --sign: #2a2e34;
-  }
+  :root[data-theme="dark"] { --paper: #16131c; --card: #221e2b; --dot: rgba(255, 255, 255, .08); }
+  :root[data-theme="dark"] body { color: #fff6e0; }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    margin: 0;
-    background: var(--bg);
+    margin: 0; overflow-x: hidden;
     color: var(--ink);
-    font: 17px/1.55 "Golos Text", system-ui, sans-serif;
+    background: var(--paper) radial-gradient(var(--dot) 1.4px, transparent 1.6px) 0 0 / 14px 14px;
+    font: 18px/1.55 Rubik, system-ui, sans-serif;
   }
-  h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 700; letter-spacing: -.01em; }
-  a { color: var(--red); }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+  h1, h2, h3, .mono { font-family: "Rubik Mono One", Rubik, sans-serif; font-weight: 400; line-height: 1.05; margin: 0; text-transform: uppercase; }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
 
-  /* Line badges, like on Moscow transport signage */
-  .badge {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-width: 30px; height: 30px; padding: 0 8px;
-    border-radius: 15px; color: #fff; font-weight: 700; font-size: 15px; font-style: normal;
+  /* Comic primitives */
+  .box { border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+  .cap {
+    display: inline-block; background: var(--yellow); color: var(--ink);
+    border: 3px solid var(--ink); padding: 6px 12px; font-weight: 700;
+    font-size: 15px; text-transform: uppercase; letter-spacing: .04em;
   }
-  .b1 { background: var(--l1); }
-  .b5 { background: var(--l5); }
-  .bt { background: var(--red); }
+  .hl { padding: 0 .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; color: var(--ink); }
+  .hl.y { background: var(--yellow); } .hl.p { background: var(--pink); color: #fff; } .hl.c { background: var(--cyan); }
 
-  /* Top bar */
-  .topbar { background: var(--red); color: #fff; }
-  .topbar .wrap { display: flex; align-items: center; gap: 12px; height: 56px; font-weight: 600; }
-  .topbar svg { flex: none; }
-  .topbar span { opacity: .85; font-weight: 500; margin-left: auto; font-size: 15px; }
-  @media (max-width: 520px) { .topbar span { display: none; } }
+  /* Photo slot: shows the image if it exists in img/, otherwise a halftone placeholder */
+  .ph { position: relative; margin: 0; overflow: hidden; background: var(--cyan); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; filter: contrast(1.15) saturate(1.35); transition: transform .6s ease; }
+  .ph::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(rgba(0,0,0,.28) 1px, transparent 1.4px) 0 0 / 6px 6px;
+    mix-blend-mode: multiply; opacity: .55;
+  }
+  .ph:hover img { transform: scale(1.05); }
+  .ph.empty {
+    display: grid; place-items: center; text-align: center; padding: 16px;
+    background: var(--c, var(--cyan)) radial-gradient(rgba(0,0,0,.22) 3px, transparent 3.5px) 0 0 / 16px 16px;
+  }
+  .ph.empty::before {
+    content: "ФОТО · " attr(data-label); font: 700 14px Rubik, sans-serif; text-transform: uppercase;
+    background: var(--card); color: var(--ink); border: 3px solid var(--ink); padding: 6px 10px; max-width: 90%;
+  }
+  :root .ph.empty::before { color: #111; background: #fff; }
+  .ph figcaption { position: absolute; left: 12px; bottom: 12px; z-index: 1; max-width: calc(100% - 24px); }
 
   /* Hero */
-  .hero { padding: 56px 0 48px; }
-  .hero h1 { font-size: clamp(38px, 6.5vw, 72px); font-weight: 800; margin: 0 0 20px; max-width: 900px; }
-  .hero p { max-width: 640px; font-size: 19px; color: var(--muted); margin: 0; }
+  .hero { position: relative; min-height: 100vh; display: grid; align-items: end; border-bottom: 4px solid var(--ink); }
+  .hero .ph { position: absolute; inset: 0; }
+  .hero .ph.empty::before { margin-bottom: 40vh; }
+  .hero-text { position: relative; z-index: 2; padding: 0 16px 56px; min-width: 0; width: 100%; }
+  .hero h1 { font-size: clamp(22px, 7.4vw, 104px); }
+  .hero h1 span { display: inline-block; background: var(--yellow); border: 4px solid var(--ink); padding: 6px 16px 2px; margin: 0 0 10px; box-shadow: 8px 8px 0 var(--ink); }
+  .hero h1 span:nth-child(2) { background: var(--pink); color: #fff; transform: rotate(-1.5deg); }
+  .hero p { max-width: 560px; background: var(--card); border: 4px solid var(--ink); padding: 14px 18px; margin: 18px 0 0; font-size: 19px; font-weight: 500; }
 
-  .sign {
-    margin-top: 40px; background: var(--sign); color: var(--sign-ink);
-    border-radius: 16px; padding: 20px 24px;
-    display: grid; grid-template-columns: auto 1fr; gap: 14px 20px; align-items: center;
-  }
-  .sign .pict {
-    width: 56px; height: 56px; border-radius: 12px; background: #fff;
-    display: grid; place-items: center; grid-row: span 2;
-  }
-  .sign .name { font-size: 26px; font-weight: 700; }
-  .sign .name small { display: block; font-size: 15px; font-weight: 400; opacity: .7; }
-  .sign .transfers { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 15px; }
-  .sign .transfers > span { display: inline-flex; align-items: center; gap: 8px; }
-  @media (max-width: 520px) {
-    .sign { grid-template-columns: 1fr; }
-    .sign .pict { grid-row: auto; }
-  }
+  /* Marquee */
+  .ticker { background: var(--ink); color: var(--yellow); overflow: hidden; border-bottom: 4px solid var(--ink); white-space: nowrap; }
+  .ticker div { display: inline-block; padding: 14px 0; font: 22px "Rubik Mono One", sans-serif; animation: run 28s linear infinite; }
+  .ticker b { color: var(--pink); font-weight: 400; margin: 0 18px; }
+  @keyframes run { to { transform: translateX(-50%); } }
 
-  section { padding: 64px 0; }
-  section + section { border-top: 1px solid var(--line); }
-  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
-  .head .ico {
-    flex: none; width: 44px; height: 44px; border-radius: 10px;
-    background: var(--red); color: #fff; display: grid; place-items: center;
-  }
-  section h2 { font-size: clamp(28px, 4vw, 40px); }
-  .lead { color: var(--muted); max-width: 680px; margin: 0 0 32px; }
+  section { padding: 88px 0; }
+  .sec-title { font-size: clamp(30px, 5vw, 64px); margin-bottom: 28px; }
+  .sec-title em { font-style: normal; color: var(--pink); -webkit-text-stroke: 2px var(--ink); }
 
   /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-  .stat { background: var(--surface); border-radius: 16px; padding: 22px; }
-  .stat b { display: block; font-size: 38px; font-weight: 800; line-height: 1.1; margin-bottom: 6px; }
-  .stat b em { font-style: normal; color: var(--red); }
-  .stat span { color: var(--muted); font-size: 15px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .stat { padding: 24px; color: var(--ink); }
+  .stat:nth-child(1) { background: var(--yellow); } .stat:nth-child(2) { background: var(--cyan); }
+  .stat:nth-child(3) { background: var(--pink); color: #fff; } .stat:nth-child(4) { background: var(--red); color: #fff; }
+  .stat b { display: block; font: 46px/1 "Rubik Mono One", sans-serif; margin-bottom: 12px; }
+  .stat b small { display: block; font-size: 18px; margin-top: 6px; }
+  .stat > span { font-weight: 500; }
+
+  /* Big photo + text split */
+  .split { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+  .split.rev { grid-template-columns: 1fr 1.3fr; }
+  .split.rev .ph { order: 2; }
+  .split .ph { aspect-ratio: 4 / 5; }
+  @media (max-width: 820px) { .split, .split.rev { grid-template-columns: 1fr; } .split.rev .ph { order: 0; } .split .ph { aspect-ratio: 4 / 3; } }
+
+  /* Stories: comic panels */
+  .story { margin-bottom: 72px; }
+  .story:last-child { margin-bottom: 0; }
+  .story .num { font: 15px "Rubik Mono One", sans-serif; display: inline-block; background: var(--ink); color: var(--yellow); padding: 6px 10px; margin-bottom: 14px; }
+  .story h3 { font-size: clamp(24px, 3.4vw, 40px); margin-bottom: 18px; }
+  .story p { margin: 0 0 14px; }
+  .panel { background: var(--card); padding: 24px; }
+
+  /* Gallery of close-ups */
+  .gallery { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 180px; gap: 16px; }
+  .gallery .ph:nth-child(1) { grid-column: span 4; grid-row: span 2; }
+  .gallery .ph:nth-child(2) { grid-column: span 2; grid-row: span 2; --c: var(--pink); }
+  .gallery .ph:nth-child(3) { grid-column: span 2; --c: var(--yellow); }
+  .gallery .ph:nth-child(4) { grid-column: span 2; --c: var(--red); }
+  .gallery .ph:nth-child(5) { grid-column: span 2; }
+  @media (max-width: 720px) {
+    .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
+    .gallery .ph:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+    .gallery .ph:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  }
 
   /* Before / after */
-  .compare { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-  .compare th, .compare td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  .compare thead th { background: var(--sign); color: var(--sign-ink); font-size: 14px; font-weight: 600; }
-  .compare thead th:last-child { background: var(--red); }
-  .compare tr:last-child td { border-bottom: 0; }
-  .compare td:first-child { font-weight: 600; width: 20%; }
-  .compare td:nth-child(2) { color: var(--muted); }
-  .compare td:last-child { background: var(--red-soft); font-weight: 500; }
-  @media (max-width: 640px) {
-    .compare thead { display: none; }
-    .compare tr { display: block; border-bottom: 1px solid var(--line); }
-    .compare tr:last-child { border-bottom: 0; }
-    .compare td { display: block; border: 0; padding: 6px 16px; width: auto !important; }
-    .compare td:first-child { padding-top: 14px; }
-    .compare td:last-child { padding-bottom: 14px; }
-    .compare td:nth-child(2)::before { content: "Было: "; }
-    .compare td:nth-child(3)::before { content: "Стало: "; color: var(--red); font-weight: 700; }
-  }
+  .ba { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .ba .item { background: var(--card); padding: 22px; }
+  .ba h3 { font-size: 20px; margin-bottom: 12px; }
+  .ba .was { color: #777; text-decoration: line-through; text-decoration-thickness: 2px; margin: 0 0 8px; }
+  .ba .now { margin: 0; font-weight: 500; }
+  .ba .now::before { content: "Теперь: "; background: var(--pink); color: #fff; padding: 0 6px; margin-right: 4px; font-weight: 700; }
 
-  /* Features */
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
-  .card { background: var(--surface); border-radius: 16px; padding: 24px; }
-  .card .badge { margin-bottom: 16px; }
-  .card h3 { font-size: 21px; margin-bottom: 8px; }
-  .card p { margin: 0; color: var(--muted); }
+  /* Timeline */
+  .tl { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .tl div { background: var(--card); padding: 20px; }
+  .tl div:last-child { background: var(--yellow); color: var(--ink); }
+  .tl time { font: 20px "Rubik Mono One", sans-serif; display: block; margin-bottom: 8px; }
+  .tl p { margin: 0; font-size: 16px; }
+  .note { margin-top: 32px; max-width: 760px; background: var(--card); padding: 16px 18px; font-size: 15px; }
 
-  /* Mosaic */
-  .mosaic { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; }
-  @media (max-width: 760px) { .mosaic { grid-template-columns: 1fr; } }
-  .tiles { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; aspect-ratio: 12 / 7; border-radius: 16px; overflow: hidden; }
-
-  /* Timeline drawn as a metro line */
-  .route { list-style: none; margin: 0; padding: 0; position: relative; }
-  .route::before { content: ""; position: absolute; left: 11px; top: 12px; bottom: 12px; width: 8px; border-radius: 4px; background: var(--red); }
-  .route li { position: relative; padding: 0 0 30px 52px; }
-  .route li:last-child { padding-bottom: 0; }
-  .route li::before {
-    content: ""; position: absolute; left: 3px; top: 2px; width: 24px; height: 24px;
-    border-radius: 50%; background: var(--bg); border: 6px solid var(--red); box-sizing: border-box;
-  }
-  .route li.now::before { background: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
-  .route time { font-weight: 700; font-size: 19px; display: block; }
-  .route p { margin: 2px 0 0; color: var(--muted); }
-
-  .note {
-    display: flex; gap: 12px; align-items: flex-start;
-    background: var(--surface); border-radius: 12px; padding: 16px 18px;
-    font-size: 15px; color: var(--muted); margin-top: 32px; max-width: 760px;
-  }
-  .note b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-size: 14px; }
-
-  footer { background: var(--sign); color: #c9ccd1; padding: 40px 0 56px; font-size: 14px; }
-  footer strong { color: #fff; }
-  footer a { color: #fff; }
-  footer ul { padding-left: 18px; margin: 8px 0 0; }
+  footer { background: var(--ink); color: #fff6e0; padding: 48px 0 64px; font-size: 14px; border-top: 4px solid var(--ink); }
+  footer h2 { font-size: 22px; color: var(--yellow); margin-bottom: 12px; }
+  footer ul { padding-left: 18px; margin: 0; }
   footer li { margin-bottom: 4px; overflow-wrap: anywhere; }
+
+  /* Box text inside dark mode stays readable */
+  .panel, .ba .item, .tl div, .note, .hero p { color: inherit; }
+
+  /* Scroll reveal */
+  .rv { opacity: 0; transform: translateY(40px) rotate(-1deg); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1.2); }
+  .rv.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; transition: none; }
+    .ticker div { animation: none; }
+    .ph img { transition: none; }
+  }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="wrap">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l-2 0M15 21h2M8 17l-2 4M16 17l2 4"/><circle cx="9" cy="14" r=".5"/><circle cx="15" cy="14" r=".5"/></svg>
-    Ленинградский вокзал
-    <span>Москва · Комсомольская площадь, 3</span>
-  </div>
-</div>
-
 <header class="hero">
-  <div class="wrap">
-    <h1>Ленинградский вокзал после реконструкции</h1>
-    <p>Самый старый вокзал Москвы почти два года был закрыт и в мае 2026 года открылся снова. Пассажирских площадей стало почти вдвое больше, в главном зале появились огромные мозаики, а исторический фасад Константина Тона отреставрировали.</p>
-    <div class="sign">
-      <div class="pict" aria-hidden="true">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#d6281e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 17l-2 4M16 17l2 4"/></svg>
-      </div>
-      <div class="name">Ленинградский вокзал<small>Поезда на Санкт-Петербург, Тверь и север страны</small></div>
-      <div class="transfers">
-        <span><i class="badge b1">1</i>Комсомольская</span>
-        <span><i class="badge b5">5</i>Комсомольская</span>
-      </div>
-    </div>
+  <figure class="ph" data-src="img/hero.jpg" data-label="фасад вокзала, крупно"></figure>
+  <div class="wrap hero-text">
+    <h1><span>Ленинградский</span><br><span>вернулся</span></h1>
+    <p>Самый старый вокзал Москвы почти два года стоял закрытым. 22 мая 2026 года он открылся снова: площадей вдвое больше, на стенах огромные мозаики, а фасад Тона отреставрирован.</p>
   </div>
 </header>
 
+<div class="ticker" aria-hidden="true">
+  <div>
+    Москва — Петербург<b>●</b>с 1851 года<b>●</b>открыт 22.05.2026<b>●</b>16 000 м² для пассажиров<b>●</b>800 м² смальты<b>●</b>
+    Москва — Петербург<b>●</b>с 1851 года<b>●</b>открыт 22.05.2026<b>●</b>16 000 м² для пассажиров<b>●</b>800 м² смальты<b>●</b>
+  </div>
+</div>
+
 <section>
   <div class="wrap">
-    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h2>Главное в цифрах</h2></div>
-    <p class="lead">Масштаб модернизации, по данным РЖД и правительства Москвы.</p>
+    <h2 class="sec-title rv">В <em>цифрах</em></h2>
     <div class="stats">
-      <div class="stat"><b>8,8 <em>→</em> 16</b><span>тыс. м² пассажирских помещений, почти вдвое больше</span></div>
-      <div class="stat"><b>700 <em>→</em> 1000+</b><span>посадочных мест для ожидания</span></div>
-      <div class="stat"><b>800+ м²</b><span>занимают два мозаичных панно из смальты</span></div>
-      <div class="stat"><b>~2 года</b><span>вокзал был закрыт, с августа 2024 по май 2026</span></div>
+      <div class="stat box rv"><b><span data-count="16">16</span><small>тыс. м²</small></b><span>для пассажиров вместо 8,8 тыс.: почти вдвое больше</span></div>
+      <div class="stat box rv"><b><span data-count="1000">1000</span>+<small>мест</small></b><span>мест для ожидания, раньше было около 700</span></div>
+      <div class="stat box rv"><b><span data-count="800">800</span>+<small>м² смальты</small></b><span>мозаики, выложенной вручную</span></div>
+      <div class="stat box rv"><b><span data-count="21">21</span><small>месяц</small></b><span>вокзал был закрыт: с августа 2024 по май 2026</span></div>
     </div>
   </div>
 </section>
 
-<section>
+<section style="padding-top:0">
   <div class="wrap">
-    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-4-4M20 16H6l4 4"/></svg></div><h2>Было и стало</h2></div>
-    <p class="lead">Что изменилось для пассажира.</p>
-    <table class="compare">
-      <thead><tr><th>Что</th><th>До реконструкции</th><th>После</th></tr></thead>
-      <tbody>
-        <tr><td>Этажи</td><td>Пассажиры пользовались почти только первым этажом</td><td>Второй и третий этажи открыты под зоны ожидания, кафе и рестораны</td></tr>
-        <tr><td>Главный зал</td><td>Заставлен киосками и торговыми точками</td><td>Освобождён для быстрого прохода к поездам, торговлю перенесли на минус первый этаж</td></tr>
-        <tr><td>Ожидание</td><td>Около 700 мест</td><td>Больше 1000 мест, залы ожидания на верхних этажах</td></tr>
-        <tr><td>Бизнес-залы</td><td>—</td><td>Два, с собственными санузлами, табло отправления и Wi-Fi</td></tr>
-        <tr><td>Для семей</td><td>—</td><td>Комната для семей с детьми и детский клуб «Союзмультфильм»</td></tr>
-        <tr><td>Интерьер</td><td>Без монументального декора</td><td>Два монументальных мозаичных панно с видами Москвы и Петербурга</td></tr>
-        <tr><td>Фасад</td><td>Требовал реставрации</td><td>Отреставрирован, облик вернули к первоначальному замыслу Тона</td></tr>
-      </tbody>
-    </table>
+    <h2 class="sec-title rv">Истории <em>вокзала</em></h2>
+
+    <article class="story split">
+      <figure class="ph box rv" data-src="img/mosaic-cat.jpg" data-label="панно, крупный план с котом" style="--c:var(--pink)"><figcaption class="cap">Найди кота</figcaption></figure>
+      <div class="panel box rv">
+        <span class="num">История 01</span>
+        <h3>Кот в смальте</h3>
+        <p>Два панно с видами Москвы и Петербурга занимают больше 800 м². Около 30 художников под руководством Максима Козлова выкладывали их вручную, кусочек за кусочком.</p>
+        <p>Среди Кремля, Исаакиевского собора и «Лахта-центра» художники спрятали «пасхалки». Одна из них — кот Бегемот. Найти его можно, пока ждёте поезд.</p>
+      </div>
+    </article>
+
+    <article class="story split rev">
+      <figure class="ph box rv" data-src="img/twin.jpg" data-label="башня с часами" style="--c:var(--yellow)"><figcaption class="cap">1849 → 2026</figcaption></figure>
+      <div class="panel box rv">
+        <span class="num">История 02</span>
+        <h3>Близнецы на двух концах дороги</h3>
+        <p>Вокзал построили в 1849–1851 годах по проекту Константина Тона. Его брат-близнец стоит в Петербурге: это Московский вокзал, почти такой же.</p>
+        <p>При реконструкции фасад отреставрировали и вернули ему облик, задуманный Тоном.</p>
+      </div>
+    </article>
+
+    <article class="story split">
+      <figure class="ph box rv" data-src="img/upstairs.jpg" data-label="зал ожидания наверху" style="--c:var(--cyan)"><figcaption class="cap">Второй этаж</figcaption></figure>
+      <div class="panel box rv">
+        <span class="num">История 03</span>
+        <h3>Лестница, которая раньше никуда не вела</h3>
+        <p>Раньше пассажиры пользовались почти только первым этажом. Теперь на втором и третьем залы ожидания, кафе и рестораны.</p>
+        <p>Первый этаж освободили: киоски и фуд-корты ушли вниз, на минус первый этаж. От входа к поездам теперь прямой путь.</p>
+      </div>
+    </article>
+
+    <article class="story split rev">
+      <figure class="ph box rv" data-src="img/opening.jpg" data-label="люди в день открытия" style="--c:var(--red)"><figcaption class="cap">22 мая 2026</figcaption></figure>
+      <div class="panel box rv">
+        <span class="num">История 04</span>
+        <h3>21 месяц за забором</h3>
+        <p>11 августа 2024 года здание закрыли для пассажиров. Летом 2025-го дошли до кровли над основными залами.</p>
+        <p>22 мая 2026 года обновлённый вокзал открыли Сергей Собянин и глава РЖД Олег Белозеров.</p>
+      </div>
+    </article>
   </div>
 </section>
 
-<section>
+<section style="padding-top:0">
   <div class="wrap">
-    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div><h2>Что появилось</h2></div>
-    <p class="lead">Новые пространства и сервисы.</p>
-    <div class="grid">
-      <div class="card"><i class="badge bt">1</i><h3>Верхние этажи для людей</h3><p>Раньше второй и третий этажи были закрыты для пассажиров. Теперь там залы ожидания, кафе и рестораны.</p></div>
-      <div class="card"><i class="badge bt">2</i><h3>Свободный первый этаж</h3><p>Магазины и фуд-корты переехали на минус первый этаж. Наверху остался прямой и короткий путь к платформам.</p></div>
-      <div class="card"><i class="badge bt">3</i><h3>Сервисы для семей</h3><p>На первом этаже работают комната для семей с детьми и детский клуб «Союзмультфильм». Рядом кассы дальнего следования, медпункт и информационные стойки.</p></div>
-      <div class="card"><i class="badge bt">4</i><h3>Два бизнес-зала</h3><p>Диваны и кресла, свои санузлы, табло с расписанием и Wi-Fi.</p></div>
-      <div class="card"><i class="badge bt">5</i><h3>Новые входы</h3><p>Вокзал теснее связали с городским транспортом и добавили дополнительные входы и выходы.</p></div>
-      <div class="card"><i class="badge bt">6</i><h3>Фасад и кровля</h3><p>Историческое здание отреставрировали. Работы над кровлей основных залов начались летом 2025 года.</p></div>
+    <h2 class="sec-title rv">Крупным <em>планом</em></h2>
+    <div class="gallery">
+      <figure class="ph box rv" data-src="img/close-1.jpg" data-label="мозаика Москвы"></figure>
+      <figure class="ph box rv" data-src="img/close-2.jpg" data-label="мозаика Петербурга"></figure>
+      <figure class="ph box rv" data-src="img/close-3.jpg" data-label="деталь интерьера"></figure>
+      <figure class="ph box rv" data-src="img/close-4.jpg" data-label="табло, кассы"></figure>
+      <figure class="ph box rv" data-src="img/close-5.jpg" data-label="платформы, поезд"></figure>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap mosaic">
-    <div>
-      <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div><h2>Две столицы в смальте</h2></div>
-      <p class="lead" style="margin-bottom:16px">Главное украшение обновлённого вокзала — два мозаичных панно общей площадью больше 800 м², с видами Москвы и Санкт-Петербурга.</p>
-      <p>Около 30 художников под руководством монументалиста Максима Козлова выложили их вручную из смальты. Это крупнейшие мозаики на транспортных объектах России. На панно есть Кремль, Исаакиевский собор и «Лахта-центр», а также спрятанные «пасхалки», например кот Бегемот. Их можно поискать, пока ждёте поезд.</p>
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec-title rv">Было <em>/</em> стало</h2>
+    <div class="ba">
+      <div class="item box rv"><h3>Этажи</h3><p class="was">Почти всё на первом этаже</p><p class="now">Второй и третий этажи открыты для пассажиров</p></div>
+      <div class="item box rv"><h3>Главный зал</h3><p class="was">Киоски и торговые точки</p><p class="now">Свободный проход к поездам, торговля на −1 этаже</p></div>
+      <div class="item box rv"><h3>Ожидание</h3><p class="was">Около 700 мест</p><p class="now">Больше 1000 мест</p></div>
+      <div class="item box rv"><h3>Для семей</h3><p class="was">Отдельного клуба не было</p><p class="now">Комната для семей и детский клуб «Союзмультфильм»</p></div>
+      <div class="item box rv"><h3>Бизнес-залы</h3><p class="was">—</p><p class="now">Два зала: санузлы, табло отправления, Wi-Fi</p></div>
+      <div class="item box rv"><h3>Стены</h3><p class="was">Без монументального декора</p><p class="now">Два панно с видами Москвы и Петербурга</p></div>
     </div>
-    <div class="tiles" id="tiles" aria-hidden="true"></div>
   </div>
 </section>
 
-<section>
+<section style="padding-top:0">
   <div class="wrap">
-    <div class="head"><div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h2>Хронология</h2></div>
-    <p class="lead">От проекта Тона до открытия в 2026 году.</p>
-    <ol class="route">
-      <li><time>1849–1851</time><p>По проекту Константина Тона строят Николаевский вокзал, первый в Москве. Парное ему здание стоит в Петербурге, это Московский вокзал.</p></li>
-      <li><time>11 августа 2024</time><p>Здание вокзала закрывают для пассажиров и начинают комплексную модернизацию.</p></li>
-      <li><time>Февраль 2025</time><p>РЖД показывают проект: верхние этажи для пассажиров, торговля под землёй, панно с видами двух столиц.</p></li>
-      <li><time>Июнь 2025</time><p>Начинаются работы над кровлей основных залов.</p></li>
-      <li class="now"><time>Май 2026</time><p>Сергей Собянин и глава РЖД Олег Белозеров открывают обновлённый вокзал.</p></li>
-    </ol>
-    <div class="note"><b>i</b><span>Источники называют разные даты открытия, 22 и 25 мая 2026 года. В первых обзорах после открытия писали, что часть сервисов ещё не заработала: камеры хранения, душевые и залы на третьем этаже. Перед поездкой лучше проверить их на сайте РЖД.</span></div>
+    <h2 class="sec-title rv">Хроно<em>логия</em></h2>
+    <div class="tl">
+      <div class="box rv"><time>1851</time><p>Открыт Николаевский вокзал Тона, первый в Москве</p></div>
+      <div class="box rv"><time>08.2024</time><p>Здание закрыто, начинается модернизация</p></div>
+      <div class="box rv"><time>02.2025</time><p>РЖД показывают проект с панно и верхними этажами</p></div>
+      <div class="box rv"><time>06.2025</time><p>Работы над кровлей основных залов</p></div>
+      <div class="box rv"><time>22.05.2026</time><p>Вокзал снова открыт</p></div>
+    </div>
+    <p class="note box">В первых обзорах после открытия писали, что часть сервисов ещё не заработала: камеры хранения, душевые и залы на третьем этаже. Перед поездкой лучше проверить их на сайте РЖД.</p>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <strong>Источники</strong>
+    <h2>Источники</h2>
     <ul>
       <li><a href="https://mperspektiva.ru/topics/leningradskiy-vokzal-otkryt-posle-rekonstruktsii/">Московская перспектива — «Ленинградский вокзал открыт после реконструкции»</a></li>
       <li><a href="https://t-j.ru/leningradskiy-is-back/">Т—Ж — «Каким получился Ленинградский вокзал после двухлетней реконструкции»</a></li>
@@ -289,20 +295,42 @@
 </footer>
 
 <script>
-  // Decorative smalt pattern: left half reads as "Moscow" (warm reds), right half as "Petersburg" (cool blues)
-  (function () {
-    var warm = ["#b3221a", "#d6281e", "#e2573a", "#e8a33a", "#c27a1f", "#f0c873"];
-    var cool = ["#1f3b5c", "#2e5a85", "#4a7fa8", "#7fa9c6", "#b9cfdc", "#e8a33a"];
-    var box = document.getElementById("tiles");
-    for (var r = 0; r < 7; r++) {
-      for (var c = 0; c < 12; c++) {
-        var set = c < 6 ? warm : cool;
-        var i = document.createElement("i");
-        i.style.background = set[(r * 7 + c * 3 + (r * c) % 5) % set.length];
-        box.appendChild(i);
-      }
+  // Fill photo slots from img/; keep the halftone placeholder when a file is missing
+  document.querySelectorAll(".ph[data-src]").forEach(function (fig) {
+    var img = new Image();
+    img.alt = fig.dataset.label;
+    img.onload = function () { fig.classList.remove("empty"); fig.prepend(img); };
+    img.onerror = function () { fig.classList.add("empty"); };
+    fig.classList.add("empty");
+    img.src = fig.dataset.src;
+  });
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function countUp(el) {
+    var target = +el.dataset.count, start = null;
+    function step(t) {
+      if (!start) start = t;
+      var k = Math.min((t - start) / 1200, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3))).toLocaleString("ru-RU");
+      if (k < 1) requestAnimationFrame(step);
     }
-  })();
+    requestAnimationFrame(step);
+  }
+
+  if (reduce || !("IntersectionObserver" in window)) {
+    document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("in");
+        e.target.querySelectorAll("[data-count]").forEach(countUp);
+        io.unobserve(e.target);
+      });
+    }, { threshold: .15 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  }
 </script>
 </body>
 </html>
