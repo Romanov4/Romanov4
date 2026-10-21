@@ -40,8 +40,8 @@ const ERAS = [
   {
     era: 'Советская', short: 'XX век', year: 'XX век', period: '1920–1970-е',
     title: 'Советская эпоха',
-    text: 'В 1923 году вокзал переименовали в Октябрьский, затем — в Ленинградский. На рубеже 1940–1950-х интерьеры реставрировали по проекту Алексея Душкина. В 1960-е слева появилась трёхэтажная пристройка, а в 1970-е вокзал расширили.',
-    desc: 'пасмурный день, асфальт, легковые машины и автобус на площади, Ярославский и Казанский вокзалы рядом, трёхэтажная пристройка слева, башня без флагштока, контактная сеть, электровоз и тёмно-красные вагоны',
+    text: 'В 1923 году вокзал переименовали в Октябрьский, затем — в Ленинградский. На рубеже 1940–1950-х интерьеры реставрировали по проекту Алексея Душкина. В 1960-е за основным зданием появилась трёхэтажная пристройка, а в 1970-е вокзал расширили.',
+    desc: 'пасмурный день, асфальт, легковые машины и автобус на площади, Ярославский и Казанский вокзалы рядом, трёхэтажная пристройка за основным зданием, башня без флагштока, контактная сеть, электровоз и тёмно-красные вагоны',
     train: 'electro',
     filter: 'sepia(0.1) saturate(0.78) contrast(1.02)',
     vignette: 0.16,
@@ -1066,36 +1066,42 @@ function createWorld() {
     g.add(b.build(MK, { cast: false }));
   }
 
-  /* ---------- Пристройка 1960-х слева: простой объём, прямоугольные окна ---------- */
+  /* ---------- Пристройка 1960-х за основным зданием: простой объём вдоль путей, прямоугольные окна ---------- */
   {
     const g = featGroup('annex');
     const ab = new Batch();
-    const x0 = -55, x1 = -27.05, d = 20, H = 12.6;
+    // за левой частью здания Тона, слева от путей; торцом к перронам
+    const x0 = -40, x1 = -19, d = 38, zc = -12.5 - d / 2, H = 12.6;
     const w = x1 - x0, cx = (x0 + x1) / 2;
-    ab.add('wallA', place(box(w, H, d), cx, H / 2, 0));
-    ab.add('plinth', place(box(w + 0.2, 0.9, d + 0.2), cx, 0.45, 0));
-    ab.add('trim', place(box(w + 0.5, 0.4, d + 0.5), cx, H + 0.2, 0));
-    ab.add('roof', place(box(w - 1, 0.6, d - 1), cx, H + 0.3, 0));
-    const wins = [];
-    for (let x = x0 + 2.5; x < x1 - 1.5; x += 3.0) wins.push(x);
+    ab.add('wallA', place(box(w, H, d), cx, H / 2, zc));
+    ab.add('plinth', place(box(w + 0.2, 0.9, d + 0.2), cx, 0.45, zc));
+    ab.add('trim', place(box(w + 0.5, 0.4, d + 0.5), cx, H + 0.2, zc));
+    ab.add('roof', place(box(w - 1, 0.6, d - 1), cx, H + 0.3, zc));
+    const winsX = [];
+    for (let x = x0 + 2.5; x < x1 - 1.5; x += 3.0) winsX.push(x);
+    const winsZ = [];
+    for (let z = zc - d / 2 + 2.5; z < zc + d / 2 - 1.5; z += 3.0) winsZ.push(z);
     for (const y of [1.5, 5.5, 9.3]) {
       for (const zf of [d / 2, -d / 2]) {
         const sg = zf > 0 ? 1 : -1;
-        for (const x of wins) {
-          ab.add('trimN', place(box(2.0, 2.6, 0.06), x, y + 1.2, zf + sg * 0.03));
-          ab.add('glass', place(box(1.7, 2.3, 0.08), x, y + 1.2, zf + sg * 0.05));
+        for (const x of winsX) {
+          ab.add('trimN', place(box(2.0, 2.6, 0.06), x, y + 1.2, zc + zf + sg * 0.03));
+          ab.add('glass', place(box(1.7, 2.3, 0.08), x, y + 1.2, zc + zf + sg * 0.05));
         }
       }
-      for (let z = -d / 2 + 2.5; z < d / 2 - 1.5; z += 3.0) {
-        ab.add('trimN', place(box(0.06, 2.6, 2.0), x0 - 0.03, y + 1.2, z));
-        ab.add('glass', place(box(0.08, 2.3, 1.7), x0 - 0.05, y + 1.2, z));
+      for (const [xf, sg] of [[x0, -1], [x1, 1]]) {
+        for (const z of winsZ) {
+          ab.add('trimN', place(box(0.06, 2.6, 2.0), xf + sg * 0.03, y + 1.2, z));
+          ab.add('glass', place(box(0.08, 2.3, 1.7), xf + sg * 0.05, y + 1.2, z));
+        }
       }
     }
-    ab.add('door', place(box(3.4, 2.8, 0.12), cx + 4, 1.4, d / 2 + 0.06));
-    ab.add('trim', place(box(5, 0.2, 2.0), cx + 4, 3.1, d / 2 + 1.0));
+    // вход со стороны перронов
+    ab.add('door', place(box(0.12, 2.8, 3.4), x1 + 0.06, 1.4, zc - 4));
+    ab.add('trim', place(box(2.0, 0.2, 5), x1 + 1.0, 3.1, zc - 4));
     g.add(ab.build(MK, { noShadow: ['trimN', 'glass', 'door'] }));
     const cs = new THREE.Mesh(new THREE.PlaneGeometry(w + 8, d + 8).rotateX(-Math.PI / 2), M.contact);
-    cs.position.set(cx, 0.1, 0);
+    cs.position.set(cx, 0.1, zc);
     cs.renderOrder = 1;
     g.add(cs);
   }
