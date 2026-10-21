@@ -1,0 +1,343 @@
+:root {
+  --paper: #f6f1e6;
+  --paper-2: #ece4d3;
+  --ink: #221d17;
+  --muted: #5a5046;
+  --bordo: #6b1d24;
+  --blue: #1f3d66;
+  --gold: #a8843f;
+  --line: rgba(34, 29, 23, 0.2);
+  --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --sans: "PT Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --fade: 1.8s;
+  /* фолбэк-иллюстрация */
+  --fb-sky: #e9dcc0;
+  --fb-wall: #c9a879;
+  --fb-wall2: #b9966a;
+  --fb-glow: #3a3128;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #1c1813;
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-text-size-adjust: 100%;
+}
+
+body { overflow-x: hidden; }
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #cfc3ab 0%, #efe6d2 70%, #b9ab90 100%);
+  isolation: isolate;
+}
+
+#scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  cursor: grab;
+  transition: filter var(--fade) ease;
+}
+#scene:active { cursor: grabbing; }
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 55% 45%, rgba(0,0,0,0) 45%, rgba(40, 26, 12, 0.85) 100%);
+  opacity: var(--vignette, 0.4);
+  transition: opacity var(--fade) ease;
+}
+
+/* ---------- Шапка ---------- */
+.brand {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  max-width: calc(100% - 48px);
+  padding: 12px 18px 12px;
+  background: var(--paper);
+  border: 1px solid rgba(168, 132, 63, 0.6);
+  box-shadow: 0 10px 28px rgba(20, 14, 8, 0.22);
+}
+.brand::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(168, 132, 63, 0.35);
+  pointer-events: none;
+}
+.brand-kicker {
+  margin: 0 0 2px;
+  font: 700 11px/1.3 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.brand-title {
+  margin: 0;
+  font: 600 28px/1.05 var(--serif);
+  color: var(--ink);
+}
+.brand-sub {
+  margin: 4px 0 0;
+  font: 400 14px/1.3 var(--sans);
+  color: var(--muted);
+}
+
+/* ---------- Панель карусели ---------- */
+.panel {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  width: min(470px, calc(100% - 48px));
+  padding: 20px 22px 14px;
+  background: var(--paper);
+  border: 1px solid rgba(168, 132, 63, 0.6);
+  box-shadow: 0 18px 44px rgba(20, 14, 8, 0.3);
+}
+.panel::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 0;
+  height: 4px;
+  border-top: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+.card { min-height: 9.5em; }
+.card-meta {
+  margin: 6px 0 4px;
+  font: 700 12px/1.3 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.card-year {
+  margin: 0;
+  font: 600 52px/1 var(--serif);
+  color: var(--gold);
+  letter-spacing: 0.01em;
+  font-variant-numeric: lining-nums;
+}
+.card-title {
+  margin: 4px 0 8px;
+  font: 600 30px/1.1 var(--serif);
+  color: var(--bordo);
+}
+.card-text {
+  margin: 0;
+  font: 400 15.5px/1.5 var(--sans);
+  color: var(--ink);
+}
+.card.is-changing .card-year,
+.card.is-changing .card-title,
+.card.is-changing .card-text { animation: cardIn 0.6s ease both; }
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.icon-btn {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.icon-btn:hover { background: var(--paper-2); border-color: var(--bordo); color: var(--bordo); }
+#playBtn .i-play { display: none; }
+#playBtn.is-paused .i-play { display: block; }
+#playBtn.is-paused .i-pause { display: none; }
+
+.timeline-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 132, 63, 0.7) transparent;
+}
+.timeline {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 3px;
+  list-style: none;
+  width: max-content;
+  min-width: 100%;
+  justify-content: space-between;
+}
+.year-btn {
+  min-width: 44px;
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  font: 600 18px/1 var(--serif);
+  font-variant-numeric: lining-nums;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+}
+.year-btn:hover { border-color: var(--bordo); color: var(--bordo); }
+.year-btn[aria-current="true"] {
+  background: var(--bordo);
+  border-color: var(--bordo);
+  color: var(--paper);
+}
+
+button:focus-visible,
+#scene:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+.year-btn[aria-current="true"]:focus-visible { outline-color: var(--blue); }
+
+.progress {
+  height: 2px;
+  margin-top: 10px;
+  background: var(--line);
+  overflow: hidden;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--gold);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.hint {
+  margin: 8px 0 0;
+  font: 400 12.5px/1.35 var(--sans);
+  color: var(--muted);
+}
+
+/* ---------- Фолбэк ---------- */
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 300px;
+  background: linear-gradient(180deg, var(--fb-sky) 0%, var(--paper) 100%);
+  transition: background var(--fade) ease;
+}
+.fallback[hidden] { display: none; }
+.fallback-art { width: min(760px, 92%); height: auto; }
+.fb-ground { fill: #8e826c; }
+.fb-wall { fill: var(--fb-wall); transition: fill var(--fade); }
+.fb-wall2 { fill: var(--fb-wall2); transition: fill var(--fade); }
+.fb-roof { fill: #4c4a44; }
+.fb-trim { fill: #f3ead6; }
+.fb-win { fill: var(--fb-glow); transition: fill var(--fade); }
+.fb-clock { fill: #f8f2e2; stroke: var(--gold); stroke-width: 2; }
+.fb-hand { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
+.fallback-note {
+  margin: 14px 0 0;
+  padding: 6px 12px;
+  background: var(--paper);
+  font: 400 14px/1.4 var(--sans);
+  color: var(--muted);
+  text-align: center;
+}
+.no-webgl #scene, .no-webgl .vignette { display: none; }
+.no-webgl .hint { display: none; }
+.no-webgl .panel { left: 50%; transform: translateX(-50%); }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.noscript {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--paper);
+  font: 400 16px/1.5 var(--sans);
+}
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 720px) {
+  .brand { top: 10px; left: 10px; max-width: calc(100% - 20px); padding: 8px 12px; }
+  .brand-kicker { font-size: 10px; }
+  .brand-title { font-size: 22px; }
+  .brand-sub { font-size: 12.5px; }
+  .panel {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    padding: 14px 14px 10px;
+  }
+  .panel::before { left: 14px; right: 14px; }
+  .card { min-height: 0; }
+  .card-year { font-size: 40px; }
+  .card-title { font-size: 24px; margin-bottom: 6px; }
+  .card-text { font-size: 14.5px; line-height: 1.45; }
+  .controls { margin-top: 10px; padding-top: 10px; gap: 4px; }
+  .icon-btn { width: 40px; height: 40px; }
+  .year-btn { font-size: 17px; padding: 4px 6px; min-height: 40px; }
+  .hint { display: none; }
+  .fallback { padding: 110px 12px 360px; }
+  .no-webgl .panel { left: 10px; transform: none; }
+}
+
+@media (max-height: 620px) and (min-width: 721px) {
+  .card-text { font-size: 14px; }
+  .card-year { font-size: 40px; }
+  .hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --fade: 0s; }
+  #scene, .vignette, .fallback, .fb-wall, .fb-wall2, .fb-win { transition: none; }
+  .card.is-changing .card-year,
+  .card.is-changing .card-title,
+  .card.is-changing .card-text { animation: none; }
+}
