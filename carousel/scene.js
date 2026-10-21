@@ -356,7 +356,7 @@ function hipRoof(w, d, h) {
  * «Лофт» по поперечному сечению: profile — замкнутый контур [x, y, colorKey] (против часовой при взгляде с +Z),
  * rings — [{z, sx, sy, dy, t}], yb — базовая линия масштабирования по высоте. Цвета — атрибут color.
  */
-function loft(profile, rings, yb, colorFn, { capFront = false, tip = 0.2 } = {}) {
+function loft(profile, rings, yb, colorFn, { capFront = false, tip = 0.2, closed = true } = {}) {
   const M = profile.length, R = rings.length;
   const pos = [], col = [], idx = [];
   for (let r = 0; r < R; r++) {
@@ -369,7 +369,7 @@ function loft(profile, rings, yb, colorFn, { capFront = false, tip = 0.2 } = {})
     }
   }
   for (let r = 0; r < R - 1; r++) {
-    for (let i = 0; i < M; i++) {
+    for (let i = 0; i < (closed ? M : M - 1); i++) {
       const a = r * M + i, b = r * M + ((i + 1) % M), cc = (r + 1) * M + i, d = (r + 1) * M + ((i + 1) % M);
       idx.push(a, b, cc, b, d, cc);
     }
@@ -886,7 +886,7 @@ function createWorld() {
       for (const u of [-5.55, -1.8, 1.8, 5.55]) {
         column(f, u, 0.9, Y_MID - 0.18, 0.26);
         column(f, u, Y_MID + 0.18, Y_TOP - 0.8, 0.2);
-        bld.face('trim', box(0.8, 2.9, 0.3), f, u, 14.1, 0.15); // пилоны аттика
+        if (Math.abs(u) > 3) bld.face('trim', box(0.8, 2.9, 0.3), f, u, 14.1, 0.15); // пилоны аттика
       }
       bld.face('trim', box(8.6, 1.9, 0.14), f, 0, 14.05, 0.08); // доска аттика
       bld.face('bronze', box(8.2, 0.08, 0.05), f, 0, 13.2, 0.17);
@@ -1533,12 +1533,7 @@ function createWorld() {
     for (let i = half.length - 2; i >= 1; i--) profile.push([-half[i][0], half[i][1], half[i][2]]);
     const { NOSE, YB } = SAP;
     const bodyCol = (k) => LIV[k];
-    const noseCol = (k, t, y) => {
-      if (t > 0.18 && y >= 2.6 && y <= 3.34 + (t - 0.18) * 1.2) return LIV.k; // лобовое стекло
-      if (t > 0.55 && y > 2.3 && y < 3.9) return LIV.k;
-      if (k === 'k') return t > 0.92 ? LIV.w : LIV.k;
-      return LIV[k];
-    };
+    const noseCol = (k, t) => (k === 'k' && t > 0.3 ? LIV.w : k === 'roof' ? LIV.w : LIV[k]);
     const NR = 18;
     const noseGeo = () => {
       const rings = [];
@@ -1549,6 +1544,30 @@ function createWorld() {
         rings.push(r);
       }
       return loft(profile, rings, YB, noseCol, { capFront: true, tip: 0.35 });
+    };
+    // лобовое стекло — отдельная гладкая «накладка» по форме носа
+    const wsProfile = [];
+    for (let y = 2.45; y <= 4.08; y += 0.12) {
+      // интерполяция x по правой половине профиля
+      let x = 0;
+      for (let i = 0; i < half.length - 1; i++) {
+        const [x0, y0] = half[i], [x1, y1] = half[i + 1];
+        if (y >= y0 && y <= y1 && y1 > y0) { x = x0 + (x1 - x0) * (y - y0) / (y1 - y0); break; }
+      }
+      wsProfile.push([x, y]);
+    }
+    const ws = [...wsProfile.map(([x, y]) => [x, y, 'k']), ...wsProfile.slice(0, -1).reverse().map(([x, y]) => [-x, y, 'k'])];
+    const wsGeo = () => {
+      const rings = [];
+      const T0 = 0.2, T1 = 0.86, NRW = 12;
+      for (let k = 0; k <= NRW; k++) {
+        const t = T0 + (T1 - T0) * (k / NRW);
+        const r = sapNoseRing(t);
+        // слегка «надуваем» над поверхностью и сужаем к краям участка
+        rings.push({ t, z: t * NOSE + 0.02, sx: r.sx * 1.012, sy: r.sy * 1.008, dy: r.dy + 0.012 });
+      }
+      // профиль идёт против часовой (вверх по правой стороне, вниз по левой) — нормали наружу
+      return loft(ws, rings, YB, () => LIV.k, { closed: false });
     };
     const bodyGeo = (len) => loft(profile, [{ z: -len, sx: 1, sy: 1 }, { z: 0, sx: 1, sy: 1 }], YB, bodyCol);
     const gangGeo = (len) => loft(profile, [{ z: -len, sx: 0.9, sy: 0.92 }, { z: 0, sx: 0.9, sy: 0.92 }], YB, () => LIV.g);
@@ -1568,8 +1587,8 @@ function createWorld() {
       const zA = lead ? zf - NOSE : zf;
       const zB = tail ? zf - CL + NOSE : zf - CL;
       push(bodyGeo(zA - zB).translate(0, 0, zA));
-      if (lead) push(noseGeo().translate(0, 0, zA));
-      if (tail) push(noseGeo().rotateY(Math.PI).translate(0, 0, zB));
+      if (lead) { push(noseGeo().translate(0, 0, zA)); push(wsGeo().translate(0, 0, zA)); }
+      if (tail) { push(noseGeo().rotateY(Math.PI).translate(0, 0, zB)); push(wsGeo().rotateY(Math.PI).translate(0, 0, zB)); }
       if (!tail) push(gangGeo(GAP).translate(0, 0, zf - CL));
       for (const bz of [zf - (lead ? 4.6 : 2.8), zf - CL + (tail ? 4.6 : 2.8)]) {
         b.add('dark', place(box(2.5, 0.5, 3.2), 0, 0.62, bz));
