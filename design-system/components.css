@@ -251,21 +251,34 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
 /* ---------- Кессонная полоса (потолок кассового зала) ---------- */
 .coffers {
   --c: var(--coffer);
+  --rib: color-mix(in srgb, var(--accent-2) 22%, transparent);
+  position: relative;
   height: var(--c);
   border-block: var(--bw-hair) solid var(--rule);
   background:
-    /* встроенный светильник */
-    radial-gradient(circle at 50% 50%, var(--lamp) 0 3px, var(--ornament) 3px 4px, transparent 4.5px) 0 0 / var(--c) var(--c),
-    /* утопленное поле кессона */
-    linear-gradient(var(--blue-soft), var(--blue-soft)) calc(var(--c) * .18) calc(var(--c) * .18) / calc(var(--c) * .64) calc(var(--c) * .64) no-repeat,
     /* рёбра решётки */
-    linear-gradient(90deg, var(--rule) var(--bw-hair), transparent var(--bw-hair)) 0 0 / var(--c) var(--c),
-    linear-gradient(var(--rule) var(--bw-hair), transparent var(--bw-hair)) 0 0 / var(--c) var(--c),
-    /* внутренняя рамка кессона */
-    linear-gradient(90deg, transparent 8px, color-mix(in srgb, var(--accent-2) 22%, transparent) 8px 9px, transparent 9px calc(var(--c) - 9px), color-mix(in srgb, var(--accent-2) 22%, transparent) calc(var(--c) - 9px) calc(var(--c) - 8px), transparent calc(var(--c) - 8px)) 0 0 / var(--c) var(--c),
-    linear-gradient(transparent 8px, color-mix(in srgb, var(--accent-2) 22%, transparent) 8px 9px, transparent 9px calc(var(--c) - 9px), color-mix(in srgb, var(--accent-2) 22%, transparent) calc(var(--c) - 9px) calc(var(--c) - 8px), transparent calc(var(--c) - 8px)) 0 0 / var(--c) var(--c),
+    linear-gradient(90deg, var(--rule) var(--bw-hair), transparent var(--bw-hair)) center top / var(--c) var(--c),
+    linear-gradient(var(--rule) var(--bw-hair), transparent var(--bw-hair)) center top / var(--c) var(--c),
+    /* внутренняя профилированная рамка кессона */
+    linear-gradient(90deg, transparent 7px, var(--rib) 7px 8px, transparent 8px calc(var(--c) - 8px), var(--rib) calc(var(--c) - 8px) calc(var(--c) - 7px), transparent calc(var(--c) - 7px)) center top / var(--c) var(--c),
+    linear-gradient(transparent 7px, var(--rib) 7px 8px, transparent 8px calc(var(--c) - 8px), var(--rib) calc(var(--c) - 8px) calc(var(--c) - 7px), transparent calc(var(--c) - 7px)) center top / var(--c) var(--c),
     var(--bg-alt);
-  background-position: center top;
+}
+/* Утопленное поле кессона (квадрат = горизонтальная полоса × вертикальная маска) и светильник */
+.coffers::before,
+.coffers::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.coffers::before {
+  background: linear-gradient(transparent 14px, var(--blue-soft) 14px calc(var(--c) - 14px), transparent calc(var(--c) - 14px)) center top / var(--c) var(--c);
+  -webkit-mask: linear-gradient(90deg, transparent 14px, #000 14px calc(var(--c) - 14px), transparent calc(var(--c) - 14px)) center top / var(--c) var(--c);
+  mask: linear-gradient(90deg, transparent 14px, #000 14px calc(var(--c) - 14px), transparent calc(var(--c) - 14px)) center top / var(--c) var(--c);
+}
+.coffers::after {
+  background: radial-gradient(circle at 50% 50%, var(--lamp) 0 3px, var(--ornament) 3px 4px, transparent 4.5px) center top / var(--c) var(--c);
 }
 .coffers--sm { --c: 40px; }
 
@@ -392,6 +405,7 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
 .compare .compare__after { color: var(--accent-2); }
 .compare .compare__none { color: var(--text-muted); }
 @media (max-width: 640px) {
+  .compare caption { display: block; }
   .compare thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .compare, .compare tbody, .compare tr, .compare th, .compare td { display: block; width: auto !important; }
   .compare tr { padding: var(--sp-4) 0; border-bottom: var(--bw-hair) solid var(--rule); }
@@ -423,11 +437,11 @@ a:hover, .link:hover { color: var(--accent-hover); text-decoration-thickness: 2p
   color: var(--text-muted);
   font-size: var(--fs-sm);
 }
+.ph svg.ph__fallback { width: 100%; height: 100%; padding: var(--sp-3); }
 .ph.is-loaded .ph__fallback { display: none; }
 
 /* Паспарту: внешняя рамка, поле «картона», внутренняя волосяная линия */
 .passe {
-  margin: 0;
   padding: var(--sp-3);
   background: var(--surface);
   border: var(--bw-hair) solid var(--rule);

@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дизайн-система вокзала</title>
+<meta name="description" content="Дизайн-система лендинга о реконструкции Ленинградского вокзала: токены, палитра с контрастами, типографика и компоненты в светлой и тёмной теме.">
+<script>
+  /* Тема до первой отрисовки: без мигания */
+  (function () {
+    try {
+      var t = localStorage.getItem("lv-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* Стили только для витрины */
+  .sg-hero { text-align: center; padding: var(--sp-9) 0 var(--sp-8); }
+  .sg-hero h1 em { font-style: italic; font-weight: var(--fw-medium); color: var(--accent); }
+  .sg-hero .lead { margin-inline: auto; }
+  .sg-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); justify-content: center; margin-top: var(--sp-6); }
+  .sg-block { margin-top: var(--sp-8); }
+  .sg-block > h3 { margin-bottom: var(--sp-2); }
+  .sg-block > .sg-desc { color: var(--text-muted); max-width: var(--measure); margin-bottom: var(--sp-5); }
+  .sg-label {
+    display: block; margin-bottom: var(--sp-3);
+    font-size: var(--fs-xs); font-weight: var(--fw-bold); letter-spacing: var(--tr-caps);
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .sg-principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 0; border-top: var(--bw-hair) solid var(--rule); border-left: var(--bw-hair) solid var(--rule); margin: 0; padding: 0; list-style: none; }
+  .sg-principles li { padding: var(--sp-5); border-right: var(--bw-hair) solid var(--rule); border-bottom: var(--bw-hair) solid var(--rule); }
+  .sg-principles h3 { color: var(--accent-2); margin-bottom: var(--sp-2); }
+  .sg-principles p { margin: 0; color: var(--text-muted); font-size: var(--fs-sm); }
+
+  /* Палитра */
+  .sg-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr)); gap: var(--sp-4); margin: 0; padding: 0; list-style: none; }
+  .sg-swatch { border: var(--bw-hair) solid var(--rule); background: var(--surface); }
+  .sg-chip { height: 72px; border-bottom: var(--bw-hair) solid var(--rule); }
+  .sg-swatch div.sg-meta { padding: var(--sp-3); font-size: var(--fs-xs); line-height: var(--lh-snug); }
+  .sg-swatch b { display: block; font-size: var(--fs-sm); margin-bottom: 2px; }
+  .sg-swatch code { color: var(--text-muted); }
+  .sg-hex { display: flex; gap: var(--sp-3); margin-top: var(--sp-2); color: var(--text-muted); }
+  .sg-rule { margin-top: var(--sp-2); color: var(--text); }
+
+  h3 code { font-size: .62em; font-weight: 400; color: var(--text-muted); letter-spacing: 0; }
+  code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: .88em; }
+
+  /* Таблица контрастов */
+  .sg-scroll { overflow-x: auto; }
+  .ct { width: 100%; min-width: 0; border-collapse: collapse; font-size: var(--fs-sm); }
+  .ct th, .ct td { text-align: left; padding: var(--sp-3); border-bottom: var(--bw-hair) solid var(--rule); vertical-align: middle; }
+  .ct thead th { border-bottom: var(--bw-rule) solid var(--accent-2); font-size: var(--fs-xs); letter-spacing: var(--tr-caps); text-transform: uppercase; color: var(--text-muted); }
+  .ct tbody th { font-weight: var(--fw-regular); line-height: var(--lh-snug); }
+  .ct tbody th code { color: var(--text-muted); font-size: .8em; }
+  .ct td { white-space: nowrap; }
+  .ct-sample { display: inline-grid; place-items: center; width: 34px; height: 22px; vertical-align: middle; border: var(--bw-hair) solid var(--rule); margin-right: var(--sp-1); }
+  .ct-sample i { display: block; width: 18px; height: 6px; }
+  .ct-badge { display: inline-block; padding: 0 var(--sp-2); margin-left: var(--sp-1); border: var(--bw-hair) solid currentColor; border-radius: var(--radius-2); font-size: var(--fs-xs); font-weight: var(--fw-bold); }
+  .ct-badge--ok { color: var(--accent-2); }
+  .ct-badge--warn { color: var(--text-muted); }
+  .ct-badge--bad { color: var(--accent); border-style: dashed; }
+  .ct-badge--info { color: var(--text-muted); border-style: dotted; }
+  @media (max-width: 640px) {
+    .ct thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .ct, .ct tbody, .ct tr, .ct th, .ct td { display: block; }
+    .ct tr { padding: var(--sp-3) 0; border-bottom: var(--bw-hair) solid var(--rule); }
+    .ct th, .ct td { border: 0; padding: var(--sp-1) 0; white-space: normal; }
+    .ct td:nth-of-type(1)::before { content: "Светлая: "; color: var(--text-muted); }
+    .ct td:nth-of-type(2)::before { content: "Тёмная: "; color: var(--text-muted); }
+  }
+
+  /* Типографика */
+  .sg-fonts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--sp-5); }
+  .sg-font { padding: var(--sp-5); border: var(--bw-hair) solid var(--rule); background: var(--surface); }
+  .sg-font .sg-big { font-size: var(--fs-2xl); line-height: 1.1; margin: var(--sp-2) 0; }
+  .sg-font p { margin: 0; color: var(--text-muted); font-size: var(--fs-sm); }
+  .sg-scale { list-style: none; margin: 0; padding: 0; border-top: var(--bw-hair) solid var(--rule); }
+  .sg-scale li { display: grid; grid-template-columns: 9rem 1fr; gap: var(--sp-4); align-items: baseline; padding: var(--sp-3) 0; border-bottom: var(--bw-hair) solid var(--rule); }
+  .sg-scale code { font-size: var(--fs-xs); color: var(--text-muted); }
+  .sg-scale span { overflow-wrap: anywhere; }
+  @media (max-width: 520px) { .sg-scale li { grid-template-columns: 1fr; gap: var(--sp-1); } }
+
+  /* Отступы и прочие шкалы */
+  .sg-space { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+  .sg-space li { display: grid; grid-template-columns: 6rem 1fr; align-items: center; gap: var(--sp-3); font-size: var(--fs-xs); color: var(--text-muted); }
+  .sg-space i { display: block; height: 12px; background: var(--accent-2); }
+  .sg-grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--sp-5); }
+  .sg-tile { padding: var(--sp-4); border: var(--bw-hair) solid var(--rule); background: var(--surface); font-size: var(--fs-sm); }
+  .sg-tile p { margin: var(--sp-2) 0 0; color: var(--text-muted); font-size: var(--fs-xs); }
+  .sg-demo-box { height: 56px; background: var(--bg-alt); border: var(--bw-hair) solid var(--line-strong); }
+
+  /* Две темы рядом */
+  .sg-islands { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: var(--sp-5); }
+  .sg-island { background: var(--bg); color: var(--text); border: var(--bw-hair) solid var(--rule); padding: var(--sp-5); }
+  .sg-island .figures { grid-template-columns: 1fr 1fr; }
+  .sg-island .figures__item:nth-child(2n) { border-right: 0; }
+
+  .sg-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+  .sg-demo-focus { box-shadow: var(--focus-ring); }
+  .sg-two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); align-items: start; }
+  @media (max-width: 820px) { .sg-two { grid-template-columns: 1fr; } }
+  .sg-skip-demo { position: relative; height: 64px; border: var(--bw-hair) dashed var(--line-strong); background: var(--surface); }
+  .sg-skip-demo .skip-link { position: absolute; transform: none; }
+  .sg-mosaic-art { aspect-ratio: 4 / 3; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#main">
+      <svg viewBox="0 0 22 28" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+        <path d="M11 1 L18 7 H4 Z"/><rect x="5" y="7" width="12" height="9"/><circle cx="11" cy="11.5" r="3"/><path d="M11 11.5 V9.6 M11 11.5 L12.4 12.3"/><rect x="2" y="16" width="18" height="11"/><path d="M8 27 V21 a3 3 0 0 1 6 0 V27"/>
+      </svg>
+      Ленинградский вокзал
+    </a>
+    <nav class="topnav" aria-label="Разделы витрины">
+      <ul>
+        <li><a href="#palette" aria-current="true">Палитра</a></li>
+        <li><a href="#type">Шрифты</a></li>
+        <li><a href="#scales">Шкалы</a></li>
+        <li><a href="#components">Компоненты</a></li>
+        <li><a href="#themes">Темы</a></li>
+      </ul>
+    </nav>
+    <fieldset class="theme-switch">
+      <legend class="visually-hidden">Тема оформления</legend>
+      <label><input type="radio" name="theme" value="auto" checked><span>Авто</span></label>
+      <label><input type="radio" name="theme" value="light"><span>Светлая</span></label>
+      <label><input type="radio" name="theme" value="dark"><span>Тёмная</span></label>
+    </fieldset>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <div class="sg-hero">
+    <div class="wrap">
+      <p class="kicker">Москва · Комсомольская площадь · 1849–1851 / 2024–2026</p>
+      <h1>Дизайн-система <em>вокзала Тона</em></h1>
+      <div class="orn orn--center" aria-hidden="true"><i class="orn__d"></i></div>
+      <p class="lead">Токены и компоненты для лендинга о реконструкции Ленинградского вокзала. Классический, официальный, деловой тон: бумага и камень, чернила, бордо и синий; золото — только орнамент.</p>
+      <div class="sg-actions">
+        <a class="btn btn--primary" href="#components">Компоненты</a>
+        <a class="btn btn--secondary" href="#palette">Палитра и контраст</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="coffers" aria-hidden="true"></div>
+
+  <!-- I. Принципы -->
+  <section class="section" aria-labelledby="h-principles">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">I</span>
+        <h2 class="sec-head__title" id="h-principles">Принципы</h2>
+        <p class="sec-head__desc">Пять мотивов реставрации, переведённые в правила интерфейса.</p>
+      </div>
+      <ul class="sg-principles">
+        <li><h3>Фасад 1873 года</h3><p>Два основных тона и белые известковые швы: спокойный тёплый фон, тонкие светлые линии-членения вместо теней.</p></li>
+        <li><h3>Кессонный потолок</h3><p>Модульная сетка с шагом 56px, разделители-кессоны со «встроенным светильником» между крупными разделами.</p></li>
+        <li><h3>Гостиная XIX века</h3><p>Лепнина — орнаментальные линейки и ромбы; бархат — бордо; паркет — строгий ритм линий в таблицах и списках.</p></li>
+        <li><h3>Смальта «Две столицы»</h3><p>Глубокий тёмный раздел и полоса смальты — единственное место для насыщенной многоцветности.</p></li>
+        <li><h3>Часовая башня</h3><p>Римские цифры разделов, даты хроники крупной антиквой, симметрия и центральная ось в шапке.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="masonry" aria-hidden="true"></div>
+
+  <!-- II. Палитра -->
+  <section class="section" id="palette" aria-labelledby="h-palette">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">II</span>
+        <h2 class="sec-head__title" id="h-palette">Палитра</h2>
+        <p class="sec-head__desc">Плашки показывают цвет текущей темы; ниже указаны значения для светлой (☀) и тёмной (☾) тем.</p>
+      </div>
+
+      <div class="sg-block" style="margin-top:0">
+        <h3>Поверхности и текст</h3>
+        <ul class="sg-swatches">
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--paper)"></div><div class="sg-meta"><b>Бумага</b><code>--paper</code><div class="sg-hex"><span>☀ #f6f1e6</span><span>☾ #16120f</span></div><div class="sg-rule">Основной фон</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--stone)"></div><div class="sg-meta"><b>Камень</b><code>--stone</code><div class="sg-hex"><span>☀ #ece4d3</span><span>☾ #201b16</span></div><div class="sg-rule">Врезки, кессоны, фото-слоты</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--raised)"></div><div class="sg-meta"><b>Паспарту</b><code>--raised</code><div class="sg-hex"><span>☀ #fbf8f1</span><span>☾ #29221c</span></div><div class="sg-rule">Карточки, рамки</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--ink)"></div><div class="sg-meta"><b>Чернила</b><code>--ink</code><div class="sg-hex"><span>☀ #221d17</span><span>☾ #eee6d6</span></div><div class="sg-rule">Текст · 14.84 / 15.01</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--muted)"></div><div class="sg-meta"><b>Сепия</b><code>--muted</code><div class="sg-hex"><span>☀ #665d50</span><span>☾ #ab9f8c</span></div><div class="sg-rule">Вторичный текст · 5.74 / 7.16</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--line)"></div><div class="sg-meta"><b>Линия</b><code>--line</code><div class="sg-hex"><span>☀ #d6cab3</span><span>☾ #3b332a</span></div><div class="sg-rule">Декоративные разделители</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--line-strong)"></div><div class="sg-meta"><b>Линия усиленная</b><code>--line-strong</code><div class="sg-hex"><span>☀ #8a7859</span><span>☾ #7a6a54</span></div><div class="sg-rule">Границы контролов ≥ 3:1</div></div></li>
+        </ul>
+      </div>
+
+      <div class="sg-block">
+        <h3>Акценты</h3>
+        <ul class="sg-swatches">
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--bordeaux)"></div><div class="sg-meta"><b>Бордо · главный</b><code>--bordeaux</code><div class="sg-hex"><span>☀ #6b1d24</span><span>☾ #d88a8e</span></div><div class="sg-rule">Ссылки, цифры, буквица, кнопка · 10.21 / 7.05</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--bordeaux-soft)"></div><div class="sg-meta"><b>Бордо тонировка</b><code>--bordeaux-soft</code><div class="sg-hex"><span>☀ #f1e2df</span><span>☾ #2c1a1b</span></div><div class="sg-rule">Фон акцентного примечания</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--blue)"></div><div class="sg-meta"><b>Синий · второй</b><code>--blue</code><div class="sg-hex"><span>☀ #1f3d66</span><span>☾ #9dbbe3</span></div><div class="sg-rule">Линии-планки, даты, «стало» · 9.72 / 9.45</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--blue-soft)"></div><div class="sg-meta"><b>Синий тонировка</b><code>--blue-soft</code><div class="sg-hex"><span>☀ #e3e8ef</span><span>☾ #1a2230</span></div><div class="sg-rule">Примечания, поля кессонов</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--gold)"></div><div class="sg-meta"><b>Золото · декор</b><code>--gold</code><div class="sg-hex"><span>☀ #a8843f</span><span>☾ #cfaa62</span></div><div class="sg-rule">Орнамент; текст только ≥ 24px на бумаге · 3.09</div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--gold-text)"></div><div class="sg-meta"><b>Старое золото</b><code>--gold-text</code><div class="sg-hex"><span>☀ #7a5c20</span><span>☾ #d4b06a</span></div><div class="sg-rule">Кикер, мелкие подписи · 5.52 / 9.06</div></div></li>
+        </ul>
+      </div>
+
+      <div class="sg-block">
+        <h3>Декор: фасад, смальта, тёмный раздел</h3>
+        <p class="sg-desc">Тона фасада — интерпретация по описанию реставрации (два основных тона, белые швы); сверить с фотофиксацией перед продакшеном. Ни один декоративный цвет не используется для текста.</p>
+        <ul class="sg-swatches">
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--facade-field)"></div><div class="sg-meta"><b>Фасад · поле</b><code>--facade-field</code><div class="sg-hex"><span>☀ #d9c29a</span><span>☾ #6f5f47</span></div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--facade-trim)"></div><div class="sg-meta"><b>Фасад · тяги</b><code>--facade-trim</code><div class="sg-hex"><span>☀ #efe6d3</span><span>☾ #8c7f69</span></div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--facade-joint)"></div><div class="sg-meta"><b>Известковый шов</b><code>--facade-joint</code><div class="sg-hex"><span>☀ #fbfaf5</span><span>☾ #b9ae9a</span></div></div></li>
+          <li class="sg-swatch"><div class="sg-chip smalt-band" style="height:72px"></div><div class="sg-meta"><b>Смальта</b><code>--smalt-*</code><div class="sg-hex"><span>синяя · золотая · красная · зелёная</span></div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--night)"></div><div class="sg-meta"><b>Бархат · тёмный раздел</b><code>--night</code><div class="sg-hex"><span>☀ #2a1316</span><span>☾ #241012</span></div></div></li>
+          <li class="sg-swatch"><div class="sg-chip" style="background:var(--focus)"></div><div class="sg-meta"><b>Фокус</b><code>--focus</code><div class="sg-hex"><span>☀ #1f3d66</span><span>☾ #9dbbe3</span></div><div class="sg-rule">Кольцо 2px + подложка 2px</div></div></li>
+        </ul>
+      </div>
+
+      <div class="sg-block">
+        <h3>Контраст по WCAG 2.2</h3>
+        <p class="sg-desc">Посчитано скриптом <code>contrast.py</code> по значениям из <code>tokens.css</code>. Норма: текст ≥ 4.5:1, крупный текст (от 24px или от 18.66px полужирным) ≥ 3:1, границы элементов управления и фокус ≥ 3:1. Пары с пометкой «запрещено» в интерфейсе не применяются.</p>
+        <div class="sg-scroll">
+          <table class="ct">
+            <caption class="visually-hidden">Коэффициенты контраста пар токенов в светлой и тёмной темах</caption>
+            <thead><tr><th scope="col">Пара</th><th scope="col">Светлая</th><th scope="col">Тёмная</th></tr></thead>
+            <tbody>
+<!-- contrast:start -->
+<tr><th scope="row">Основной текст<br><code>--ink</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#221d17"></i></span> <b>14.84:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#eee6d6"></i></span> <b>15.01:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Основной текст на камне<br><code>--ink</code> / <code>--stone</code></th><td><span class="ct-sample" style="background:#ece4d3" aria-hidden="true"><i style="background:#221d17"></i></span> <b>13.22:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#201b16" aria-hidden="true"><i style="background:#eee6d6"></i></span> <b>13.76:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Вторичный текст<br><code>--muted</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#665d50"></i></span> <b>5.74:1</b> <span class="ct-badge ct-badge--ok">AA</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#ab9f8c"></i></span> <b>7.16:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Вторичный текст на камне<br><code>--muted</code> / <code>--stone</code></th><td><span class="ct-sample" style="background:#ece4d3" aria-hidden="true"><i style="background:#665d50"></i></span> <b>5.11:1</b> <span class="ct-badge ct-badge--ok">AA</span></td><td><span class="ct-sample" style="background:#201b16" aria-hidden="true"><i style="background:#ab9f8c"></i></span> <b>6.56:1</b> <span class="ct-badge ct-badge--ok">AA</span></td></tr>
+<tr><th scope="row">Текст примечания<br><code>--ink</code> / <code>--blue-soft</code></th><td><span class="ct-sample" style="background:#e3e8ef" aria-hidden="true"><i style="background:#221d17"></i></span> <b>13.58:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#1a2230" aria-hidden="true"><i style="background:#eee6d6"></i></span> <b>12.87:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Бордо: ссылки, цифры, буквица<br><code>--bordeaux</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#6b1d24"></i></span> <b>10.21:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#d88a8e"></i></span> <b>7.05:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Бордо на камне<br><code>--bordeaux</code> / <code>--stone</code></th><td><span class="ct-sample" style="background:#ece4d3" aria-hidden="true"><i style="background:#6b1d24"></i></span> <b>9.09:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#201b16" aria-hidden="true"><i style="background:#d88a8e"></i></span> <b>6.46:1</b> <span class="ct-badge ct-badge--ok">AA</span></td></tr>
+<tr><th scope="row">Синий: даты, «стало», навигация<br><code>--blue</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#1f3d66"></i></span> <b>9.72:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#9dbbe3"></i></span> <b>9.45:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Синий на камне<br><code>--blue</code> / <code>--stone</code></th><td><span class="ct-sample" style="background:#ece4d3" aria-hidden="true"><i style="background:#1f3d66"></i></span> <b>8.66:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#201b16" aria-hidden="true"><i style="background:#9dbbe3"></i></span> <b>8.66:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Старое золото: кикер, мелкие подписи<br><code>--gold-text</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#7a5c20"></i></span> <b>5.52:1</b> <span class="ct-badge ct-badge--ok">AA</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#d4b06a"></i></span> <b>9.06:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Старое золото на камне<br><code>--gold-text</code> / <code>--stone</code></th><td><span class="ct-sample" style="background:#ece4d3" aria-hidden="true"><i style="background:#7a5c20"></i></span> <b>4.91:1</b> <span class="ct-badge ct-badge--ok">AA</span></td><td><span class="ct-sample" style="background:#201b16" aria-hidden="true"><i style="background:#d4b06a"></i></span> <b>8.31:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Золото: римские цифры ≥ 24px<br><code>--gold</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#a8843f"></i></span> <b>3.09:1</b> <span class="ct-badge ct-badge--ok">AA крупный</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#cfaa62"></i></span> <b>8.50:1</b> <span class="ct-badge ct-badge--ok">AA крупный</span></td></tr>
+<tr><th scope="row">Золото на камне<br><code>--gold</code> / <code>--stone</code></th><td><span class="ct-sample" style="background:#ece4d3" aria-hidden="true"><i style="background:#a8843f"></i></span> <b>2.75:1</b> <span class="ct-badge ct-badge--bad">запрещено</span></td><td><span class="ct-sample" style="background:#201b16" aria-hidden="true"><i style="background:#cfaa62"></i></span> <b>7.79:1</b> <span class="ct-badge ct-badge--ok">AA крупный</span></td></tr>
+<tr><th scope="row">Золото мелким текстом<br><code>--gold</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#a8843f"></i></span> <b>3.09:1</b> <span class="ct-badge ct-badge--warn">только крупный</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#cfaa62"></i></span> <b>8.50:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Текст кнопки на бордо<br><code>--on-accent</code> / <code>--bordeaux</code></th><td><span class="ct-sample" style="background:#6b1d24" aria-hidden="true"><i style="background:#f6f1e6"></i></span> <b>10.21:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#d88a8e" aria-hidden="true"><i style="background:#16120f"></i></span> <b>7.05:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Активный пункт переключателя<br><code>--paper</code> / <code>--blue</code></th><td><span class="ct-sample" style="background:#1f3d66" aria-hidden="true"><i style="background:#f6f1e6"></i></span> <b>9.72:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#9dbbe3" aria-hidden="true"><i style="background:#16120f"></i></span> <b>9.45:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Тёмный раздел: текст<br><code>--on-night</code> / <code>--night</code></th><td><span class="ct-sample" style="background:#2a1316" aria-hidden="true"><i style="background:#f6f1e6"></i></span> <b>15.50:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#241012" aria-hidden="true"><i style="background:#eee6d6"></i></span> <b>14.62:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Тёмный раздел: вторичный<br><code>--on-night-muted</code> / <code>--night</code></th><td><span class="ct-sample" style="background:#2a1316" aria-hidden="true"><i style="background:#c9bca5"></i></span> <b>9.33:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#241012" aria-hidden="true"><i style="background:#bfb19a"></i></span> <b>8.61:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Тёмный раздел: золото<br><code>--gold-on-night</code> / <code>--night</code></th><td><span class="ct-sample" style="background:#2a1316" aria-hidden="true"><i style="background:#d9b26a"></i></span> <b>8.75:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td><td><span class="ct-sample" style="background:#241012" aria-hidden="true"><i style="background:#d9b26a"></i></span> <b>9.09:1</b> <span class="ct-badge ct-badge--ok">AAA</span></td></tr>
+<tr><th scope="row">Границы элементов управления<br><code>--line-strong</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#8a7859"></i></span> <b>3.80:1</b> <span class="ct-badge ct-badge--ok">AA 1.4.11</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#7a6a54"></i></span> <b>3.56:1</b> <span class="ct-badge ct-badge--ok">AA 1.4.11</span></td></tr>
+<tr><th scope="row">Кольцо фокуса<br><code>--focus</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#1f3d66"></i></span> <b>9.72:1</b> <span class="ct-badge ct-badge--ok">AA 1.4.11</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#9dbbe3"></i></span> <b>9.45:1</b> <span class="ct-badge ct-badge--ok">AA 1.4.11</span></td></tr>
+<tr><th scope="row">Волосяная линия<br><code>--line</code> / <code>--paper</code></th><td><span class="ct-sample" style="background:#f6f1e6" aria-hidden="true"><i style="background:#d6cab3"></i></span> <b>1.44:1</b> <span class="ct-badge ct-badge--info">декор</span></td><td><span class="ct-sample" style="background:#16120f" aria-hidden="true"><i style="background:#3b332a"></i></span> <b>1.50:1</b> <span class="ct-badge ct-badge--info">декор</span></td></tr>
+<!-- contrast:end -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="coffers" aria-hidden="true"></div>
+
+  <!-- III. Типографика -->
+  <section class="section" id="type" aria-labelledby="h-type">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">III</span>
+        <h2 class="sec-head__title" id="h-type">Шрифты и шкала</h2>
+        <p class="sec-head__desc">Антиква для заголовков и цифр, гротеск ParaType для текста. Оба с полноценной кириллицей.</p>
+      </div>
+      <div class="sg-fonts">
+        <div class="sg-font">
+          <span class="sg-label">Заголовки · --font-display</span>
+          <p class="sg-big" style="font-family:var(--font-display);color:var(--text)">Cormorant Garamond</p>
+          <p>500 · 600 · 700, курсив 500. Заголовки, римские цифры, даты, показатели, буквица. Не меньше 21px.</p>
+        </div>
+        <div class="sg-font">
+          <span class="sg-label">Текст · --font-text</span>
+          <p class="sg-big" style="font-family:var(--font-text);font-size:var(--fs-xl);color:var(--text)">PT Sans</p>
+          <p>400 · 700, курсив 400. Основной текст 17/1.65, подписи 13–15, навигация и кикер капителью с трекингом.</p>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <h3>Шкала</h3>
+        <ul class="sg-scale">
+          <li><code>--fs-3xl 42–88</code><span style="font:var(--fw-semibold) var(--fs-3xl)/var(--lh-tight) var(--font-display)">Вокзал Тона</span></li>
+          <li><code>--fs-2xl 32–52</code><span style="font:var(--fw-semibold) var(--fs-2xl)/var(--lh-heading) var(--font-display)">Облик по замыслу автора</span></li>
+          <li><code>--fs-xl 28–36</code><span style="font:var(--fw-semibold) var(--fs-xl)/var(--lh-heading) var(--font-display)">Музей истории вокзала</span></li>
+          <li><code>--fs-lg 22–26</code><span style="font:var(--fw-semibold) var(--fs-lg)/var(--lh-heading) var(--font-display)">22 мая 2026</span></li>
+          <li><code>--fs-md 18–19</code><span style="font-size:var(--fs-md)">Лид: после реконструкции вокзал вновь принимает пассажиров.</span></li>
+          <li><code>--fs-base 17</code><span style="font-size:var(--fs-base)">Основной текст: фасаду вернули два основных тона по снимку 1873 года.</span></li>
+          <li><code>--fs-sm 15</code><span style="font-size:var(--fs-sm)">Примечание: часть сервисов вводится поэтапно.</span></li>
+          <li><code>--fs-xs 13</code><span class="kicker">Кикер · капитель · трекинг 0.22em</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- IV. Шкалы -->
+  <section class="section surface-alt" id="scales" aria-labelledby="h-scales">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">IV</span>
+        <h2 class="sec-head__title" id="h-scales">Отступы, линии, движение</h2>
+        <p class="sec-head__desc">На «камне» римская цифра автоматически темнеет до старого золота: обычное золото не держит 3:1.</p>
+      </div>
+      <div class="sg-two">
+        <div>
+          <span class="sg-label">Отступы · шаг 4/8</span>
+          <ul class="sg-space">
+            <li><code>--sp-1 · 4</code><i style="width:4px"></i></li>
+            <li><code>--sp-2 · 8</code><i style="width:8px"></i></li>
+            <li><code>--sp-3 · 12</code><i style="width:12px"></i></li>
+            <li><code>--sp-4 · 16</code><i style="width:16px"></i></li>
+            <li><code>--sp-5 · 24</code><i style="width:24px"></i></li>
+            <li><code>--sp-6 · 32</code><i style="width:32px"></i></li>
+            <li><code>--sp-7 · 40</code><i style="width:40px"></i></li>
+            <li><code>--sp-8 · 48</code><i style="width:48px"></i></li>
+            <li><code>--sp-9 · 64</code><i style="width:64px"></i></li>
+            <li><code>--sp-10 · 80</code><i style="width:80px"></i></li>
+            <li><code>--sp-11 · 96</code><i style="width:96px"></i></li>
+          </ul>
+        </div>
+        <div class="sg-grid3">
+          <div class="sg-tile"><div class="sg-demo-box" style="border-radius:var(--radius-1)"></div><p><code>--radius-1</code> 2px · кнопки. Карточки и фото без скругления.</p></div>
+          <div class="sg-tile"><div class="sg-demo-box" style="box-shadow:var(--shadow-2)"></div><p><code>--shadow-2</code> — единственная тень, для всплывающих слоёв.</p></div>
+          <div class="sg-tile"><div class="sg-demo-box" style="border-top:var(--bw-bar) solid var(--accent-2)"></div><p><code>--bw-bar</code> 4px · <code>--bw-rule</code> 2px · <code>--bw-hair</code> 1px.</p></div>
+          <div class="sg-tile"><div class="sg-demo-box" style="box-shadow:var(--focus-ring)"></div><p><code>--focus-ring</code> — двойное кольцо, видно на любом фоне.</p></div>
+          <div class="sg-tile"><b>Движение</b><p><code>--dur-fast</code> 120 · <code>--dur-base</code> 200 · <code>--dur-reveal</code> 900 мс; <code>--ease-out</code>. При reduced-motion все длительности обнуляются.</p></div>
+          <div class="sg-tile"><b>Сетка</b><p><code>--container</code> 1120 · узкий 760 · поле 16/24 · <code>--grid-gap</code> 24–56 · кессон 56.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="coffers" aria-hidden="true"></div>
+
+  <!-- V. Компоненты -->
+  <section class="section" id="components" aria-labelledby="h-components">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">V</span>
+        <h2 class="sec-head__title" id="h-components">Компоненты</h2>
+        <p class="sec-head__desc">Классы из <code>components.css</code>. Всё ниже переключается вместе с темой.</p>
+      </div>
+
+      <div class="sg-block" style="margin-top:0">
+        <h3>Орнаментальная линейка <code>.orn</code></h3>
+        <p class="sg-desc">Лепной поясок: волосяная линия золотом с ромбом. Варианты: центрированная, с заливкой, тройная.</p>
+        <div class="orn" aria-hidden="true"><i class="orn__d"></i></div>
+        <div class="orn orn--center" aria-hidden="true"><i class="orn__d orn__d--fill"></i></div>
+        <div class="orn orn--center orn--triple" aria-hidden="true"><i class="orn__d"></i><i class="orn__d"></i><i class="orn__d"></i></div>
+      </div>
+
+      <div class="sg-block">
+        <h3>Кессонная полоса <code>.coffers</code>, кладка <code>.masonry</code>, смальта <code>.smalt-band</code></h3>
+        <p class="sg-desc">Разделители между крупными разделами. Всегда <code>aria-hidden="true"</code>.</p>
+        <div class="coffers" aria-hidden="true"></div>
+        <div style="height:var(--sp-4)"></div>
+        <div class="coffers coffers--sm" aria-hidden="true"></div>
+        <div style="height:var(--sp-4)"></div>
+        <div class="masonry" aria-hidden="true"></div>
+        <div style="height:var(--sp-4)"></div>
+        <div class="smalt-band" aria-hidden="true"></div>
+      </div>
+
+      <div class="sg-block">
+        <h3>Заголовок раздела <code>.sec-head</code></h3>
+        <p class="sg-desc">Римская цифра — декор (<code>aria-hidden</code>), заголовок — настоящий <code>h2</code>. На телефоне цифра встаёт над заголовком.</p>
+        <div class="sec-head">
+          <span class="sec-head__no" aria-hidden="true">VII</span>
+          <h3 class="sec-head__title">Хроника</h3>
+          <p class="sec-head__desc">От проекта Константина Тона до открытия после реконструкции.</p>
+        </div>
+      </div>
+
+      <div class="sg-two sg-block">
+        <div>
+          <h3>Буквица <code>.dropcap</code> и факты <code>.facts</code></h3>
+          <p class="dropcap" style="margin-top:var(--sp-4)">Здание построено в 1849–1851 годах по проекту Константина Тона и стало первым вокзалом Москвы. Чтобы установить подлинный цвет стен, реставраторы расчистили больше десяти слоёв поздней краски.</p>
+          <ul class="facts">
+            <li>Фасаду вернули два основных тона по снимку 1873 года</li>
+            <li>Швы кладки снова белые: известковый раствор вместо цемента</li>
+            <li>Выходы к путям накрыл стеклянный дебаркадер</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Кнопки и ссылки</h3>
+          <p class="sg-desc" style="margin-top:var(--sp-4)">Одна главная кнопка на экран. Минимальная высота 44px.</p>
+          <div class="sg-row">
+            <a class="btn btn--primary" href="#components">Главное действие</a>
+            <a class="btn btn--secondary" href="#components">Второе</a>
+            <button class="btn btn--ghost" type="button">Тихое</button>
+          </div>
+          <p style="margin-top:var(--sp-5)">Текстовая <a href="#palette">ссылка в абзаце</a>, <a class="link link--quiet" href="#type">тихая ссылка</a> и <a class="link link--more" href="#themes">подробнее</a>.</p>
+          <span class="sg-label" style="margin-top:var(--sp-5)">Фокус (статичный образец)</span>
+          <div class="sg-row">
+            <span class="btn btn--primary sg-demo-focus" aria-hidden="true">Кнопка в фокусе</span>
+            <span class="sg-demo-focus" style="color:var(--accent);text-decoration:underline;border-radius:var(--radius-1)" aria-hidden="true">ссылка в фокусе</span>
+          </div>
+          <span class="sg-label" style="margin-top:var(--sp-5)">Skip-link (видна при фокусе с клавиатуры)</span>
+          <div class="sg-skip-demo" aria-hidden="true"><span class="skip-link">Перейти к содержанию</span></div>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <h3>Блок цифр <code>.figures</code></h3>
+        <p class="sg-desc">Список определений: подпись в <code>dt</code>, значение в <code>dd</code>; визуально значение сверху.</p>
+        <dl class="figures">
+          <div class="figures__item"><dt class="figures__label">пассажирских помещений вместо 8,8 тыс. м²</dt><dd class="figures__value">16 <small>тыс. м²</small></dd></div>
+          <div class="figures__item"><dt class="figures__label">посадочных мест в залах ожидания, прежде около 700</dt><dd class="figures__value">1000+</dd></div>
+          <div class="figures__item"><dt class="figures__label">освещённость залов, вдвое выше прежней</dt><dd class="figures__value">300 <small>лк</small></dd></div>
+          <div class="figures__item"><dt class="figures__label">мозаичных панно «Две столицы»</dt><dd class="figures__value">800+ <small>м²</small></dd></div>
+        </dl>
+      </div>
+
+      <div class="sg-block">
+        <h3>Таблица «было/стало» <code>.compare</code></h3>
+        <p class="sg-desc">Строка — <code>th scope="row"</code>. На ширине до 640px таблица превращается в карточки, подписи берутся из <code>data-label</code>.</p>
+        <table class="compare">
+          <caption>Как изменилось устройство вокзала</caption>
+          <thead><tr><th scope="col">Раздел</th><th scope="col">До реконструкции</th><th scope="col">После</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Этажи</th><td class="compare__before" data-label="Было">Пассажиры пользовались почти только первым этажом</td><td class="compare__after" data-label="Стало">Второй и третий этажи открыты: залы ожидания, кафе и рестораны</td></tr>
+            <tr><th scope="row">Ожидание</th><td class="compare__before" data-label="Было">Около 700 мест</td><td class="compare__after" data-label="Стало">Более 1000 мест</td></tr>
+            <tr><th scope="row">Кассовый зал</th><td class="compare__none" data-label="Было">—</td><td class="compare__after" data-label="Стало">Кессонный потолок со встроенными светильниками</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sg-block">
+        <h3>Карточка интерьера <code>.hall</code> с паспарту <code>.passe</code></h3>
+        <p class="sg-desc">Двойная рамка: внешняя линия, поле «картона», внутренняя линия вокруг фото. Если фото нет — гравюрная заглушка.</p>
+        <div class="halls">
+          <article class="hall">
+            <figure class="passe">
+              <div class="ph">
+                <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                  <rect x="10" y="10" width="220" height="160"/>
+                  <g><path d="M10 50 H230 M10 90 H230 M10 130 H230 M65 10 V170 M120 10 V170 M175 10 V170"/></g>
+                  <g stroke-width=".8"><rect x="20" y="20" width="35" height="20"/><rect x="75" y="20" width="35" height="20"/><rect x="130" y="20" width="35" height="20"/><rect x="185" y="20" width="35" height="20"/><rect x="20" y="60" width="35" height="20"/><rect x="75" y="60" width="35" height="20"/><rect x="130" y="60" width="35" height="20"/><rect x="185" y="60" width="35" height="20"/><rect x="20" y="100" width="35" height="20"/><rect x="75" y="100" width="35" height="20"/><rect x="130" y="100" width="35" height="20"/><rect x="185" y="100" width="35" height="20"/><rect x="20" y="140" width="35" height="20"/><rect x="75" y="140" width="35" height="20"/><rect x="130" y="140" width="35" height="20"/><rect x="185" y="140" width="35" height="20"/></g>
+                  <g fill="currentColor"><circle cx="37.5" cy="30" r="2"/><circle cx="92.5" cy="30" r="2"/><circle cx="147.5" cy="30" r="2"/><circle cx="202.5" cy="30" r="2"/><circle cx="37.5" cy="70" r="2"/><circle cx="92.5" cy="70" r="2"/><circle cx="147.5" cy="70" r="2"/><circle cx="202.5" cy="70" r="2"/><circle cx="37.5" cy="110" r="2"/><circle cx="92.5" cy="110" r="2"/><circle cx="147.5" cy="110" r="2"/><circle cx="202.5" cy="110" r="2"/><circle cx="37.5" cy="150" r="2"/><circle cx="92.5" cy="150" r="2"/><circle cx="147.5" cy="150" r="2"/><circle cx="202.5" cy="150" r="2"/></g>
+                </svg>
+              </div>
+              <figcaption>Кессонный потолок</figcaption>
+            </figure>
+            <h3 class="hall__title">Кассовый зал</h3>
+            <p class="hall__text">Кессонный потолок со встроенными светильниками. Освещённость залов доведена до 300 люкс.</p>
+            <p class="hall__meta">Первый этаж</p>
+          </article>
+          <article class="hall">
+            <figure class="passe">
+              <div class="ph">
+                <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                  <path d="M10 22 H230 M10 28 H230"/><path d="M10 22 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0"/>
+                  <rect x="90" y="40" width="60" height="90"/><path d="M120 40 V130 M90 85 H150"/>
+                  <path d="M70 34 C 92 60, 80 110, 92 136 L70 136 Z"/><path d="M170 34 C 148 60, 160 110, 148 136 L170 136 Z"/>
+                  <path d="M60 34 H180"/>
+                  <path d="M10 136 H230"/>
+                  <g stroke-width=".7"><path d="M10 150 L40 136 L70 150 L100 136 L130 150 L160 136 L190 150 L220 136 L230 141"/><path d="M10 164 L40 150 L70 164 L100 150 L130 164 L160 150 L190 164 L220 150 L230 155"/><path d="M10 178 L40 164 L70 178 L100 164 L130 178 L160 164 L190 178 L220 164 L230 169"/></g>
+                </svg>
+              </div>
+              <figcaption>Гостиная XIX века</figcaption>
+            </figure>
+            <h3 class="hall__title">Музей истории вокзала</h3>
+            <p class="hall__text">Воссоздана гостиная XIX века: лепной декор, наборный паркет, бархатные портьеры.</p>
+            <p class="hall__meta">Экспозиция</p>
+          </article>
+          <article class="hall">
+            <figure class="passe">
+              <div class="ph">
+                <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                  <path d="M120 8 L150 34 H90 Z"/><rect x="95" y="34" width="50" height="44"/><circle cx="120" cy="56" r="14"/><circle cx="120" cy="56" r="10"/><path d="M120 56 V48 M120 56 L126 59"/>
+                  <path d="M86 78 H154 M80 84 H160"/><rect x="84" y="84" width="72" height="88"/>
+                  <path d="M104 172 V136 a16 16 0 0 1 32 0 V172"/>
+                  <rect x="92" y="96" width="14" height="24"/><rect x="134" y="96" width="14" height="24"/>
+                  <path d="M10 172 H230 M20 120 H84 M156 120 H220 M20 120 V172 M220 120 V172"/>
+                  <g stroke-width=".7"><path d="M30 172 V146 a9 9 0 0 1 18 0 V172 M56 172 V146 a9 9 0 0 1 18 0 V172 M166 172 V146 a9 9 0 0 1 18 0 V172 M192 172 V146 a9 9 0 0 1 18 0 V172"/></g>
+                </svg>
+              </div>
+              <figcaption>Часовая башня</figcaption>
+            </figure>
+            <h3 class="hall__title">Фасад и башня</h3>
+            <p class="hall__text">Цвет восстановлен по фотофиксации 1873 года, швы кладки снова белые.</p>
+            <p class="hall__meta">Комсомольская площадь</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <h3>Хроника <code>.chron</code> и примечание <code>.note</code></h3>
+        <ol class="chron" style="margin-top:var(--sp-5)">
+          <li><time datetime="1849/1851">1849–1851</time><p>Строительство Николаевского вокзала по проекту Константина Тона.</p></li>
+          <li><time datetime="2024-08-11">11 августа 2024</time><p>Здание закрыто для пассажиров, начата комплексная модернизация.</p></li>
+          <li class="is-key"><time datetime="2026-05-22">22 мая 2026</time><p>Обновлённый вокзал открыт для пассажиров.</p></li>
+        </ol>
+        <p class="note"><b class="note__title">Примечание</b>Часть сервисов вводилась поэтапно. Актуальную информацию уточняйте на сайте ОАО «РЖД».</p>
+        <p class="note note--accent"><b class="note__title">Важно</b>Акцентный вариант — для одного предупреждения на страницу.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VI. Тёмный раздел -->
+  <section class="section section--night" aria-labelledby="h-night">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">VI</span>
+        <h2 class="sec-head__title" id="h-night">«Две столицы»</h2>
+        <p class="sec-head__desc">Раздел <code>.section--night</code> переопределяет семантические алиасы: компоненты внутри работают без изменений.</p>
+      </div>
+      <div class="sg-two">
+        <figure class="passe">
+          <div class="ph sg-mosaic-art">
+            <svg class="ph__fallback" viewBox="0 0 240 180" aria-hidden="true">
+              <defs><pattern id="tess" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="var(--smalt-blue)"/></pattern></defs>
+              <rect width="240" height="180" fill="url(#tess)"/>
+              <path d="M0 140 H240 V180 H0 Z" fill="var(--smalt-green)"/>
+              <path d="M30 140 V90 L45 70 L60 90 V140 Z M100 140 V60 a20 20 0 0 1 40 0 V140 Z M180 140 V100 L195 40 L210 100 V140 Z" fill="var(--smalt-gold)"/>
+              <circle cx="120" cy="36" r="10" fill="var(--smalt-gold)"/>
+              <path d="M0 150 H240" stroke="var(--smalt-red)" stroke-width="4"/>
+            </svg>
+          </div>
+          <figcaption>Смальта: Москва и Петербург</figcaption>
+        </figure>
+        <div>
+          <p class="dropcap">В центральном зале разместились два мозаичных панно общей площадью более 800 м² с видами Москвы и Санкт-Петербурга. Панно выполнены вручную из смальты.</p>
+          <ul class="facts">
+            <li>Московский Кремль, Исаакиевский собор, «Лахта-центр»</li>
+            <li>Скрытые детали для внимательного зрителя</li>
+          </ul>
+          <div class="sg-row" style="margin-top:var(--sp-6)">
+            <a class="btn btn--primary" href="#themes">Кнопка на бархате</a>
+            <a href="#components">Ссылка на бархате</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="smalt-band" aria-hidden="true"></div>
+
+  <!-- VII. Две темы -->
+  <section class="section" id="themes" aria-labelledby="h-themes">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-head__no" aria-hidden="true">VII</span>
+        <h2 class="sec-head__title" id="h-themes">Две темы рядом</h2>
+        <p class="sec-head__desc">Атрибут <code>data-theme</code> работает и на отдельном блоке: слева всегда светлая тема, справа всегда тёмная.</p>
+      </div>
+      <div class="sg-islands">
+        <div class="sg-island" data-theme="light" role="group" aria-label="Светлая тема">
+          <p class="kicker">Светлая тема</p>
+          <h3 style="font-size:var(--fs-xl)">Облик по замыслу автора</h3>
+          <div class="orn" aria-hidden="true"><i class="orn__d"></i></div>
+          <dl class="figures">
+            <div class="figures__item"><dt class="figures__label">пассажирских помещений</dt><dd class="figures__value">16 <small>тыс. м²</small></dd></div>
+            <div class="figures__item"><dt class="figures__label">мест ожидания</dt><dd class="figures__value">1000+</dd></div>
+          </dl>
+          <ul class="facts"><li>Швы кладки снова белые</li><li>Два основных тона фасада</li></ul>
+          <p class="note">Примечание на синей тонировке.</p>
+          <div class="sg-row" style="margin-top:var(--sp-5)"><a class="btn btn--primary" href="#themes">Кнопка</a><a href="#palette">Ссылка</a></div>
+        </div>
+        <div class="sg-island" data-theme="dark" role="group" aria-label="Тёмная тема">
+          <p class="kicker">Тёмная тема</p>
+          <h3 style="font-size:var(--fs-xl)">Облик по замыслу автора</h3>
+          <div class="orn" aria-hidden="true"><i class="orn__d"></i></div>
+          <dl class="figures">
+            <div class="figures__item"><dt class="figures__label">пассажирских помещений</dt><dd class="figures__value">16 <small>тыс. м²</small></dd></div>
+            <div class="figures__item"><dt class="figures__label">мест ожидания</dt><dd class="figures__value">1000+</dd></div>
+          </dl>
+          <ul class="facts"><li>Швы кладки снова белые</li><li>Два основных тона фасада</li></ul>
+          <p class="note">Примечание на синей тонировке.</p>
+          <div class="sg-row" style="margin-top:var(--sp-5)"><a class="btn btn--primary" href="#themes">Кнопка</a><a href="#palette">Ссылка</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>Дизайн-система лендинга «Ленинградский вокзал». Файлы: <code>tokens.css</code>, <code>components.css</code>, <code>contrast.py</code>, <code>README.md</code>.</p>
+    <p style="margin:0">Шрифты: <a href="https://fonts.google.com/specimen/Cormorant+Garamond">Cormorant Garamond</a> и <a href="https://fonts.google.com/specimen/PT+Sans">PT Sans</a>, Google Fonts.</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var current = root.getAttribute("data-theme") || "auto";
+    var radios = document.querySelectorAll('.theme-switch input[name="theme"]');
+    radios.forEach(function (r) {
+      r.checked = r.value === current;
+      r.addEventListener("change", function () {
+        if (!r.checked) return;
+        if (r.value === "auto") root.removeAttribute("data-theme");
+        else root.setAttribute("data-theme", r.value);
+        try {
+          if (r.value === "auto") localStorage.removeItem("lv-theme");
+          else localStorage.setItem("lv-theme", r.value);
+        } catch (e) {}
+      });
+    });
+  })();
+</script>
+</body>
+</html>
