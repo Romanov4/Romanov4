@@ -187,6 +187,15 @@ function setPaused(p) {
   ui.elapsed = 0;
 }
 
+const moreBtn = $('moreBtn');
+moreBtn.addEventListener('click', () => {
+  const open = moreBtn.getAttribute('aria-expanded') !== 'true';
+  moreBtn.setAttribute('aria-expanded', String(open));
+  moreBtn.textContent = open ? 'Скрыть' : 'Подробнее';
+  $('card').classList.toggle('is-open', open);
+  interact();
+});
+
 $('prevBtn').addEventListener('click', () => { interact(); goTo(ui.idx - 1, { user: true }); });
 $('nextBtn').addEventListener('click', () => { interact(); goTo(ui.idx + 1, { user: true }); });
 $('playBtn').addEventListener('click', () => { setPaused(!ui.userPaused); ui.holdUntil = 0; });
@@ -1098,13 +1107,14 @@ function createWorld() {
     const g = featGroup('superstr');
     const b = new Batch();
     for (const s of [-1, 1]) {
-      const cx = 13.5 * s, w = 14.4, d = 16, y0 = Y_TOP + 0.6, H = 3.8;
+      const cx = 13.5 * s, w = 14.2, d = 15, y0 = Y_TOP + 0.6, H = 3.2;
       b.add('wallA', place(box(w, H, d), cx, y0 + H / 2, 0));
-      b.add('trim', place(box(w + 0.3, 0.25, d + 0.3), cx, y0 + H + 0.12, 0));
+      b.add('trim', place(box(w + 0.3, 0.2, d + 0.3), cx, y0 + H + 0.1, 0));
+      b.add('roof', place(box(w - 0.4, 0.3, d - 0.4), cx, y0 + H + 0.3, 0));
       for (const x of AX) {
         for (const zf of [d / 2, -d / 2]) {
           const sg = zf > 0 ? 1 : -1;
-          b.add('glass', place(box(1.6, 1.8, 0.08), x * s, y0 + 1.9, zf + sg * 0.04));
+          b.add('glass', place(box(1.5, 1.6, 0.08), x * s, y0 + 1.6, zf + sg * 0.04));
         }
       }
     }
@@ -1860,8 +1870,8 @@ function createWorld() {
   function initialCamera(aspect) {
     const portrait = aspect < 0.8;
     if (portrait) controls.target.set(4, 8, -16);
-    const r = portrait ? 172 : aspect < 1.2 ? 165 : 128;
-    const sph = new THREE.Spherical(r, portrait ? 1.24 : 1.3, portrait ? 0.92 : 0.7);
+    const r = portrait ? 168 : aspect < 1.2 ? 150 : 118;
+    const sph = new THREE.Spherical(r, portrait ? 1.3 : 1.38, portrait ? 0.95 : 0.74);
     camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
     controls.update();
   }
@@ -1876,7 +1886,7 @@ function createWorld() {
     camera.aspect = W / H;
     camera.fov = W / H < 0.8 ? 46 : 36;
     if (!viewLocked) {
-      if (W < 721) camera.setViewOffset(W, H, 0, Math.round(H * 0.2), W, H);
+      if (W < 721) camera.setViewOffset(W, H, 0, Math.round(H * 0.12), W, H);
       else camera.setViewOffset(W, H, -Math.round(W * 0.1), Math.round(H * 0.06), W, H);
     }
     camera.updateProjectionMatrix();

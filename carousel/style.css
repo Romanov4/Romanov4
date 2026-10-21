@@ -7,6 +7,12 @@
   --blue: #1f3d66;
   --gold: #a8843f;
   --line: rgba(34, 29, 23, 0.2);
+  --frame: rgba(168, 132, 63, 0.6);
+  --frame-2: rgba(168, 132, 63, 0.35);
+  --on-accent: #f6f1e6;
+  --on-accent-2: #f1e6d3;
+  --shadow: rgba(20, 14, 8, 0.28);
+  color-scheme: light;
   --serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
   --sans: "PT Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
   --fade: 1.8s;
@@ -15,6 +21,42 @@
   --fb-wall: #c9a879;
   --fb-wall2: #b9966a;
   --fb-glow: #3a3128;
+}
+
+/* Тёмная тема UI (палитра design-system/tokens.css); 3D-сцена не меняется */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #29221c;
+    --paper-2: #342b23;
+    --ink: #eee6d6;
+    --muted: #ab9f8c;
+    --bordo: #d88a8e;
+    --blue: #9dbbe3;
+    --gold: #cfaa62;
+    --line: #3b332a;
+    --frame: rgba(207, 170, 98, 0.45);
+    --frame-2: rgba(207, 170, 98, 0.25);
+    --on-accent: #16120f;
+    --on-accent-2: #2a1d1d;
+    --shadow: rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #29221c;
+  --paper-2: #342b23;
+  --ink: #eee6d6;
+  --muted: #ab9f8c;
+  --bordo: #d88a8e;
+  --blue: #9dbbe3;
+  --gold: #cfaa62;
+  --line: #3b332a;
+  --frame: rgba(207, 170, 98, 0.45);
+  --frame-2: rgba(207, 170, 98, 0.25);
+  --on-accent: #16120f;
+  --on-accent-2: #2a1d1d;
+  --shadow: rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -70,14 +112,14 @@ body { overflow-x: hidden; }
   max-width: calc(100% - 48px);
   padding: 12px 18px 12px;
   background: var(--paper);
-  border: 1px solid rgba(168, 132, 63, 0.6);
-  box-shadow: 0 10px 28px rgba(20, 14, 8, 0.22);
+  border: 1px solid var(--frame);
+  box-shadow: 0 10px 28px var(--shadow);
 }
 .brand::after {
   content: "";
   position: absolute;
   inset: 4px;
-  border: 1px solid rgba(168, 132, 63, 0.35);
+  border: 1px solid var(--frame-2);
   pointer-events: none;
 }
 .brand-kicker {
@@ -106,8 +148,8 @@ body { overflow-x: hidden; }
   width: min(530px, calc(100% - 48px));
   padding: 20px 22px 14px;
   background: var(--paper);
-  border: 1px solid rgba(168, 132, 63, 0.6);
-  box-shadow: 0 18px 44px rgba(20, 14, 8, 0.3);
+  border: 1px solid var(--frame);
+  box-shadow: 0 18px 44px var(--shadow);
 }
 .panel::before {
   content: "";
@@ -162,7 +204,21 @@ body { overflow-x: hidden; }
   to { opacity: 1; transform: none; }
 }
 
+.more-btn {
+  display: none;
+  min-height: 32px;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: 700 14px/1.2 var(--sans);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
 .controls {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -232,11 +288,11 @@ body { overflow-x: hidden; }
 .year-btn:hover { border-color: var(--bordo); color: var(--bordo); }
 .yb-name { font: 600 19px/1 var(--serif); }
 .yb-years { font: 400 12.5px/1.1 var(--sans); color: var(--muted); letter-spacing: 0.02em; }
-.year-btn[aria-current="true"] .yb-years { color: #f1e6d3; }
+.year-btn[aria-current="true"] .yb-years { color: var(--on-accent-2); }
 .year-btn[aria-current="true"] {
   background: var(--bordo);
   border-color: var(--bordo);
-  color: var(--paper);
+  color: var(--on-accent);
 }
 
 button:focus-visible,
@@ -325,31 +381,38 @@ button:focus-visible,
 
 /* ---------- Адаптив ---------- */
 @media (max-width: 720px) {
-  .brand { top: 10px; left: 10px; max-width: calc(100% - 20px); padding: 8px 12px; }
+  .brand { top: 10px; left: 10px; max-width: calc(100% - 20px); padding: 7px 12px; }
   .brand-kicker { font-size: 10px; }
-  .brand-title { font-size: 22px; }
-  .brand-sub { font-size: 12.5px; }
+  .brand-title { font-size: 21px; }
+  .brand-sub { display: none; }
   .panel {
     left: 10px;
     right: 10px;
     bottom: 10px;
     width: auto;
-    padding: 14px 14px 10px;
+    padding: 12px 14px 8px;
   }
   .panel::before { left: 14px; right: 14px; }
   .card { min-height: 0; }
-  .card-year { font-size: 40px; }
-  .card-title { font-size: 24px; margin-bottom: 6px; }
-  .card-text { font-size: 14.5px; line-height: 1.45; }
-  .controls { margin-top: 10px; padding-top: 10px; gap: 6px; flex-wrap: wrap; }
-  .timeline-wrap { order: -1; flex: 1 1 100%; overflow: visible; }
+  .card-meta { margin-top: 4px; font-size: 11px; }
+  .card-year { font-size: 36px; }
+  .card-period { font-size: 12px; }
+  .card-title { font-size: 23px; margin: 2px 0 0; }
+  .card-text { font-size: 14.5px; line-height: 1.45; margin-top: 6px; }
+  .card:not(.is-open) .card-text { display: none; }
+  .more-btn { display: inline-block; }
+  /* стрелки и пауза — в правом верхнем углу карточки, шкала эпох — во всю ширину */
+  .controls { position: static; margin-top: 8px; padding-top: 8px; gap: 0; }
+  .timeline-wrap { flex: 1 1 100%; overflow: visible; }
   .timeline { width: 100%; padding: 0; }
-  #playBtn { margin-left: auto; }
-  .icon-btn { width: 40px; height: 40px; }
+  #prevBtn, #nextBtn, #playBtn { position: absolute; top: 14px; }
+  #prevBtn { right: 102px; }
+  #nextBtn { right: 58px; }
+  #playBtn { right: 14px; }
   .year-btn { padding: 4px 4px; min-height: 46px; }
   .yb-name { font-size: 18px; }
   .hint { display: none; }
-  .fallback { padding: 110px 12px 360px; }
+  .fallback { padding: 90px 12px 260px; }
   .no-webgl .panel { left: 10px; transform: none; }
 }
 

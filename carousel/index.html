@@ -9,6 +9,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=PT+Sans:wght@400;700&display=swap">
   <link rel="stylesheet" href="style.css">
+  <script>
+    /* Тема UI как у страницы-хоста: ключ localStorage "lv-theme" (dark|light), иначе prefers-color-scheme */
+    (function () {
+      function apply(v) {
+        if (v === 'dark' || v === 'light') document.documentElement.setAttribute('data-theme', v);
+        else document.documentElement.removeAttribute('data-theme');
+      }
+      try { apply(localStorage.getItem('lv-theme')); } catch (e) { /* хранилище недоступно */ }
+      window.addEventListener('storage', function (e) { if (e.key === 'lv-theme' || e.key === null) apply(e.newValue); });
+    })();
+  </script>
 </head>
 <body>
   <main class="stage" id="stage" data-era="0">
@@ -61,6 +72,7 @@
         <p class="card-year" id="eraYear">1851</p>
         <p class="card-period" id="eraPeriod">1851–1917</p>
         <h2 class="card-title" id="eraTitle">Царская эпоха</h2>
+        <button type="button" class="more-btn" id="moreBtn" aria-expanded="false" aria-controls="eraText">Подробнее</button>
         <p class="card-text" id="eraText">Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона. С 1855 года он называется Николаевским.</p>
       </div>
 
