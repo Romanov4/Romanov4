@@ -103,7 +103,7 @@ body { overflow-x: hidden; }
   position: absolute;
   left: 24px;
   bottom: 24px;
-  width: min(470px, calc(100% - 48px));
+  width: min(530px, calc(100% - 48px));
   padding: 20px 22px 14px;
   background: var(--paper);
   border: 1px solid rgba(168, 132, 63, 0.6);
