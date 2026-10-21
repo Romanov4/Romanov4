@@ -3,409 +3,569 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ленинградский вокзал</title>
-<meta name="description" content="Реконструкция Ленинградского вокзала Москвы 2024–2026: что изменилось и что восстановили">
+<title>Ленинградский вокзал после реконструкции 2024–2026</title>
+<meta name="description" content="Что изменилось на Ленинградском вокзале Москвы после реконструкции 2024–2026: фасад Тона по снимку 1873 года, залы ожидания, мозаики, музей и пересадки.">
+<meta name="theme-color" content="#f6f1e6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16120f" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Ленинградский вокзал после реконструкции">
+<meta property="og:description" content="Старейший вокзал Москвы снова открыт: фасад Тона по снимку 1873 года, пять залов ожидания, мозаики «Москва» и «Петербург», музей и прямой выход в метро.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 28'%3E%3Cg fill='none' stroke='%236b1d24' stroke-width='1.6'%3E%3Cpath d='M11 1 18 7H4Z'/%3E%3Crect x='5' y='7' width='12' height='9'/%3E%3Ccircle cx='11' cy='11.5' r='3'/%3E%3Crect x='2' y='16' width='18' height='11'/%3E%3C/g%3E%3C/svg%3E">
+<script>
+  /* Тема до первой отрисовки: без мигания */
+  (function () {
+    try {
+      var t = localStorage.getItem("lv-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #f6f1e6;
-    --stone: #ece4d3;
-    --ink: #221d17;
-    --muted: #6d6456;
-    --line: #d6cab3;
-    --bordeaux: #6b1d24;
-    --gold: #a8843f;
-    --on-dark: #f6f1e6;
-    --dark: #2a1316;
-    --blue: #1f3d66;
-    --blue-soft: #e3e8ef;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #16120f;
-      --stone: #201b16;
-      --ink: #eee6d6;
-      --muted: #a89d8b;
-      --line: #3b332a;
-      --bordeaux: #c46a6f;
-      --gold: #cfaa62;
-      --dark: #0f0c0a;
-      --blue: #8fb0dc;
-      --blue-soft: #1a2230;
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system/tokens.css">
+<link rel="stylesheet" href="design-system/components.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TrainStation",
+      "@id": "#station",
+      "name": "Ленинградский вокзал",
+      "alternateName": ["Николаевский вокзал", "Петербургский вокзал"],
+      "additionalType": "https://schema.org/LandmarksOrHistoricalBuildings",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Комсомольская площадь, 3",
+        "addressLocality": "Москва",
+        "addressCountry": "RU"
+      },
+      "sameAs": "https://ru.wikipedia.org/wiki/Ленинградский_вокзал"
+    },
+    {
+      "@type": "Article",
+      "headline": "Ленинградский вокзал после реконструкции 2024–2026",
+      "inLanguage": "ru",
+      "dateModified": "2026-10-21",
+      "about": { "@id": "#station" }
     }
+  ]
+}
+</script>
+<style>
+  /* Страничные надстройки над дизайн-системой */
+  .hero { text-align: center; padding: var(--sp-9) 0 0; }
+  .hero h1 em { font-style: italic; font-weight: var(--fw-medium); color: var(--accent); }
+  .hero .lead { margin-inline: auto; }
+  .hero-dates {
+    display: flex; justify-content: center; align-items: baseline; gap: var(--sp-4);
+    margin: var(--sp-6) 0 0; font-family: var(--font-display); font-size: var(--fs-xl);
+    color: var(--accent-2); font-variant-numeric: lining-nums tabular-nums;
   }
-  :root[data-theme="dark"] {
-    --paper: #16120f;
-    --stone: #201b16;
-    --ink: #eee6d6;
-    --muted: #a89d8b;
-    --line: #3b332a;
-    --bordeaux: #c46a6f;
-    --gold: #cfaa62;
-    --dark: #0f0c0a;
-    --blue: #8fb0dc;
-    --blue-soft: #1a2230;
+  .hero-dates span[aria-hidden] { color: var(--ornament); }
+  .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-3); margin-top: var(--sp-6); }
+  .hero-photo { margin-top: var(--sp-8); }
+  .hero-photo .ph { aspect-ratio: 21 / 8; }
+  @media (max-width: 640px) { .hero-photo .ph { aspect-ratio: 4 / 3; } }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-8); align-items: start; }
+  @media (max-width: 820px) { .two { grid-template-columns: 1fr; gap: var(--sp-6); } }
+  .two .ph { aspect-ratio: 4 / 5; }
+  @media (max-width: 820px) { .two .ph { aspect-ratio: 4 / 3; } }
+
+  /* Встроенная 3D-карусель */
+  .carousel-frame { border: var(--bw-hair) solid var(--rule); background: var(--bg-alt); }
+  .carousel-frame iframe { display: block; width: 100%; height: min(82svh, 760px); min-height: 560px; border: 0; }
+  .carousel-more { margin-top: var(--sp-4); font-size: var(--fs-sm); color: var(--text-muted); }
+
+  /* Поэтажный план */
+  .floors { margin: 0; padding: 0; list-style: none; border-top: var(--bw-rule) solid var(--accent-2); }
+  .floors li { display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--sp-5); padding: var(--sp-5) 0; border-bottom: var(--bw-hair) solid var(--rule); }
+  .floors .lvl { font-family: var(--font-display); font-size: var(--fs-xl); color: var(--accent); line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+  .floors .lvl small { display: block; font-family: var(--font-text); font-size: var(--fs-xs); letter-spacing: var(--tr-wide); text-transform: uppercase; color: var(--text-muted); margin-top: var(--sp-2); }
+  .floors h3 { font-size: var(--fs-lg); margin: 0 0 var(--sp-1); }
+  .floors p { margin: 0; color: var(--text-muted); }
+  @media (max-width: 520px) { .floors li { grid-template-columns: 1fr; gap: var(--sp-2); } }
+
+  /* Карточки-факты (пересадки, авторы, отзывы) */
+  .cells { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); border-top: var(--bw-hair) solid var(--rule); border-left: var(--bw-hair) solid var(--rule); margin: 0; padding: 0; list-style: none; }
+  .cells > li { padding: var(--sp-5); border-right: var(--bw-hair) solid var(--rule); border-bottom: var(--bw-hair) solid var(--rule); background: var(--surface); }
+  .cells h3 { font-size: var(--fs-lg); margin: 0 0 var(--sp-2); color: var(--accent-2); }
+  .cells p { margin: 0; color: var(--text-muted); font-size: var(--fs-sm); }
+
+  .reviews { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); }
+  @media (max-width: 760px) { .reviews { grid-template-columns: 1fr; } }
+  .reviews h3 { font-size: var(--fs-xl); margin: 0 0 var(--sp-3); }
+
+  .credits { margin: 0; }
+  .credits div { display: grid; grid-template-columns: 14rem 1fr; gap: var(--sp-4); padding: var(--sp-4) 0; border-bottom: var(--bw-hair) solid var(--rule); }
+  .credits div:first-child { border-top: var(--bw-rule) solid var(--accent-2); }
+  .credits dt { font-family: var(--font-display); font-size: var(--fs-lg); }
+  .credits dd { margin: 0; }
+  @media (max-width: 640px) { .credits div { grid-template-columns: 1fr; gap: var(--sp-1); } }
+
+  .src { color: var(--text-muted); font-size: var(--fs-xs); white-space: nowrap; }
+  .footer ol { padding-left: 1.4em; margin: var(--sp-3) 0 var(--sp-5); columns: 2; column-gap: var(--sp-8); }
+  @media (max-width: 760px) { .footer ol { columns: 1; } }
+  .footer li { margin-bottom: var(--sp-2); break-inside: avoid; overflow-wrap: anywhere; }
+  .footer h2 { font-size: var(--fs-xl); margin: 0; }
+
+  @media print {
+    .carousel-frame, .carousel-more, .hero-actions { display: none !important; }
   }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0; background: var(--paper); color: var(--ink);
-    font: 17px/1.65 "PT Sans", system-ui, sans-serif;
-  }
-  h1, h2, h3 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; line-height: 1.1; margin: 0; }
-  a { color: var(--bordeaux); }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
-  .narrow { max-width: 760px; }
-
-  .kicker { font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
-
-  /* Ornamental rule: hairline with a lozenge */
-  .orn { display: flex; align-items: center; gap: 14px; color: var(--gold); margin: 22px 0; }
-  .orn::before, .orn::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .7; }
-  .orn i { width: 9px; height: 9px; border: 1px solid currentColor; transform: rotate(45deg); }
-  .orn.center { max-width: 320px; margin-left: auto; margin-right: auto; }
-
-  /* Top bar */
-  .top { border-top: 4px solid var(--blue); border-bottom: 1px solid var(--line); }
-  .top .wrap { display: flex; justify-content: space-between; align-items: center; height: 60px; gap: 16px; }
-  .brand { font: 600 22px "Cormorant Garamond", serif; letter-spacing: .02em; color: var(--blue); }
-  .top nav { display: flex; gap: 22px; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
-  .top nav a { color: var(--muted); text-decoration: none; }
-  .top nav a:hover { color: var(--blue); }
-  @media (max-width: 760px) { .top nav { display: none; } }
-
-  /* Hero */
-  .hero { text-align: center; padding: 72px 0 0; }
-  .hero h1 { font-size: clamp(42px, 7vw, 88px); font-weight: 600; margin: 14px 0 0; }
-  .hero h1 em { font-style: italic; color: var(--bordeaux); font-weight: 500; }
-  .hero .sub { max-width: 640px; margin: 0 auto; color: var(--muted); font-size: 19px; }
-  .dates { display: inline-flex; gap: 28px; margin-top: 26px; font: 600 22px "Cormorant Garamond", serif; color: var(--blue); }
-  .dates span + span::before { content: "—"; margin-right: 28px; color: var(--gold); }
-
-  /* Photo slot: image from img/ if present, otherwise an engraving-style placeholder */
-  .ph { position: relative; margin: 0; background: var(--stone); overflow: hidden; }
-  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .ph .fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); }
-  .ph.loaded .fallback { display: none; }
-  .frame { border: 1px solid var(--line); outline: 1px solid var(--line); outline-offset: 6px; }
-
-  .hero-photo { margin: 48px 7px 0; aspect-ratio: 21 / 8; }
-  .hero-photo .fallback svg { width: min(92%, 980px); height: auto; }
-  @media (max-width: 640px) { .hero-photo { aspect-ratio: 4 / 3; } }
-
-  /* Coffered band, after the ticket hall ceiling */
-  .coffers {
-    height: 56px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    background:
-      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
-      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
-      radial-gradient(circle at 50% 50%, var(--blue) 0 3px, transparent 3.5px) 28px 28px / 56px 56px,
-      var(--blue-soft);
-  }
-
-  section { padding: 88px 0; }
-  .sec-head { display: grid; grid-template-columns: 90px 1fr; gap: 0 24px; align-items: baseline; margin-bottom: 36px; }
-  .sec-head .no { font: 600 46px "Cormorant Garamond", serif; color: var(--gold); line-height: 1; }
-  .sec-head h2 { font-size: clamp(32px, 4.4vw, 52px); }
-  .sec-head p { grid-column: 2; color: var(--muted); margin: 10px 0 0; max-width: 640px; }
-  @media (max-width: 640px) { .sec-head { grid-template-columns: 1fr; } .sec-head p { grid-column: 1; } .sec-head .no { font-size: 34px; margin-bottom: 6px; } }
-
-  /* Figures */
-  .figures { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--blue); border-bottom: 1px solid var(--line); }
-  .figures div { padding: 28px 22px; border-right: 1px solid var(--line); }
-  .figures div:last-child { border-right: 0; }
-  .figures b { display: block; font: 600 50px/1 "Cormorant Garamond", serif; color: var(--bordeaux); margin-bottom: 10px; }
-  .figures b small { font-size: 24px; }
-  .figures span { color: var(--muted); font-size: 15px; }
-  @media (max-width: 860px) { .figures { grid-template-columns: 1fr 1fr; } .figures div:nth-child(2) { border-right: 0; } .figures div:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
-  @media (max-width: 460px) { .figures { grid-template-columns: 1fr; } .figures div { border-right: 0; border-bottom: 1px solid var(--line); } .figures div:last-child { border-bottom: 0; } }
-
-  /* Two-column text + photo */
-  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
-  .duo .ph { aspect-ratio: 4 / 5; }
-  @media (max-width: 820px) { .duo { grid-template-columns: 1fr; gap: 32px; } .duo .ph { aspect-ratio: 4 / 3; } }
-  .prose p { margin: 0 0 16px; }
-  .prose p:first-child::first-letter { font: 600 64px/.8 "Cormorant Garamond", serif; float: left; margin: 6px 10px 0 0; color: var(--bordeaux); }
-  .facts { list-style: none; padding: 0; margin: 28px 0 0; border-top: 1px solid var(--line); }
-  .facts li { padding: 14px 0 14px 28px; border-bottom: 1px solid var(--line); position: relative; }
-  .facts li::before { content: ""; position: absolute; left: 4px; top: 22px; width: 7px; height: 7px; border: 1px solid var(--gold); transform: rotate(45deg); }
-
-  /* Comparison table */
-  .table { width: 100%; border-collapse: collapse; }
-  .table th, .table td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  .table thead th { border-bottom: 2px solid var(--blue); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  .table td:first-child { font: 600 21px "Cormorant Garamond", serif; width: 22%; }
-  .table td:nth-child(2) { color: var(--muted); }
-  .table td:last-child { color: var(--blue); }
-  @media (max-width: 640px) {
-    .table thead { display: none; }
-    .table tr { display: block; border-bottom: 1px solid var(--line); padding: 12px 0; }
-    .table td { display: block; border: 0; padding: 4px 0; width: auto !important; }
-    .table td:nth-child(2)::before { content: "Было: "; }
-    .table td:nth-child(3)::before { content: "Стало: "; color: var(--bordeaux); font-weight: 700; }
-  }
-
-  /* Interiors */
-  .halls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
-  @media (max-width: 900px) { .halls { grid-template-columns: 1fr; } }
-  .hall .ph { aspect-ratio: 4 / 3; margin: 7px 7px 24px; }
-  .hall h3 { font-size: 28px; margin-bottom: 8px; }
-  .hall p { margin: 0; color: var(--muted); }
-
-  /* Mosaic feature on dark ground */
-  .mosaic { background: var(--dark); color: var(--on-dark); }
-  .mosaic .sec-head p { color: #c9bca5; }
-  .mosaic .sec-head h2 { color: var(--on-dark); }
-  .mosaic .sec-head .no { color: #d9b26a; }
-  .mosaic .duo .ph { background: #3a2226; }
-  .mosaic .prose p:first-child::first-letter { color: #d9b26a; }
-  .mosaic .facts, .mosaic .facts li { border-color: #4a2d31; }
-  .mosaic .facts li::before { border-color: #d9b26a; }
-
-  /* Services */
-  .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-  .services div { padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .services h3 { font-size: 23px; margin-bottom: 6px; color: var(--blue); }
-  .services p { margin: 0; color: var(--muted); font-size: 15px; }
-
-  /* Chronicle */
-  .chron { list-style: none; margin: 0; padding: 0; }
-  .chron li { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
-  .chron li:first-child { border-top: 2px solid var(--blue); }
-  .chron time { font: 600 24px "Cormorant Garamond", serif; color: var(--blue); }
-  .chron p { margin: 0; }
-  @media (max-width: 600px) { .chron li { grid-template-columns: 1fr; gap: 4px; } }
-  .note { margin-top: 28px; padding: 16px 20px; background: var(--blue-soft); border-left: 3px solid var(--blue); color: var(--muted); font-size: 15px; }
-
-  footer a { color: var(--blue); }
-  footer { border-top: 4px solid var(--blue); padding: 48px 0 64px; font-size: 14px; color: var(--muted); }
-  footer h2 { font-size: 26px; color: var(--ink); margin-bottom: 12px; }
-  footer ul { padding-left: 18px; margin: 0; columns: 2; column-gap: 40px; }
-  @media (max-width: 760px) { footer ul { columns: 1; } }
-  footer li { margin-bottom: 6px; overflow-wrap: anywhere; break-inside: avoid; }
-
-  /* Quiet reveal */
-  .rv { opacity: 0; transform: translateY(16px); transition: opacity .9s ease, transform .9s ease; }
-  .rv.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Перейти к содержанию</a>
 
-<div class="top">
-  <div class="wrap">
-    <div class="brand">Ленинградский вокзал</div>
-    <nav>
-      <a href="#facade">Фасад</a>
-      <a href="#space">Пространство</a>
-      <a href="#interiors">Интерьеры</a>
-      <a href="#chronicle">Хроника</a>
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#main">
+      <svg viewBox="0 0 22 28" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+        <path d="M11 1 L18 7 H4 Z"/><rect x="5" y="7" width="12" height="9"/><circle cx="11" cy="11.5" r="3"/><path d="M11 11.5 V9.6 M11 11.5 L12.4 12.3"/><rect x="2" y="16" width="18" height="11"/><path d="M8 27 V21 a3 3 0 0 1 6 0 V27"/>
+      </svg>
+      Ленинградский вокзал
+    </a>
+    <nav class="topnav" aria-label="Разделы страницы">
+      <ul>
+        <li><a href="#history">История</a></li>
+        <li><a href="#facade">Фасад</a></li>
+        <li><a href="#space">Пространство</a></li>
+        <li><a href="#mosaics">Мозаики</a></li>
+        <li><a href="#chronicle">Хроника</a></li>
+      </ul>
     </nav>
-  </div>
-</div>
-
-<header class="hero">
-  <div class="wrap">
-    <div class="kicker">Москва · Комсомольская площадь</div>
-    <h1>Вокзал Тона <em>возвращён</em></h1>
-    <div class="orn center"><i></i></div>
-    <p class="sub">После двадцати одного месяца реконструкции старейший вокзал Москвы вновь принимает пассажиров. Историческому зданию вернули авторский облик, а пространства для пассажиров стало почти вдвое больше.</p>
-    <div class="dates"><span>11.08.2024</span><span>22.05.2026</span></div>
-    <figure class="ph hero-photo frame" data-src="img/hero.jpg" data-label="Фасад Ленинградского вокзала">
-      <div class="fallback" aria-hidden="true">
-        <svg viewBox="0 0 1000 300" fill="none" stroke="currentColor" stroke-width="1.4">
-          <line x1="20" y1="280" x2="980" y2="280"/>
-          <rect x="70" y="150" width="860" height="130"/>
-          <path d="M60 150 H940 M66 142 H934"/>
-          <rect x="420" y="96" width="160" height="184"/>
-          <path d="M412 96 H588 M418 88 H582"/>
-          <rect x="462" y="30" width="76" height="58"/>
-          <circle cx="500" cy="58" r="17"/><circle cx="500" cy="58" r="13"/>
-          <path d="M500 58 V48 M500 58 L507 62"/>
-          <path d="M456 30 L500 8 L544 30"/>
-          <g stroke-width="1">
-            <path d="M100 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M160 270 V200 a18 18 0 0 1 36 0 V270"/>
-            <path d="M220 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M280 270 V200 a18 18 0 0 1 36 0 V270"/>
-            <path d="M340 270 V200 a18 18 0 0 1 36 0 V270"/>
-            <path d="M624 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M684 270 V200 a18 18 0 0 1 36 0 V270"/>
-            <path d="M744 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M804 270 V200 a18 18 0 0 1 36 0 V270"/>
-            <path d="M864 270 V200 a18 18 0 0 1 36 0 V270"/>
-            <path d="M462 280 V190 a38 38 0 0 1 76 0 V280"/>
-            <rect x="436" y="110" width="26" height="44"/><rect x="538" y="110" width="26" height="44"/>
-            <path d="M70 165 H930 M70 180 H420 M580 180 H930"/>
-            <path d="M88 150 V280 M912 150 V280 M440 96 V280 M560 96 V280"/>
-          </g>
-        </svg>
-      </div>
-    </figure>
+    <fieldset class="theme-switch">
+      <legend class="visually-hidden">Тема оформления</legend>
+      <label><input type="radio" name="theme" value="auto" checked><span>Авто</span></label>
+      <label><input type="radio" name="theme" value="light"><span>Светлая</span></label>
+      <label><input type="radio" name="theme" value="dark"><span>Тёмная</span></label>
+    </fieldset>
   </div>
 </header>
 
-<div class="coffers" aria-hidden="true" style="margin-top:72px"></div>
-
-<section>
-  <div class="wrap">
-    <div class="sec-head rv"><span class="no">I</span><h2>Итоги реконструкции</h2><p>Основные показатели по данным правительства Москвы и ОАО «РЖД».</p></div>
-    <div class="figures rv">
-      <div><b>16 <small>тыс. м²</small></b><span>пассажирских помещений вместо 8,8 тыс. м²</span></div>
-      <div><b>1000+</b><span>посадочных мест в залах ожидания, прежде около 700</span></div>
-      <div><b>300 <small>лк</small></b><span>освещённость залов, вдвое выше прежней</span></div>
-      <div><b>800+ <small>м²</small></b><span>мозаичных панно «Две столицы»</span></div>
-    </div>
-  </div>
-</section>
-
-<section id="facade" style="padding-top:0">
-  <div class="wrap">
-    <div class="sec-head rv"><span class="no">II</span><h2>Облик по замыслу автора</h2><p>Фасад реставрировали по архивным документам и историческим фотографиям.</p></div>
-    <div class="duo">
-      <div class="prose rv">
-        <p>Здание построено в 1849–1851 годах по проекту Константина Тона и стало первым вокзалом Москвы. Его парное здание, нынешний Московский вокзал, стоит на другом конце дороги, в Петербурге.</p>
-        <p>Чтобы установить подлинный цвет стен, реставраторы расчистили больше десяти слоёв поздней краски. За основу колористики взяли фотофиксацию 1873 года: фасаду вернули два основных тона.</p>
-        <ul class="facts">
-          <li>Поздние слои отделки удалены, восстановлены исходные цветовые решения и архитектурные элементы</li>
-          <li>Швы кладки снова белые: в XIX веке вместо цемента использовали известковый раствор</li>
-          <li>Выходы к путям накрыл стеклянный дебаркадер</li>
-        </ul>
+<main id="main" tabindex="-1">
+  <div class="hero">
+    <div class="wrap">
+      <p class="kicker">Москва · Комсомольская площадь, 3</p>
+      <h1>Ленинградский вокзал <em>после реконструкции</em></h1>
+      <div class="orn orn--center" aria-hidden="true"><i class="orn__d"></i></div>
+      <p class="lead">Старейший вокзал Москвы, построенный по проекту Константина Тона, двадцать один месяц был закрыт и вновь принимает пассажиров. Фасаду вернули авторский облик, а пассажирские зоны выросли почти втрое.</p>
+      <p class="hero-dates"><time datetime="2024-08-11">11.08.2024</time><span aria-hidden="true">—</span><time datetime="2026-05-22">22.05.2026</time></p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href="#figures">Что изменилось</a>
+        <a class="btn btn--secondary" href="#history">История в 3D</a>
       </div>
-      <figure class="ph frame rv" data-src="img/facade.jpg" data-label="Башня с часами после реставрации" style="margin:7px">
-        <div class="fallback">Фото: башня с часами</div>
+      <figure class="passe hero-photo">
+        <div class="ph" data-src="img/hero.jpg" data-alt="Главный фасад Ленинградского вокзала с часовой башней после реставрации">
+          <svg class="ph__fallback" viewBox="0 0 1000 300" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <line x1="20" y1="280" x2="980" y2="280"/>
+            <rect x="70" y="150" width="860" height="130"/>
+            <path d="M60 150 H940 M66 142 H934"/>
+            <rect x="420" y="96" width="160" height="184"/>
+            <path d="M412 96 H588 M418 88 H582"/>
+            <rect x="462" y="30" width="76" height="58"/>
+            <circle cx="500" cy="58" r="17"/><circle cx="500" cy="58" r="13"/>
+            <path d="M500 58 V48 M500 58 L507 62"/>
+            <path d="M456 30 L500 8 L544 30"/>
+            <g stroke-width="1">
+              <path d="M100 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M160 270 V200 a18 18 0 0 1 36 0 V270"/>
+              <path d="M220 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M280 270 V200 a18 18 0 0 1 36 0 V270"/>
+              <path d="M340 270 V200 a18 18 0 0 1 36 0 V270"/>
+              <path d="M624 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M684 270 V200 a18 18 0 0 1 36 0 V270"/>
+              <path d="M744 270 V200 a18 18 0 0 1 36 0 V270"/><path d="M804 270 V200 a18 18 0 0 1 36 0 V270"/>
+              <path d="M864 270 V200 a18 18 0 0 1 36 0 V270"/>
+              <path d="M462 280 V190 a38 38 0 0 1 76 0 V280"/>
+              <rect x="436" y="110" width="26" height="44"/><rect x="538" y="110" width="26" height="44"/>
+              <path d="M70 165 H930 M70 180 H420 M580 180 H930"/>
+              <path d="M88 150 V280 M912 150 V280 M440 96 V280 M560 96 V280"/>
+            </g>
+          </svg>
+        </div>
+        <figcaption>Главный фасад со стороны Комсомольской площади</figcaption>
       </figure>
     </div>
   </div>
-</section>
 
-<div class="coffers" aria-hidden="true"></div>
+  <div class="coffers" aria-hidden="true"></div>
 
-<section id="space">
-  <div class="wrap">
-    <div class="sec-head rv"><span class="no">III</span><h2>Пространство для пассажира</h2><p>Как изменилось устройство вокзала.</p></div>
-    <table class="table rv">
-      <thead><tr><th>Раздел</th><th>До реконструкции</th><th>После</th></tr></thead>
-      <tbody>
-        <tr><td>Этажи</td><td>Пассажиры пользовались почти только первым этажом</td><td>Второй и третий этажи открыты: залы ожидания, кафе и рестораны</td></tr>
-        <tr><td>Главный зал</td><td>Торговые точки в зоне ожидания</td><td>Зал освобождён для прохода к поездам, торговля перенесена на −1 этаж</td></tr>
-        <tr><td>Ожидание</td><td>Около 700 мест</td><td>Более 1000 мест</td></tr>
-        <tr><td>Кассовый зал</td><td>—</td><td>Кессонный потолок со встроенными светильниками</td></tr>
-        <tr><td>Бизнес-залы</td><td>—</td><td>Два зала с санузлами, табло отправления и Wi-Fi</td></tr>
-        <tr><td>Для семей</td><td>—</td><td>Комната для семей с детьми, детский клуб «Союзмультфильм»</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+  <!-- I. Итоги -->
+  <section class="section" id="figures" aria-labelledby="h-figures">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">I</span>
+        <h2 class="sec-head__title" id="h-figures">Итоги реконструкции</h2>
+        <p class="sec-head__desc">Основные показатели по данным правительства Москвы и ОАО «РЖД».</p>
+      </div>
+      <dl class="figures rv">
+        <div class="figures__item"><dt class="figures__label">пассажирские зоны выросли почти втрое <a href="#fig-note">(см. примечание)</a></dt><dd class="figures__value">≈&nbsp;3<small>×</small></dd></div>
+        <div class="figures__item"><dt class="figures__label">посадочных мест вместо прежних 700</dt><dd class="figures__value">1000+</dd></div>
+        <div class="figures__item"><dt class="figures__label">залов ожидания, все бесплатные, доступны и провожающим</dt><dd class="figures__value">5</dd></div>
+        <div class="figures__item"><dt class="figures__label">освещённость залов, вдвое выше прежней</dt><dd class="figures__value">300&nbsp;<small>лк</small></dd></div>
+      </dl>
+      <p class="note note--accent rv" id="fig-note"><b class="note__title">Расхождение в источниках</b>Мэрия и ОАО «РЖД» пишут, что пассажирские зоны выросли почти втрое. В других публикациях приводится рост с 8,8 до 16&nbsp;тыс.&nbsp;м², то есть примерно в 1,8&nbsp;раза; возможно, «втрое» относится только к залам ожидания.</p>
+    </div>
+  </section>
 
-<section class="mosaic">
-  <div class="wrap">
-    <div class="sec-head rv"><span class="no">IV</span><h2>«Две столицы»</h2><p>Главный художественный акцент обновлённого вокзала.</p></div>
-    <div class="duo">
-      <figure class="ph rv" data-src="img/mosaic.jpg" data-label="Мозаичное панно «Две столицы»">
-        <div class="fallback" style="color:#c9bca5">Фото: мозаичное панно</div>
-      </figure>
-      <div class="prose rv">
-        <p>В центральном зале разместились два мозаичных панно общей площадью более 800 м² с видами Москвы и Санкт-Петербурга. Это крупнейшие мозаики на объектах транспортной инфраструктуры России.</p>
-        <p>Панно выполнены вручную из смальты. Над ними работали около 30 художников под руководством монументалиста Максима Козлова.</p>
-        <ul class="facts">
-          <li>Московский Кремль, Исаакиевский собор, «Лахта-центр»</li>
-          <li>Скрытые детали для внимательного зрителя, среди них кот Бегемот</li>
-        </ul>
+  <!-- II. 3D-история -->
+  <section class="section surface-alt" id="history" aria-labelledby="h-history">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">II</span>
+        <h2 class="sec-head__title" id="h-history">Три эпохи вокзала</h2>
+        <p class="sec-head__desc">Царская, советская и нынешняя — в интерактивной 3D-модели. Модель стилизованная и не является обмерным чертежом.</p>
+      </div>
+      <div class="carousel-frame rv">
+        <iframe src="carousel/index.html" title="Историческая 3D-карусель: Ленинградский вокзал в 1851 году, в XX веке и в 2026 году" loading="lazy" allow="fullscreen"></iframe>
+      </div>
+      <p class="carousel-more">Вращайте модель мышью или пальцем, эпохи переключаются кнопками и стрелками. <a class="link--more" href="carousel/index.html">Открыть на весь экран</a></p>
+    </div>
+  </section>
+
+  <!-- III. Фасад -->
+  <section class="section" id="facade" aria-labelledby="h-facade">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">III</span>
+        <h2 class="sec-head__title" id="h-facade">Облик по замыслу автора</h2>
+        <p class="sec-head__desc">Фасад реставрировали по архивным документам и историческим фотографиям, преимущественно вручную.</p>
+      </div>
+      <div class="two">
+        <div class="rv">
+          <p class="dropcap">Вокзал построен по проекту Константина Тона в 1849&nbsp;году и открыт в 1851-м — это первый вокзал Москвы и старейший из сохранившихся. Его парное здание, нынешний Московский вокзал, стоит на другом конце дороги, в Петербурге.</p>
+          <p>Чтобы установить подлинный цвет стен, реставраторы расчистили больше десяти слоёв поздней краски. За основу колористики взяли фотофиксацию 1873&nbsp;года: фасаду вернули два основных тона.</p>
+          <ul class="facts">
+            <li>Поздние слои отделки удалены, восстановлены исходные цветовые решения и архитектурные элементы, отремонтированы кровля и фасады</li>
+            <li>Швы кладки снова белые: полтора века назад вместо цемента использовали раствор на основе извести</li>
+            <li>Центральный фасад с башней и часами сохранён; по данным СМИ, на башню вернули исторический флагшток</li>
+            <li>Тёплая архитектурная подсветка напоминает свет масляных фонарей XIX&nbsp;века</li>
+          </ul>
+        </div>
+        <figure class="passe rv">
+          <div class="ph" data-src="img/facade.jpg" data-alt="Часовая башня Ленинградского вокзала после реставрации">
+            <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+              <path d="M120 8 L150 34 H90 Z"/><rect x="95" y="34" width="50" height="44"/><circle cx="120" cy="56" r="14"/><circle cx="120" cy="56" r="10"/><path d="M120 56 V48 M120 56 L126 59"/>
+              <path d="M86 78 H154 M80 84 H160"/><rect x="84" y="84" width="72" height="88"/>
+              <path d="M104 172 V136 a16 16 0 0 1 32 0 V172"/>
+              <rect x="92" y="96" width="14" height="24"/><rect x="134" y="96" width="14" height="24"/>
+              <path d="M10 172 H230 M20 120 H84 M156 120 H220 M20 120 V172 M220 120 V172"/>
+              <g stroke-width=".7"><path d="M30 172 V146 a9 9 0 0 1 18 0 V172 M56 172 V146 a9 9 0 0 1 18 0 V172 M166 172 V146 a9 9 0 0 1 18 0 V172 M192 172 V146 a9 9 0 0 1 18 0 V172"/></g>
+            </svg>
+          </div>
+          <figcaption>Часовая башня</figcaption>
+        </figure>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="interiors">
-  <div class="wrap">
-    <div class="sec-head rv"><span class="no">V</span><h2>Исторические интерьеры</h2><p>Помимо пассажирских залов, на вокзале воссоздали утраченные пространства.</p></div>
-    <div class="halls">
-      <article class="hall rv">
-        <figure class="ph frame" data-src="img/chapel.jpg" data-label="Часовня Святителя Николая"><div class="fallback">Фото: часовня</div></figure>
-        <h3>Часовня Святителя Николая</h3>
-        <p>В здании вокзала восстановлена часовня Святителя Николая Чудотворца.</p>
-      </article>
-      <article class="hall rv">
-        <figure class="ph frame" data-src="img/museum.jpg" data-label="Музей истории вокзала"><div class="fallback">Фото: гостиная XIX века</div></figure>
-        <h3>Музей истории вокзала</h3>
-        <p>В музее воссоздана гостиная XIX века: лепной декор, наборный паркет, бархатные портьеры.</p>
-      </article>
-      <article class="hall rv">
-        <figure class="ph frame" data-src="img/ticket-hall.jpg" data-label="Кассовый зал"><div class="fallback">Фото: кассовый зал</div></figure>
-        <h3>Кассовый зал</h3>
-        <p>Кессонный потолок со встроенными светильниками. Освещённость залов доведена до 300 люкс.</p>
-      </article>
+  <div class="masonry" aria-hidden="true"></div>
+
+  <!-- IV. Было / стало -->
+  <section class="section" id="space" aria-labelledby="h-space">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">IV</span>
+        <h2 class="sec-head__title" id="h-space">Пространство для пассажира</h2>
+        <p class="sec-head__desc">Как изменилось устройство вокзала.</p>
+      </div>
+      <table class="compare rv">
+        <caption class="visually-hidden">Сравнение вокзала до и после реконструкции</caption>
+        <thead><tr><th scope="col">Раздел</th><th scope="col">До реконструкции</th><th scope="col">После</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Этажи</th><td class="compare__before" data-label="Было">Пассажиры пользовались почти только первым этажом</td><td class="compare__after" data-label="Стало">Открыты второй, третий и четвёртый этажи: залы ожидания, лаунж, музей и коворкинг</td></tr>
+          <tr><th scope="row">Главный зал</th><td class="compare__before" data-label="Было">Торговые точки в зоне ожидания</td><td class="compare__after" data-label="Стало">Свободный проход к поездам, магазины перенесены на минус первый этаж</td></tr>
+          <tr><th scope="row">Ожидание</th><td class="compare__before" data-label="Было">Около&nbsp;700&nbsp;мест</td><td class="compare__after" data-label="Стало">Более&nbsp;1000&nbsp;мест в пяти бесплатных залах</td></tr>
+          <tr><th scope="row">Бизнес-зал</th><td class="compare__before" data-label="Было">Один зал</td><td class="compare__after" data-label="Стало">Увеличен вдвое, добавлены лаунж-зона и коворкинг с переговорными</td></tr>
+          <tr><th scope="row">Семьям с детьми</th><td class="compare__none" data-label="Было">—</td><td class="compare__after" data-label="Стало">Комната матери и ребёнка и детский клуб «Союзмультфильм» — первый на железнодорожном вокзале в России</td></tr>
+          <tr><th scope="row">Входы</th><td class="compare__none" data-label="Было">—</td><td class="compare__after" data-label="Стало">Пять входов, три из них работают; открыт вход со стороны Краснопрудной улицы, не использовавшийся более 30&nbsp;лет</td></tr>
+          <tr><th scope="row">Досмотр</th><td class="compare__none" data-label="Было">—</td><td class="compare__after" data-label="Стало">Багажные ленты на входе — впервые на российских железнодорожных вокзалах</td></tr>
+          <tr><th scope="row">Навигация</th><td class="compare__none" data-label="Было">—</td><td class="compare__after" data-label="Стало">Около 220 цифровых элементов, выполненных по стандартам московского метро</td></tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-</section>
+  </section>
 
-<section style="padding-top:0">
-  <div class="wrap">
-    <div class="sec-head rv"><span class="no">VI</span><h2>Сервисы</h2><p>Что доступно пассажирам в обновлённом здании.</p></div>
-    <div class="services rv">
-      <div><h3>Залы ожидания</h3><p>На втором и третьем этажах, с кафе и ресторанами.</p></div>
-      <div><h3>Бизнес-залы</h3><p>Два зала: мягкая мебель, санузлы, табло отправления, Wi-Fi.</p></div>
-      <div><h3>Семьям с детьми</h3><p>Комната для семей и детский клуб «Союзмультфильм» на первом этаже.</p></div>
-      <div><h3>Кассы и справка</h3><p>Кассы дальнего следования, медицинский пункт, информационные стойки.</p></div>
-      <div><h3>Торговая галерея</h3><p>Магазины и кафе на минус первом этаже.</p></div>
-      <div><h3>Дебаркадер</h3><p>Стеклянный навес над выходами к поездам.</p></div>
+  <!-- V. По этажам -->
+  <section class="section" aria-labelledby="h-floors" style="padding-top:0">
+    <div class="wrap wrap--narrow">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">V</span>
+        <h2 class="sec-head__title" id="h-floors">По этажам</h2>
+        <p class="sec-head__desc">Что где находится в обновлённом здании.</p>
+      </div>
+      <ol class="floors rv">
+        <li><span class="lvl">4<small>этаж</small></span><div><h3>Музей и коворкинг</h3><p>Иммерсивный музей истории вокзала и коворкинг с переговорными. Этаж прежде был закрыт для пассажиров.</p></div></li>
+        <li><span class="lvl">3<small>этаж</small></span><div><h3>Зал ожидания и лаунж</h3><p>Ещё один зал ожидания и лаунж с лежаками и креслами у панорамных окон.</p></div></li>
+        <li><span class="lvl">2<small>этаж</small></span><div><h3>Четыре зала ожидания</h3><p>Залы ожидания, кафе и рестораны.</p></div></li>
+        <li><span class="lvl">1<small>этаж</small></span><div><h3>Кассы и проход к поездам</h3><p>Кассовый зал с кессонным потолком, быстрый проход к платформам, комната матери и ребёнка, детский клуб «Союзмультфильм».</p></div></li>
+        <li><span class="lvl">−1<small>этаж</small></span><div><h3>Магазины и метро</h3><p>Торговая галерея, автоматические камеры хранения и прямой выход к станции метро «Комсомольская».</p></div></li>
+      </ol>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="coffers" aria-hidden="true"></div>
+  <!-- VI. Мозаики -->
+  <section class="section section--night" id="mosaics" aria-labelledby="h-mosaics">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">VI</span>
+        <h2 class="sec-head__title" id="h-mosaics">Москва и Петербург в смальте</h2>
+        <p class="sec-head__desc">Крупнейшая мозаика на объектах транспортной инфраструктуры России.</p>
+      </div>
+      <div class="two">
+        <figure class="passe rv">
+          <div class="ph" data-src="img/mosaic.jpg" data-alt="Мозаичное панно с видами Москвы и Санкт-Петербурга в центральном зале вокзала">
+            <svg class="ph__fallback" viewBox="0 0 240 180" aria-hidden="true">
+              <defs><pattern id="tess" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="var(--smalt-blue)"/></pattern></defs>
+              <rect width="240" height="180" fill="url(#tess)"/>
+              <path d="M0 140 H240 V180 H0 Z" fill="var(--smalt-green)"/>
+              <path d="M30 140 V90 L45 70 L60 90 V140 Z M100 140 V60 a20 20 0 0 1 40 0 V140 Z M180 140 V100 L195 40 L210 100 V140 Z" fill="var(--smalt-gold)"/>
+              <circle cx="120" cy="36" r="10" fill="var(--smalt-gold)"/>
+              <path d="M0 150 H240" stroke="var(--smalt-red)" stroke-width="4"/>
+            </svg>
+          </div>
+          <figcaption>Панно в центральном зале</figcaption>
+        </figure>
+        <div class="rv">
+          <p class="dropcap">В центральном зале — два мозаичных панно, каждое длиной около 84&nbsp;м и высотой почти 5&nbsp;м, общей площадью более 800&nbsp;м². Их создала мастерская художника-монументалиста Максима Козлова: над панно работали 30 мастеров-мозаичистов.</p>
+          <p>Панно написаны в жанре ведуты: зритель словно движется вдоль Москвы-реки и вдоль Невы. Смальта уложена в смешанной технике с элементами римской мозаики; для проекта разработали новую смальту.</p>
+          <ul class="facts">
+            <li>Слева от Водовзводной башни спрятаны герои «Мастера и Маргариты» — Коровьев, Азазелло и кот Бегемот</li>
+            <li>Среди других деталей — вывеска пышечной, самолёт и девочка с синим шаром</li>
+            <li>Автор советует идти вдоль панно медленно и смотреть с расстояния около двух метров</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section id="chronicle">
-  <div class="wrap narrow">
-    <div class="sec-head rv"><span class="no">VII</span><h2>Хроника</h2></div>
-    <ol class="chron rv">
-      <li><time>1849–1851</time><p>Строительство Николаевского вокзала по проекту Константина Тона, первого вокзала Москвы.</p></li>
-      <li><time>11 августа 2024</time><p>Здание закрыто для пассажиров, начата комплексная модернизация.</p></li>
-      <li><time>Февраль 2025</time><p>ОАО «РЖД» представляет проект: верхние этажи для пассажиров, торговля на нижнем уровне, мозаичные панно.</p></li>
-      <li><time>Июнь 2025</time><p>Начаты работы на кровле над основными залами.</p></li>
-      <li><time>22 мая 2026</time><p>Сергей Собянин и генеральный директор ОАО «РЖД» Олег Белозеров открывают обновлённый вокзал.</p></li>
-    </ol>
-    <p class="note">По первым обзорам после открытия, часть сервисов вводилась поэтапно: камеры хранения, душевые и залы третьего этажа. Актуальную информацию уточняйте на сайте ОАО «РЖД».</p>
-  </div>
-</section>
+  <div class="smalt-band" aria-hidden="true"></div>
 
-<footer>
+  <!-- VII. Интерьеры -->
+  <section class="section" aria-labelledby="h-halls">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">VII</span>
+        <h2 class="sec-head__title" id="h-halls">Исторические интерьеры</h2>
+        <p class="sec-head__desc">Помимо пассажирских залов, на вокзале воссоздали утраченные пространства.</p>
+      </div>
+      <div class="halls">
+        <article class="hall rv">
+          <figure class="passe">
+            <div class="ph" data-src="img/ticket-hall.jpg" data-alt="Кассовый зал с кессонным потолком">
+              <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <rect x="10" y="10" width="220" height="160"/>
+                <path d="M10 50 H230 M10 90 H230 M10 130 H230 M65 10 V170 M120 10 V170 M175 10 V170"/>
+                <g fill="currentColor"><circle cx="37.5" cy="30" r="2"/><circle cx="92.5" cy="30" r="2"/><circle cx="147.5" cy="30" r="2"/><circle cx="202.5" cy="30" r="2"/><circle cx="37.5" cy="70" r="2"/><circle cx="92.5" cy="70" r="2"/><circle cx="147.5" cy="70" r="2"/><circle cx="202.5" cy="70" r="2"/><circle cx="37.5" cy="110" r="2"/><circle cx="92.5" cy="110" r="2"/><circle cx="147.5" cy="110" r="2"/><circle cx="202.5" cy="110" r="2"/><circle cx="37.5" cy="150" r="2"/><circle cx="92.5" cy="150" r="2"/><circle cx="147.5" cy="150" r="2"/><circle cx="202.5" cy="150" r="2"/></g>
+              </svg>
+            </div>
+            <figcaption>Кессонный потолок</figcaption>
+          </figure>
+          <h3 class="hall__title">Кассовый зал</h3>
+          <p class="hall__text">Новый кессонный потолок со встроенными светильниками, по оценке «Ведомостей» — с отсылкой к советским архитектурным традициям.</p>
+          <p class="hall__meta">Первый этаж</p>
+        </article>
+        <article class="hall rv">
+          <figure class="passe">
+            <div class="ph" data-src="img/museum.jpg" data-alt="Воссозданная гостиная XIX века в музее истории вокзала">
+              <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <path d="M10 22 H230 M10 28 H230"/><path d="M10 22 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0 q10 -10 20 0"/>
+                <rect x="90" y="40" width="60" height="90"/><path d="M120 40 V130 M90 85 H150"/>
+                <path d="M70 34 C 92 60, 80 110, 92 136 L70 136 Z"/><path d="M170 34 C 148 60, 160 110, 148 136 L170 136 Z"/>
+                <path d="M60 34 H180 M10 136 H230"/>
+                <g stroke-width=".7"><path d="M10 150 L40 136 L70 150 L100 136 L130 150 L160 136 L190 150 L220 136 L230 141"/><path d="M10 164 L40 150 L70 164 L100 150 L130 164 L160 150 L190 164 L220 150 L230 155"/></g>
+              </svg>
+            </div>
+            <figcaption>Гостиная XIX века</figcaption>
+          </figure>
+          <h3 class="hall__title">Музей истории вокзала</h3>
+          <p class="hall__text">По архивам воссоздана гостиная XIX&nbsp;века: лепной декор, наборный паркет, бархатные портьеры, мраморный камин. Центральная сцена — Константин Тон представляет Николаю&nbsp;I проект вокзала. К музею ведёт подлинная чугунная лестница середины XIX&nbsp;века.</p>
+          <p class="hall__meta">Четвёртый этаж · открыт с 1&nbsp;июня 2026</p>
+        </article>
+        <article class="hall rv">
+          <figure class="passe">
+            <div class="ph" data-src="img/chapel.jpg" data-alt="Часовня Святителя Николая Чудотворца в здании вокзала">
+              <svg class="ph__fallback" viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+                <path d="M120 14 V36 M112 22 H128"/><path d="M96 70 Q120 30 144 70"/><rect x="96" y="70" width="48" height="100"/>
+                <path d="M110 170 V128 a10 10 0 0 1 20 0 V170"/><rect x="108" y="84" width="24" height="28"/>
+                <path d="M40 170 H200 M60 170 V110 H96 M180 170 V110 H144"/>
+                <g stroke-width=".7"><path d="M70 170 V132 a7 7 0 0 1 14 0 V170 M156 170 V132 a7 7 0 0 1 14 0 V170"/></g>
+              </svg>
+            </div>
+            <figcaption>Часовня</figcaption>
+          </figure>
+          <h3 class="hall__title">Часовня Святителя Николая</h3>
+          <p class="hall__text">В исторической части здания восстановлена часовня Святителя Николая Чудотворца.</p>
+          <p class="hall__meta">Историческая часть</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="coffers" aria-hidden="true"></div>
+
+  <!-- VIII. Пересадки и платформы -->
+  <section class="section" aria-labelledby="h-transfer">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">VIII</span>
+        <h2 class="sec-head__title" id="h-transfer">Пересадки и платформы</h2>
+        <p class="sec-head__desc">Как теперь попасть к поездам и в метро.</p>
+      </div>
+      <ul class="cells rv">
+        <li><h3>Метро без улицы</h3><p>С 3&nbsp;июня 2026 года с минус первого этажа можно пройти к «Комсомольской» Кольцевой и Сокольнической линий — около двух минут пешком.</p></li>
+        <li><h3>Навес над платформами</h3><p>Распределительную площадку и платформы дальнего следования накрыл новый навес площадью более 6,9&nbsp;тыс.&nbsp;м². Схема прохода к поездам и нумерация путей изменились.</p></li>
+        <li><h3>Вход с Краснопрудной</h3><p>Открыт вход со стороны Краснопрудной улицы, не использовавшийся более 30&nbsp;лет. Второй путь в метро — переход под Краснопрудной.</p></li>
+        <li><h3>Маломобильным пассажирам</h3><p>Работает центр обеспечения мобильности. У исторического главного входа подъёмника нет; бригада помогает пассажирам на колясках.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- IX. Кто работал -->
+  <section class="section" aria-labelledby="h-credits" style="padding-top:0">
+    <div class="wrap wrap--narrow">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">IX</span>
+        <h2 class="sec-head__title" id="h-credits">Кто работал над проектом</h2>
+      </div>
+      <dl class="credits rv">
+        <div><dt>Генпроектировщик и генподрядчик</dt><dd>АО «Мосинжпроект»</dd></div>
+        <div><dt>Авторский коллектив</dt><dd>Сергей Кузнецов, Иван Греков (бюро Kamen), Ильдар Ибрагимов и Алексей Кузнецов (Институт «Мосинжпроект») <span class="src">— по данным журнала «Эксперт»</span></dd></div>
+        <div><dt>Мозаики</dt><dd>Мастерская Максима Козлова</dd></div>
+        <div><dt>Исторический проект</dt><dd>Константин Тон, 1849–1851</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- X. Отзывы -->
+  <section class="section surface-alt" aria-labelledby="h-reviews">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">X</span>
+        <h2 class="sec-head__title" id="h-reviews">Что говорят пассажиры</h2>
+        <p class="sec-head__desc">Впечатления из обзоров и публикаций первых месяцев после открытия.</p>
+      </div>
+      <div class="reviews rv">
+        <div>
+          <h3>Хвалят</h3>
+          <ul class="facts">
+            <li>Простор и чистоту</li>
+            <li>Отсутствие толкотни в залах</li>
+            <li>Бесплатные залы ожидания на верхних этажах</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Критикуют</h3>
+          <ul class="facts">
+            <li>Бизнес-зал: низкие столики, мало розеток</li>
+            <li>Мало еды для пассажиров ранних «Сапсанов»</li>
+            <li>Новую нумерацию путей и непривычные надписи навигации</li>
+            <li>Нет подъёмника у исторического входа</li>
+            <li>Старые навесы над перронами рядом с новым</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- XI. Хроника -->
+  <section class="section" id="chronicle" aria-labelledby="h-chronicle">
+    <div class="wrap wrap--narrow">
+      <div class="sec-head rv">
+        <span class="sec-head__no" aria-hidden="true">XI</span>
+        <h2 class="sec-head__title" id="h-chronicle">Хроника</h2>
+      </div>
+      <ol class="chron rv">
+        <li><span class="chron__date"><time datetime="1849">1849</time>–<time datetime="1851">1851</time></span><p>Петербургский вокзал построен по проекту Константина Тона в 1849&nbsp;году; движение открыто в 1851-м.</p></li>
+        <li><time datetime="1855">1855</time><p>Вокзал переименован в Николаевский.</p></li>
+        <li><time datetime="1923">1923</time><p>Переименован в Октябрьский, затем — в Ленинградский.</p></li>
+        <li><time datetime="1949">1949</time><p>Реставрация интерьеров по проекту архитектора Алексея Душкина.</p></li>
+        <li><span class="chron__date"><time datetime="1974">1974</time>–<time datetime="1977">1977</time></span><p>Реконструкция: расширение вокзала и раздельные платформы.</p></li>
+        <li><span class="chron__date"><time datetime="2008">2008</time>–<time datetime="2013">2013</time></span><p>Реконструкция, добавившая около 8000&nbsp;м² площадей.</p></li>
+        <li><time datetime="2024-08-11">11&nbsp;августа&nbsp;2024</time><p>Здание закрыто для пассажиров, начата комплексная модернизация.</p></li>
+        <li class="is-key"><time datetime="2026-05-22">22&nbsp;мая&nbsp;2026</time><p>Сергей Собянин и генеральный директор ОАО «РЖД» Олег Белозёров открывают обновлённый вокзал.</p></li>
+        <li><time datetime="2026-06-01">1&nbsp;июня&nbsp;2026</time><p>Открыты музей истории вокзала и коворкинг.</p></li>
+        <li><time datetime="2026-06-03">3&nbsp;июня&nbsp;2026</time><p>Открыт прямой выход с вокзала к станции метро «Комсомольская».</p></li>
+      </ol>
+      <p class="note rv"><b class="note__title">Примечание</b>Часть сервисов вводилась поэтапно. Это первый этап обновления площади Трёх вокзалов; следующим станет Ярославский вокзал. Актуальную информацию уточняйте на сайте ОАО «РЖД».</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
   <div class="wrap">
     <h2>Источники</h2>
-    <ul>
+    <ol>
       <li><a href="https://www.mos.ru/mayor/themes/14895050/">Сайт мэра Москвы — открытие вокзала после реконструкции</a></li>
-      <li><a href="https://vm.ru/moscow/1329516-izuchili-kazhdyj-ottenok-kak-prohodila-rekonstrukciya-leningradskogo-vokzala">Вечерняя Москва — «Изучили каждый оттенок»</a></li>
+      <li><a href="https://ria.ru/20260522/vokzal-2094085685.html">РИА Новости — открытие 22 мая 2026</a></li>
       <li><a href="https://www.mos.ru/news/item/155972073/">mos.ru — исторический цвет стен</a></li>
-      <li><a href="https://otello.ru/nomer/leningradsky-vokzal-moskva">Номер — изменения после реконструкции</a></li>
-      <li><a href="https://www.vedomosti.ru/realty/galleries/2026/05/22/1199410-leningradskii-vokzal-posle-rekonstruktsii">Ведомости — фотогалерея, 22 мая 2026</a></li>
-      <li><a href="https://mperspektiva.ru/topics/leningradskiy-vokzal-otkryt-posle-rekonstruktsii/">Московская перспектива — вокзал открыт</a></li>
+      <li><a href="https://vm.ru/moscow/1329516-izuchili-kazhdyj-ottenok-kak-prohodila-rekonstrukciya-leningradskogo-vokzala">Вечерняя Москва — «Изучили каждый оттенок»</a></li>
+      <li><a href="https://news.rambler.ru/moscow_city/56498300-vosstanovili-po-arhivnym-dokumentam-i-starym-snimkam-kak-rekonstruirovali-leningradskiy-vokzal/">Рамблер — восстановили по архивным снимкам</a></li>
+      <li><a href="https://www.gazetametro.ru/articles/na-leningradskom-vokzale-dlja-passazhirov-dostupny-pjat-zalov-ozhidanija-sozdannyh-po-novoj-kontseptsii-02-09-2026">Газета «Метро» — пять залов ожидания</a></li>
+      <li><a href="https://expert.ru/urban/object/arkhitektura/na-styke-iskusstva-i-progressa">Эксперт — авторы проекта, навигация</a></li>
+      <li><a href="https://www.vedomosti.ru/realty/galleries/2026/05/22/1199410-leningradskii-vokzal-posle-rekonstruktsii">Ведомости — фотогалерея</a></li>
+      <li><a href="https://mperspektiva.ru/topics/na-leningradskom-vokzale-smontirovali-krupneyshuyu-transportnuyu-mozaiku-rossii/">Московская перспектива — крупнейшая транспортная мозаика</a></li>
+      <li><a href="https://www.mos.ru/news/item/170755073/">mos.ru — размеры мозаичных панно</a></li>
+      <li><a href="https://www.gazetametro.ru/articles/na-leningradskom-vokzale-sprjatali-kota-begemota-i-drugih-geroev-mihaila-bulgakova-03-07-2026">Газета «Метро» — герои Булгакова на панно</a></li>
+      <li><a href="https://peterburg2.ru/news/leningradskiy-vokzal-v-moskve-otkryl-bagazhnye-lenty-i-novye-servisy-237872.html">Peterburg2 — багажные ленты и новые сервисы</a></li>
+      <li><a href="https://spb.aif.ru/society/efimov-dlya-leningradskogo-vokzala-sozdali-unikalnyy-naves">АиФ — навес над платформами</a></li>
+      <li><a href="https://tass.ru/obschestvo/27621173">ТАСС — выход к метро «Комсомольская»</a></li>
       <li><a href="https://t-j.ru/leningradskiy-is-back/">Т—Ж — каким получился вокзал</a></li>
-      <li><a href="https://www.atorus.ru/article/leningradskiy-vokzal-kak-teper-vyglyadit-glavnaya-zheleznodorozhnaya-dver-mezhdu-moskvoy-i-68979">Аторус — как теперь выглядит вокзал</a></li>
-      <li><a href="https://news.rambler.ru/moscow_city/56488940-avtory-panno-na-leningradskom-vokzale-dobavili-pashalki-dlya-passazhirov/">Рамблер — детали мозаичных панно</a></li>
-      <li><a href="https://peterburg2.ru/news/leningradskiy-vokzal-v-moskve-otkryl-bagazhnye-lenty-i-novye-servisy-237872.html">Peterburg2 — новые сервисы</a></li>
-    </ul>
+      <li><a href="https://www.vokrugsveta.ru/history/glavnoe-chtoby-nichego-ne-otvalilos-chto-eksperty-i-passazhiry-dumayut-ob-obnovlennom-leningradskom-vokzale-id7060246/">Вокруг света — что думают эксперты и пассажиры</a></li>
+      <li><a href="https://um.mos.ru/houses/leningradskiy_vokzal/">Узнай Москву — история здания</a></li>
+    </ol>
+    <p>Данные актуальны на 21&nbsp;октября 2026&nbsp;года. Фотографии будут добавлены; 3D-модель стилизованная. <a href="design-system/index.html">Дизайн-система страницы</a>.</p>
   </div>
 </footer>
 
 <script>
-  // Fill photo slots from img/; keep the drawn placeholder when a file is missing
-  document.querySelectorAll(".ph[data-src]").forEach(function (fig) {
+  // Переключатель темы
+  (function () {
+    var root = document.documentElement;
+    var current = root.getAttribute("data-theme") || "auto";
+    document.querySelectorAll('.theme-switch input[name="theme"]').forEach(function (r) {
+      r.checked = r.value === current;
+      r.addEventListener("change", function () {
+        if (!r.checked) return;
+        if (r.value === "auto") root.removeAttribute("data-theme");
+        else root.setAttribute("data-theme", r.value);
+        try {
+          if (r.value === "auto") localStorage.removeItem("lv-theme");
+          else localStorage.setItem("lv-theme", r.value);
+        } catch (e) {}
+      });
+    });
+  })();
+
+  // Фото-слоты: подставляем снимок из img/, если он есть в списке; иначе остаётся гравюра.
+  // Положите файл в img/ и допишите его имя сюда, например "img/hero.jpg".
+  var PHOTOS = [];
+  document.querySelectorAll(".ph[data-src]").forEach(function (ph) {
+    if (PHOTOS.indexOf(ph.dataset.src) === -1) return;
     var img = new Image();
-    img.alt = fig.dataset.label;
-    img.onload = function () { fig.classList.add("loaded"); fig.prepend(img); };
-    img.src = fig.dataset.src;
+    img.alt = ph.dataset.alt || "";
+    img.decoding = "async";
+    img.loading = ph.closest(".hero") ? "eager" : "lazy";
+    img.onload = function () { ph.prepend(img); ph.classList.add("is-loaded"); };
+    img.src = ph.dataset.src;
   });
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-    document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
-  } else {
+  // Спокойное появление блоков при прокрутке
+  (function () {
+    var els = document.querySelectorAll(".rv");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("is-in"); });
+      return;
+    }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
       });
-    }, { threshold: .12 });
-    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
-  }
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
 </script>
 </body>
 </html>
