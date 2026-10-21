@@ -1968,6 +1968,8 @@ function createWorld() {
     view(px, py, pz, tx2, ty, tz) {
       viewLocked = true;
       controls.autoRotate = false;
+      controls.minDistance = 2;
+      controls.maxPolarAngle = 1.56;
       camera.clearViewOffset();
       camera.position.set(px, py, pz);
       controls.target.set(tx2, ty, tz);
