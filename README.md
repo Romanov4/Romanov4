@@ -37,3 +37,27 @@ from freellm import ask
 
 print(ask("Объясни рекурсию в двух предложениях", model="auto:fast"))
 ```
+
+## Тесты
+
+```bash
+pip install -r requirements-dev.txt
+pytest                 # офлайн-тесты клиента на локальной заглушке + интеграционные, если прокси доступен
+pytest -m integration  # только проверки живого FreeLLMAPI
+```
+
+Офлайн-тесты (`tests/test_client.py`) поднимают свой мок OpenAI-совместимого API и проверяют
+формат запроса, выбор модели, system-промпт и обработку ошибок (400, 429).
+
+Интеграционные (`tests/test_integration.py`) пропускаются, пока прокси не запущен. Чтобы запустить:
+
+```bash
+ENCRYPTION_KEY=$(openssl rand -hex 32) docker compose -f docker-compose.test.yml up -d
+# в дашборде http://localhost:3001 добавьте хотя бы один ключ провайдера и скопируйте freellmapi-…
+export FREELLMAPI_KEY=freellmapi-…
+pytest -m integration -v
+```
+
+Они проверяют список доступных моделей, ответы в режимах `auto`, `auto:fast`, `auto:smart`,
+соблюдение system-промпта и отказ (400) на несуществующий профиль. Каждый прогон расходует
+немного бесплатных лимитов.
