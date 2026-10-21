@@ -223,7 +223,7 @@ panel.addEventListener('focusout', (ev) => {
 
 const progressBar = $('progressBar');
 function uiTick(now) {
-  const dt = Math.min(now - ui.last, 1000);
+  const dt = Math.min(Math.max(now - ui.last, 0), 10000);
   ui.last = now;
   const holding = ui.userPaused || reduce || ui.hoverHold || ui.focusHold || now < ui.holdUntil || document.hidden;
   if (!holding) {
@@ -233,6 +233,9 @@ function uiTick(now) {
   progressBar.style.transform = `scaleX(${holding ? 0 : Math.min(ui.elapsed / AUTOPLAY_MS, 1)})`;
   requestAnimationFrame(uiTick);
 }
+
+// после возврата во вкладку не «догоняем» пропущенное время
+document.addEventListener('visibilitychange', () => { ui.last = performance.now(); });
 
 reduceMQ.addEventListener('change', (e) => {
   reduce = e.matches;
