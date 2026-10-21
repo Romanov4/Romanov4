@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ленинградский вокзал</title>
+<meta name="description" content="Что изменилось на Ленинградском вокзале Москвы после реконструкции 2024–2026 годов">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f1e7;
+    --surface: #fffaf0;
+    --ink: #22201c;
+    --muted: #6b6458;
+    --line: #e2d8c6;
+    --accent: #8f2a1e;
+    --accent-soft: #f1ddd5;
+    --gold: #a77a2c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17140f;
+      --surface: #211d17;
+      --ink: #efe8db;
+      --muted: #a79e8f;
+      --line: #3a342a;
+      --accent: #e0775f;
+      --accent-soft: #3a211b;
+      --gold: #d4a654;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17140f;
+    --surface: #211d17;
+    --ink: #efe8db;
+    --muted: #a79e8f;
+    --line: #3a342a;
+    --accent: #e0775f;
+    --accent-soft: #3a211b;
+    --gold: #d4a654;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 17px/1.6 Inter, system-ui, sans-serif;
+  }
+  h1, h2, h3 { font-family: "PT Serif", Georgia, serif; line-height: 1.15; margin: 0; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+  /* Hero */
+  .hero {
+    border-bottom: 1px solid var(--line);
+    padding: 72px 0 56px;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 46px, var(--line) 46px 47px) bottom / 100% 10px no-repeat;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .hero h1 { font-size: clamp(40px, 7vw, 76px); margin: 14px 0 20px; }
+  .hero p { max-width: 640px; font-size: 19px; color: var(--muted); margin: 0; }
+  .facade { margin-top: 40px; color: var(--ink); }
+  .facade svg { width: 100%; height: auto; display: block; }
+
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section h2 { font-size: clamp(28px, 4vw, 40px); margin-bottom: 12px; }
+  .lead { color: var(--muted); max-width: 680px; margin: 0 0 32px; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+  .stat b { display: block; font-family: "PT Serif", serif; font-size: 40px; color: var(--accent); line-height: 1.1; }
+  .stat span { color: var(--muted); font-size: 15px; }
+
+  /* Before / after */
+  .compare { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .compare th, .compare td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .compare thead th { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  .compare tr:last-child td { border-bottom: 0; }
+  .compare td:first-child { font-weight: 600; width: 22%; }
+  .compare td:last-child { background: var(--accent-soft); }
+  @media (max-width: 640px) {
+    .compare thead { display: none; }
+    .compare tr { display: block; border-bottom: 1px solid var(--line); }
+    .compare td { display: block; border: 0; padding: 6px 16px; width: auto !important; }
+    .compare td:first-child { padding-top: 14px; }
+    .compare td:last-child { padding-bottom: 14px; }
+    .compare td:nth-child(2)::before { content: "Было: "; color: var(--muted); }
+    .compare td:nth-child(3)::before { content: "Стало: "; color: var(--accent); font-weight: 600; }
+  }
+
+  /* Features */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; }
+  .card h3 { font-size: 22px; margin-bottom: 8px; }
+  .card p { margin: 0; color: var(--muted); }
+  .card .num { font-size: 13px; color: var(--gold); font-weight: 600; letter-spacing: .1em; }
+
+  /* Mosaic */
+  .mosaic { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; }
+  @media (max-width: 760px) { .mosaic { grid-template-columns: 1fr; } }
+  .tiles { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; aspect-ratio: 12 / 7; }
+  .tiles i { border-radius: 2px; }
+
+  /* Timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+  .timeline li { position: relative; padding: 0 0 28px 28px; }
+  .timeline li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+  .timeline li:last-child { padding-bottom: 0; }
+  .timeline li:last-child::before { background: var(--accent); }
+  .timeline time { font-weight: 600; color: var(--accent); display: block; }
+  .timeline p { margin: 2px 0 0; color: var(--muted); }
+
+  .note { font-size: 15px; color: var(--muted); border-left: 3px solid var(--gold); padding: 4px 0 4px 14px; margin-top: 28px; max-width: 720px; }
+
+  footer { padding: 40px 0 56px; font-size: 14px; color: var(--muted); }
+  footer ul { padding-left: 18px; margin: 8px 0 0; }
+  footer li { margin-bottom: 4px; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Москва · Комсомольская площадь · с 1851 года</div>
+    <h1>Ленинградский вокзал после реконструкции</h1>
+    <p>Самый старый вокзал Москвы почти два года был закрыт и в мае 2026 года открылся снова. Пассажирских площадей стало почти вдвое больше, в главном зале появились огромные мозаики, а исторический фасад Константина Тона отреставрировали.</p>
+    <div class="facade" aria-hidden="true">
+      <svg viewBox="0 0 1000 220" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="0" y1="210" x2="1000" y2="210"/>
+        <rect x="80" y="110" width="840" height="100"/>
+        <rect x="430" y="70" width="140" height="140"/>
+        <rect x="470" y="22" width="60" height="48"/>
+        <circle cx="500" cy="46" r="13"/>
+        <path d="M466 22 L500 4 L534 22"/>
+        <path d="M80 110 L80 96 L920 96 L920 110"/>
+        <g stroke-width="1.5">
+          <path d="M115 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M175 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M235 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M295 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M355 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M615 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M675 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M735 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M795 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M855 200 V150 a15 15 0 0 1 30 0 V200"/>
+          <path d="M470 210 V140 a30 30 0 0 1 60 0 V210"/>
+          <rect x="450" y="85" width="22" height="30"/>
+          <rect x="528" y="85" width="22" height="30"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Главное в цифрах</h2>
+    <p class="lead">Масштаб модернизации, по данным РЖД и правительства Москвы.</p>
+    <div class="stats">
+      <div class="stat"><b>8,8 → 16</b><span>тыс. м² пассажирских помещений, почти вдвое больше</span></div>
+      <div class="stat"><b>700 → 1000+</b><span>посадочных мест для ожидания</span></div>
+      <div class="stat"><b>800+ м²</b><span>занимают два мозаичных панно из смальты</span></div>
+      <div class="stat"><b>~2 года</b><span>вокзал был закрыт, с августа 2024 по май 2026</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Было и стало</h2>
+    <p class="lead">Что изменилось для пассажира.</p>
+    <table class="compare">
+      <thead><tr><th>Что</th><th>До реконструкции</th><th>После</th></tr></thead>
+      <tbody>
+        <tr><td>Этажи</td><td>Пассажиры пользовались почти только первым этажом</td><td>Второй и третий этажи открыты под зоны ожидания, кафе и рестораны</td></tr>
+        <tr><td>Главный зал</td><td>Заставлен киосками и торговыми точками</td><td>Освобождён для быстрого прохода к поездам, торговлю перенесли на минус первый этаж</td></tr>
+        <tr><td>Ожидание</td><td>Около 700 мест</td><td>Больше 1000 мест, залы ожидания на верхних этажах</td></tr>
+        <tr><td>Бизнес-залы</td><td>—</td><td>Два, с собственными санузлами, табло отправления и Wi-Fi</td></tr>
+        <tr><td>Для семей</td><td>—</td><td>Комната для семей с детьми и детский клуб «Союзмультфильм»</td></tr>
+        <tr><td>Интерьер</td><td>Без монументального декора</td><td>Два монументальных мозаичных панно с видами Москвы и Петербурга</td></tr>
+        <tr><td>Фасад</td><td>Требовал реставрации</td><td>Отреставрирован, облик вернули к первоначальному замыслу Тона</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Что появилось</h2>
+    <p class="lead">Новые пространства и сервисы.</p>
+    <div class="grid">
+      <div class="card"><div class="num">01</div><h3>Верхние этажи для людей</h3><p>Раньше второй и третий этажи были закрыты для пассажиров. Теперь там залы ожидания, кафе и рестораны.</p></div>
+      <div class="card"><div class="num">02</div><h3>Свободный первый этаж</h3><p>Магазины и фуд-корты переехали на минус первый этаж. Наверху остался прямой и короткий путь к платформам.</p></div>
+      <div class="card"><div class="num">03</div><h3>Сервисы для семей</h3><p>На первом этаже работают комната для семей с детьми и детский клуб «Союзмультфильм». Рядом кассы дальнего следования, медпункт и информационные стойки.</p></div>
+      <div class="card"><div class="num">04</div><h3>Два бизнес-зала</h3><p>Диваны и кресла, свои санузлы, табло с расписанием и Wi-Fi.</p></div>
+      <div class="card"><div class="num">05</div><h3>Новые входы</h3><p>Вокзал теснее связали с городским транспортом и добавили дополнительные входы и выходы.</p></div>
+      <div class="card"><div class="num">06</div><h3>Фасад и кровля</h3><p>Историческое здание отреставрировали. Работы над кровлей основных залов начались летом 2025 года.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap mosaic">
+    <div>
+      <h2>Две столицы в смальте</h2>
+      <p class="lead" style="margin-bottom:16px">Главное украшение обновлённого вокзала — два мозаичных панно общей площадью больше 800 м², с видами Москвы и Санкт-Петербурга.</p>
+      <p>Около 30 художников под руководством монументалиста Максима Козлова выложили их вручную из смальты. Это крупнейшие мозаики на транспортных объектах России. На панно есть Кремль, Исаакиевский собор и «Лахта-центр», а также спрятанные «пасхалки», например кот Бегемот. Их можно поискать, пока ждёте поезд.</p>
+    </div>
+    <div class="tiles" id="tiles" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Хронология</h2>
+    <p class="lead">От проекта Тона до открытия в 2026 году.</p>
+    <ol class="timeline">
+      <li><time>1849–1851</time><p>По проекту Константина Тона строят Николаевский вокзал, первый в Москве. Парное ему здание стоит в Петербурге, это Московский вокзал.</p></li>
+      <li><time>11 августа 2024</time><p>Здание вокзала закрывают для пассажиров и начинают комплексную модернизацию.</p></li>
+      <li><time>Февраль 2025</time><p>РЖД показывают проект: верхние этажи для пассажиров, торговля под землёй, панно с видами двух столиц.</p></li>
+      <li><time>Июнь 2025</time><p>Начинаются работы над кровлей основных залов.</p></li>
+      <li><time>Май 2026</time><p>Сергей Собянин и глава РЖД Олег Белозеров открывают обновлённый вокзал.</p></li>
+    </ol>
+    <p class="note">Источники называют разные даты открытия, 22 и 25 мая 2026 года. В первых обзорах после открытия писали, что часть сервисов ещё не заработала: камеры хранения, душевые и залы на третьем этаже. Перед поездкой лучше проверить их на сайте РЖД.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <strong>Источники</strong>
+    <ul>
+      <li><a href="https://mperspektiva.ru/topics/leningradskiy-vokzal-otkryt-posle-rekonstruktsii/">Московская перспектива — «Ленинградский вокзал открыт после реконструкции»</a></li>
+      <li><a href="https://t-j.ru/leningradskiy-is-back/">Т—Ж — «Каким получился Ленинградский вокзал после двухлетней реконструкции»</a></li>
+      <li><a href="https://peterburg2.ru/news/leningradskiy-vokzal-v-moskve-otkryl-bagazhnye-lenty-i-novye-servisy-237872.html">Peterburg2 — что изменилось после модернизации</a></li>
+      <li><a href="https://news.rambler.ru/moscow_city/56488940-avtory-panno-na-leningradskom-vokzale-dobavili-pashalki-dlya-passazhirov/">Рамблер — «пасхалки» на панно</a></li>
+      <li><a href="https://realty.ria.ru/20250213/vokzal-1999208197.html">РИА Недвижимость — проект модернизации, февраль 2025</a></li>
+      <li><a href="https://msk1.ru/text/transport/2025/07/14/75703835/">MSK1 — ход работ, июль 2025</a></li>
+      <li><a href="https://stroi.mos.ru/photo_lines/sokhraniaia-istoriiu-kak-modierniziruiut-lieninghradskii-vokzal">Стройкомплекс Москвы — «Сохраняя историю»</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // Decorative smalt pattern: left half reads as "Moscow" (warm reds), right half as "Petersburg" (cool blues)
+  (function () {
+    var warm = ["#8f2a1e", "#b5462f", "#c96a3c", "#d9a441", "#a77a2c", "#e6c27a"];
+    var cool = ["#1f3b5c", "#2e5a85", "#4a7fa8", "#7fa9c6", "#b9cfdc", "#d9a441"];
+    var box = document.getElementById("tiles");
+    for (var r = 0; r < 7; r++) {
+      for (var c = 0; c < 12; c++) {
+        var set = c < 6 ? warm : cool;
+        var i = document.createElement("i");
+        i.style.background = set[(r * 7 + c * 3 + (r * c) % 5) % set.length];
+        box.appendChild(i);
+      }
+    }
+  })();
+</script>
+</body>
+</html>
