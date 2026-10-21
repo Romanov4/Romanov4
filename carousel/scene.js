@@ -20,7 +20,7 @@ const ERAS = [
     vignette: 0.55,
     fb: { sky: '#e6d3ad', wall: '#c4a275', wall2: '#b08c60', glow: '#5a4630' },
     look: {
-      skyTop: '#9fb0bd', skyHorizon: '#f1dcb4', skyBottom: '#cbb894', fog: '#e8d6b2', fogNear: 80, fogFar: 330,
+      skyTop: '#9fb0bd', skyHorizon: '#f1dcb4', skyBottom: '#cbb894', fog: '#e8d6b2', fogNear: 70, fogFar: 300,
       sun: '#ffd9a8', sunInt: 2.7, sunAz: 0.55, sunEl: 0.55,
       hemiSky: '#f4e4c6', hemiGround: '#6d5a40', hemiInt: 1.0,
       ground: '#8f7d60', paving: '#ab9877',
@@ -80,7 +80,7 @@ const ERAS = [
     vignette: 0.2,
     fb: { sky: '#d6e0e8', wall: '#d6b373', wall2: '#c39e5f', glow: '#3e3a33' },
     look: {
-      skyTop: '#6d97c4', skyHorizon: '#eadfc6', skyBottom: '#c9bfa8', fog: '#e0d8c4', fogNear: 90, fogFar: 360,
+      skyTop: '#6d97c4', skyHorizon: '#eadfc6', skyBottom: '#c9bfa8', fog: '#e0d8c4', fogNear: 80, fogFar: 320,
       sun: '#fff1d6', sunInt: 3.0, sunAz: 0.45, sunEl: 0.62,
       hemiSky: '#e9eef2', hemiGround: '#6b6250', hemiInt: 1.1,
       ground: '#77736a', paving: '#a49c8e',
@@ -257,7 +257,7 @@ panel.addEventListener('focusout', (ev) => {
 
 const progressBar = $('progressBar');
 function uiTick(now) {
-  const dt = Math.min(now - ui.last, 100);
+  const dt = Math.min(now - ui.last, 1000);
   ui.last = now;
   const holding = ui.userPaused || reduce || ui.hoverHold || ui.focusHold || now < ui.holdUntil || document.hidden;
   if (!holding) {
@@ -1388,7 +1388,7 @@ function createWorld() {
   controls.addEventListener('end', () => { lastUser = performance.now(); });
 
   function initialCamera(aspect) {
-    const r = aspect < 0.8 ? 112 : aspect < 1.2 ? 88 : 68;
+    const r = aspect < 0.8 ? 86 : aspect < 1.2 ? 84 : 68;
     const sph = new THREE.Spherical(r, 1.36, 0.74);
     camera.position.copy(TARGET).add(new THREE.Vector3().setFromSpherical(sph));
     controls.update();
@@ -1405,7 +1405,7 @@ function createWorld() {
     const narrow = W < 721;
     camera.fov = W / H < 0.8 ? 48 : 36;
     // сдвигаем кадр так, чтобы здание не пряталось под карточкой
-    if (narrow) camera.setViewOffset(W, H, 0, Math.round(H * 0.2), W, H);
+    if (narrow) camera.setViewOffset(W, H, -Math.round(W * 0.04), Math.round(H * 0.15), W, H);
     else camera.setViewOffset(W, H, -Math.round(W * 0.1), Math.round(H * 0.06), W, H);
     camera.updateProjectionMatrix();
     const ms = narrow ? 1024 : 2048;
