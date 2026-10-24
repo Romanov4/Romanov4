@@ -346,6 +346,7 @@ button:focus-visible,
 .fb-annex { display: none; }
 .stage[data-era="1"] .fb-annex, .stage[data-era="2"] .fb-annex { display: inline; }
 .fb-annex-wall { fill: #c6bca8; }
+.fb-hall-wall { fill: #b9b5ab; }
 .fb-annex-win { fill: var(--fb-glow); transition: fill var(--fade); }
 .fb-clock { fill: #f8f2e2; stroke: var(--gold); stroke-width: 2; }
 .fb-hand { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
