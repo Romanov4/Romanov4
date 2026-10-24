@@ -1,7 +1,8 @@
 /*
  * «Историческая карусель» — Ленинградский вокзал (Москва), три эпохи.
- * Процедурная модель здания К. Тона в реальном масштабе (метры), перроны тупикового вокзала,
- * поезда по эпохам, люди для масштаба, соседние вокзалы и город.
+ * Процедурная модель здания К. А. Тона в реальном масштабе (метры) по фото заказчика и docs/RESEARCH-ARCH.md:
+ * цельный объём 53 × 25,6 м, 9 осей фасада, башня 7,5 × 7,5 м; окружение и планировка — по «ТЗ для 3D».
+ * Система координат: x — вдоль площади (влево −), z — к площади (+), фасад Тона z = +10, ось x = 0, y — высота.
  * Three.js r160 подключён локально из ./vendor.
  */
 import * as THREE from './vendor/three.module.min.js';
@@ -20,78 +21,91 @@ const ERAS = [
   {
     era: 'Царская', short: '1851', year: '1851', period: '1851–1917',
     title: 'Царская эпоха',
-    text: 'Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона. С 1855 года он называется Николаевским. За зданием — металлический дебаркадер над двумя тупиковыми путями. Поезда водили американские паровозы типа 2-2-0 Александровского завода.',
-    desc: 'тёплое утро на Каланчёвском поле, булыжная мостовая, масляные фонари и извозчики, за зданием по оси — металлический дебаркадер на металлических колоннах над двумя путями, под ним паровоз 2-2-0 с трубой-воронкой и вагоны трёх классов, напротив через площадь — небольшое здание Рязанского вокзала, справа — первый Ярославский вокзал, флагшток на башне',
+    text: 'Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона; с 1855 года он называется Николаевским. Двухэтажное здание в девять осей с башней-часами стоит на немощёной площади. За ним по оси — дебаркадер с каменными стенами-аркадами и металлической кровлей, по бокам — ограды с арочными воротами, слева — здание таможни того же Тона.',
+    desc: 'утро на немощёной площади, ряды извозчиков и чугунные фонари, двухэтажное здание Тона в девять осей с коринфским ордером, башней-часами и шпилем, за ним по оси — дебаркадер с каменными аркадами и двускатной металлической кровлей, под ним паровоз 2-2-0 и вагоны трёх классов, по бокам — ограды с арочными воротами и полосатая будка, слева — трёхэтажное здание таможни',
     train: 'steam51',
-    filter: 'sepia(0.22) saturate(0.92) contrast(1.02)',
-    vignette: 0.32,
-    fb: { sky: '#eadcc0', wall: '#d6bb90', wall2: '#b98a5e', glow: '#4a3d30' },
+    filter: 'sepia(0.2) saturate(0.9) contrast(1.02)',
+    vignette: 0.3,
+    fb: { sky: '#eadcc0', wall: '#e2d2a6', wall2: '#f3ecdb', glow: '#4a3d30', dome: '#a9b2b2' },
     look: {
-      skyTop: '#7fa2c4', skyHorizon: '#f3e2c2', skyBottom: '#cdbb9a', fog: '#eadcbe', fogNear: 140, fogFar: 560, cloudC: '#fbf3e4', cloud: 0.55,
-      sun: '#ffdcae', sunInt: 3.0, sunAz: 0.75, sunEl: 0.42,
-      hemiSky: '#e8eef2', hemiGround: '#7a6a50', hemiInt: 0.85,
-      ground: '#8f7e62', paving: '#b5a58a', road: '#8f7e62', edgeC: '#d8d0bf',
-      wallA: '#dcc39a', wallB: '#b98a5e', trim: '#f1e9d8', plinth: '#8f8a80', roof: '#5f7a68',
-      city: '#d2c4a8', winGlow: '#ffcf8a', win: 0.06, lampColor: '#ffc070', lamp: 0.6, halo: 0.15,
-      facade: 0, exposure: 1.0, sunGlow: 0.55, env: 0.55, cityGlow: 0,
+      skyTop: '#86a3c0', skyHorizon: '#f0e4c8', skyBottom: '#cdbb9a', fog: '#e8dcc2', fogNear: 170, fogFar: 640, cloudC: '#fbf3e4', cloud: 0.4,
+      sun: '#ffe2b8', sunInt: 3.0, sunAz: 0.95, sunEl: 0.5,
+      hemiSky: '#e8eef2', hemiGround: '#7a6a50', hemiInt: 0.9,
+      ground: '#a8987a', paving: '#b9a88a', road: '#8e8476', edgeC: '#d8d0bf',
+      wallA: '#e8d9ae', trim: '#f3f0e6', plinth: '#cfc6b0', roof: '#aeb8b6', dome: '#b4bdbd', debWall: '#d9c9a4', customsRoof: '#8c9496', signC: '#1f3e8c',
+      city: '#d2c4a8', winGlow: '#ffcf8a', win: 0.04, glassUp: 0.03, lampColor: '#ffc070', lamp: 0.6, halo: 0.12,
+      facade: 0, wallGlow: 0, colLit: 0, signGlow: 0, signHalo: 0, clock: 0, led: 0,
+      exposure: 1.0, sunGlow: 0.55, env: 0.55, cityGlow: 0,
     },
-    feat: { gasSq: 1, gasLow: 1, carriages: 1, pole: 1, debark: 1, platLow: 1, tracks51: 1, cityLow: 1, oldNeighbors: 1, people1: 1 },
+    feat: { tsarSite: 1, carriages: 1, gasSq: 1, gasLow: 1, people1: 1, cityLow: 1, oldNeighbors: 1, tracks51: 1, platLow: 1, debark: 1 },
   },
   {
-    era: 'Советская', short: 'XX век', year: 'XX век', period: '1920–1970-е',
+    era: 'Советская', short: '1960-е', year: '1960-е', period: '1960-е — начало 1970-х',
     title: 'Советская эпоха',
-    text: 'В 1923 году вокзал переименовали в Октябрьский, затем — в Ленинградский. На рубеже 1940–1950-х интерьеры реставрировали по проекту Алексея Душкина. В 1960-е слева появилась трёхэтажная пристройка, а в 1975–1977 годах за зданием, на месте дебаркадера, построили главный кассовый зал (архитектор В. И. Кузнецов).',
-    desc: 'пасмурный день, асфальт, легковые машины и автобус на площади, слева на линии фасада — трёхэтажная пристройка, за зданием — двухуровневый кассовый зал 1970-х с надстроенными этажами, справа — двухэтажное здание касс с часами, рядом Ярославский и напротив Казанский вокзалы, башня без флагштока, навесы над платформами, контактная сеть, электровоз и тёмно-красные вагоны',
+    text: 'В 1923 году вокзал переименовали в Октябрьский, затем — в Ленинградский. В 1960-е фасад окрашен в белый цвет, на кровле стоят буквы «ЛЕНИНГРАДСКИЙ», шпиль башни венчает звезда. За зданием ещё стоит старый дебаркадер: его торец к путям — охристый щипец с надписью «МОСКВА». Справа — наземный вестибюль метро «Комсомольская» (1952, архитектор А. В. Щусев), слева за проездом вдоль путей — длинный белый трёхэтажный корпус.',
+    desc: 'ясный осенний день, асфальт, «Волги», трамваи и автобус на площади, белый фасад здания Тона, буквы «ЛЕНИНГРАДСКИЙ» на кровле, звезда на шпиле башни, за зданием — старый дебаркадер с охристым щипцом «МОСКВА» к путям, низкие навесы над платформами и контактная сеть, электровоз и тёмно-красные вагоны, справа — купольный вестибюль метро с шестиколонным портиком и шпилем со звездой, дальше — небольшое двухэтажное здание касс и Ярославский вокзал, слева за проездом с пилонами — длинный белый трёхэтажный корпус, на углу — таможня',
     train: 'electro',
-    filter: 'sepia(0.1) saturate(0.78) contrast(1.02)',
+    filter: 'sepia(0.05) saturate(0.86) contrast(1.02)',
     vignette: 0.16,
-    fb: { sky: '#d9dcd6', wall: '#d6b673', wall2: '#cfae6c', glow: '#3e3a33' },
+    fb: { sky: '#d3dfe8', wall: '#dcdfd8', wall2: '#eef0ec', glow: '#3e3a33', dome: '#aeb9be' },
     look: {
-      skyTop: '#8d9db0', skyHorizon: '#dcdcd6', skyBottom: '#b9b5aa', fog: '#d5d4cd', fogNear: 120, fogFar: 520, cloudC: '#eeeeec', cloud: 0.95,
-      sun: '#fdf4e4', sunInt: 1.5, sunAz: 0.5, sunEl: 0.75,
-      hemiSky: '#e4e8ec', hemiGround: '#6a6458', hemiInt: 1.5,
-      ground: '#76736c', paving: '#8e8b84', road: '#55555a', edgeC: '#ece7da',
-      wallA: '#d8b874', wallB: '#d2b06c', trim: '#f0e8d4', plinth: '#8a857c', roof: '#6b746f',
-      city: '#c6c0b4', winGlow: '#fff0c8', win: 0.08, lampColor: '#fff3d8', lamp: 0.5, halo: 0.12,
-      facade: 0, exposure: 1.0, sunGlow: 0.15, env: 0.7, cityGlow: 0.05,
+      skyTop: '#7f9fc0', skyHorizon: '#dfe4e4', skyBottom: '#b9b5aa', fog: '#d9dcda', fogNear: 150, fogFar: 600, cloudC: '#f2f2f0', cloud: 0.3,
+      sun: '#fff1dc', sunInt: 2.7, sunAz: 2.05, sunEl: 0.55,
+      hemiSky: '#e4e8ec', hemiGround: '#6a6458', hemiInt: 1.05,
+      ground: '#76735f', paving: '#77787a', road: '#58595c', edgeC: '#ece7da',
+      wallA: '#dcdfd8', trim: '#eaece7', plinth: '#c9ccc6', roof: '#b5bbb8', dome: '#b4bdbd', debWall: '#c9a77a', customsRoof: '#8a5a44', signC: '#2f3f6a',
+      city: '#c6c0b4', winGlow: '#fff0c8', win: 0.05, glassUp: 0.04, lampColor: '#fff3d8', lamp: 0.4, halo: 0.08,
+      facade: 0, wallGlow: 0, colLit: 0, signGlow: 0, signHalo: 0, clock: 0, led: 0,
+      exposure: 1.0, sunGlow: 0.3, env: 0.7, cityGlow: 0.05,
     },
     feat: {
-      electric: 1, cars: 1, trees: 1, annex: 1, hall70: 1, superstr: 1, sign: 1, catenary: 1, platHigh: 1, platCanopy: 1,
-      tracksX: 1, cityMid: 1, neighbors: 1, mzha: 1, people2: 1,
+      debark: 1, moskva: 1, tracks51: 1, platLow: 1, sovSite: 1, tracksSov: 1, platSov: 1, canopySov: 1, catSov: 1, cars: 1, electric: 1,
+      people2: 1, mzha: 1, modernSite: 1, metro: 1, neighbors: 1, trees: 1, cityMid: 1, longSov: 1,
     },
   },
   {
     era: 'Настоящее', short: '2026', year: '2026', period: 'после реконструкции 2024–2026',
     title: 'Настоящее',
-    text: 'Закрытый 11 августа 2024 года вокзал вновь открылся 22 мая 2026-го. Фасаду вернули цвета, зафиксированные на снимке 1873 года, на башне восстановили исторический флагшток. Советские объёмы — крыло слева и кассовый зал за зданием — реконструированы, а выход к поездам за кассовым залом накрыл новый стеклянный дебаркадер.',
-    desc: 'синие сумерки, тёплая подсветка фасада и фонари в стиле масляных, двухцветный оштукатуренный фасад со светлыми тягами и наличниками, флагшток с флагом, крыло слева и кассовый зал за зданием, стеклянный дебаркадер с криволинейной кровлей над выходом к поездам, навесы над платформами и «Сапсан»',
+    text: 'Закрытый 11 августа 2024 года вокзал вновь открылся 22 мая 2026-го. Фасаду вернули кремовый цвет с белыми деталями по снимку 1873 года, на башне снова флагшток с флагом, на кровле — новая вывеска с логотипами. За зданием — зал 1970-х со световыми люками и высокий тёмный объём, справа — новый гранёный дебаркадер из металла и стекла, к поездам на 12 путях ведут навесы платформ.',
+    desc: 'ночь, тёплая белая подсветка колонн снизу, светящиеся окна и циферблаты, бело-голубые буквы «ЛЕНИНГРАДСКИЙ ВОКЗАЛ» с логотипами РЖД и «Московского транспорта», флаг России на башне, кремовый фасад с белыми деталями, за зданием — зал с рядами световых люков и тёмный высокий объём, справа — гранёный дебаркадер с точечными огнями и свод над головами платформ, двенадцать путей с навесами и «Сапсан», справа — купольный вестибюль метро, слева — длинный корпус с серой кровлей и таможня',
     train: 'sapsan',
     filter: 'sepia(0) saturate(1.04) contrast(1.03)',
-    vignette: 0.26,
-    fb: { sky: '#3a3f63', wall: '#d9bd90', wall2: '#b4835a', glow: '#ffbf73' },
+    vignette: 0.28,
+    fb: { sky: '#17172c', wall: '#e8d9ae', wall2: '#f6f0dc', glow: '#f6d9a0', dome: '#6e9a86' },
     look: {
-      skyTop: '#1b2c5c', skyHorizon: '#f09a68', skyBottom: '#3a3240', fog: '#7a6478', fogNear: 120, fogFar: 560, cloudC: '#c98a86', cloud: 0.45,
-      sun: '#ff9b5e', sunInt: 0.8, sunAz: -2.2, sunEl: 0.06,
-      hemiSky: '#7488c0', hemiGround: '#40332e', hemiInt: 1.25,
-      ground: '#4a4950', paving: '#9a958c', road: '#3f3f44', edgeC: '#e3c13a',
-      wallA: '#dcc39a', wallB: '#b98a5e', trim: '#f6efe0', plinth: '#7f786f', roof: '#5d6a62',
-      city: '#4a4658', winGlow: '#ffb35c', win: 0.85, lampColor: '#ffb45a', lamp: 3.0, halo: 0.9,
-      facade: 1, exposure: 1.2, sunGlow: 1.0, env: 0.3, cityGlow: 1.0,
+      skyTop: '#0b0c20', skyHorizon: '#2a2948', skyBottom: '#141320', fog: '#1c1b2e', fogNear: 150, fogFar: 640, cloudC: '#34324a', cloud: 0.22,
+      sun: '#a9b8ff', sunInt: 0.35, sunAz: -2.3, sunEl: 0.6,
+      hemiSky: '#56628f', hemiGround: '#2a2622', hemiInt: 0.55,
+      ground: '#3a3a40', paving: '#8a7f72', road: '#2f2f34', edgeC: '#e3c13a',
+      wallA: '#e8d9ae', trim: '#f3f0e6', plinth: '#cfc6b0', roof: '#aeb8b6', dome: '#6e9a86', debWall: '#d9c9a4', customsRoof: '#8c9496', signC: '#1f3e8c',
+      city: '#4a4658', winGlow: '#f6d9a0', win: 0.55, glassUp: 1.25, lampColor: '#ffe2b4', lamp: 2.6, halo: 0.75,
+      facade: 1, wallGlow: 0.3, colLit: 1.7, signGlow: 2.0, signHalo: 0.95, clock: 1.3, led: 1,
+      exposure: 1.05, sunGlow: 0, env: 0.3, cityGlow: 1.0,
     },
     feat: {
-      gasSq: 1, gasHigh: 1, canopy: 1, pole: 1, flag: 1, catenary: 1, trees: 1, annex: 1, hall70: 1, superstr: 1,
-      sign: 1, platHigh: 1, platCanopy: 1, tracksX: 1, cityMid: 1, cityHigh: 1, neighbors: 1, mzha: 1, people3: 1,
+      modernSite: 1, metro: 1, neighbors: 1, trees: 1, cityMid: 1, cityHigh: 1, long26: 1, nowSite: 1, flag: 1, sign26: 1, complex26: 1,
+      tracks26: 1, plat26: 1, canopy26: 1, cat26: 1, lamp26: 1, wallLamps: 1, people3: 1,
     },
   },
 ];
+/* Дневной свет для «Настоящего» — только для сравнительных снимков (window.leningradCarousel.day(true)). */
+const DAY26 = {
+  skyTop: '#7f9fc0', skyHorizon: '#e4e6e2', skyBottom: '#b9b5aa', fog: '#d6dade', fogNear: 170, fogFar: 700, cloudC: '#f4f4f2', cloud: 0.45,
+  sun: '#fff4e2', sunInt: 2.8, sunAz: 1.2, sunEl: 0.75, hemiSky: '#e4e8ec', hemiGround: '#6a6458', hemiInt: 1.0,
+  ground: '#6f6c62', road: '#58595c', city: '#c6c0b4', win: 0.03, glassUp: 0.03, lamp: 0.3, halo: 0, facade: 0, wallGlow: 0, colLit: 0,
+  signGlow: 0, signHalo: 0, clock: 0, led: 0, exposure: 1.0, sunGlow: 0.3, env: 0.7, cityGlow: 0,
+};
 const N = ERAS.length;
-const FEATS = ['gasSq', 'gasLow', 'gasHigh', 'electric', 'carriages', 'cars', 'trees', 'annex', 'hall70', 'superstr', 'sign',
-  'pole', 'flag', 'catenary', 'debark', 'canopy', 'platCanopy', 'platLow', 'platHigh', 'tracks51', 'tracksX', 'cityLow',
-  'cityMid', 'cityHigh', 'neighbors', 'oldNeighbors', 'mzha', 'people1', 'people2', 'people3'];
+const FEATS = [
+  'tsarSite', 'carriages', 'gasSq', 'gasLow', 'people1', 'cityLow', 'oldNeighbors', 'tracks51', 'platLow', 'debark', 'moskva',
+  'sovSite', 'tracksSov', 'platSov', 'canopySov', 'catSov', 'cars', 'electric', 'people2', 'mzha',
+  'modernSite', 'metro', 'neighbors', 'trees', 'cityMid', 'longSov', 'long26',
+  'nowSite', 'flag', 'sign26', 'complex26', 'tracks26', 'plat26', 'canopy26', 'cat26', 'lamp26', 'wallLamps', 'people3', 'cityHigh',
+];
 const COLOR_KEYS = ['skyTop', 'skyHorizon', 'skyBottom', 'fog', 'cloudC', 'sun', 'hemiSky', 'hemiGround', 'ground',
-  'paving', 'road', 'edgeC', 'wallA', 'wallB', 'trim', 'plinth', 'roof', 'city', 'winGlow', 'lampColor'];
-const NUM_KEYS = ['fogNear', 'fogFar', 'cloud', 'sunInt', 'sunAz', 'sunEl', 'hemiInt', 'win', 'lamp', 'halo', 'facade',
-  'exposure', 'sunGlow', 'env', 'cityGlow'];
+  'paving', 'road', 'edgeC', 'wallA', 'trim', 'plinth', 'roof', 'dome', 'debWall', 'customsRoof', 'signC', 'city', 'winGlow', 'lampColor'];
+const NUM_KEYS = ['fogNear', 'fogFar', 'cloud', 'sunInt', 'sunAz', 'sunEl', 'hemiInt', 'win', 'glassUp', 'lamp', 'halo', 'facade',
+  'wallGlow', 'colLit', 'signGlow', 'signHalo', 'clock', 'led', 'exposure', 'sunGlow', 'env', 'cityGlow'];
 
 /* ------------------------------------------------------------------ */
 /* UI карусели (работает и без WebGL)                                   */
@@ -166,6 +180,7 @@ function goTo(i, { user = false, instant = false } = {}) {
   fbs.setProperty('--fb-wall', e.fb.wall);
   fbs.setProperty('--fb-wall2', e.fb.wall2);
   fbs.setProperty('--fb-glow', e.fb.glow);
+  fbs.setProperty('--fb-dome', e.fb.dome);
   if (user) $('announcer').textContent = `${e.title}, ${e.period}. ${e.text}`;
   if (world) world.setEra(i, instant || reduce);
 }
@@ -299,6 +314,21 @@ function worldUV(geo, s) {
   geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
 
+/** UV для подсветки колонн снизу: v = 0 у основания ствола, 1 — у капители (по ярусам здания Тона и башни). */
+function floorUV(geo) {
+  const p = geo.attributes.position.array;
+  const uv = new Float32Array((p.length / 3) * 2);
+  for (let i = 0, j = 0; i < p.length; i += 3, j += 2) {
+    const y = p[i + 1];
+    let v;
+    if (y < 8.55) v = (y - 2.1) / 5.6;
+    else if (y < 16.5) v = (y - 9.8) / 5.1;
+    else if (y < 25.1) v = (y - 18.4) / 6.4;
+    else v = (y - 25.3) / 6.2;
+    uv[j] = 0.5; uv[j + 1] = Math.min(1, Math.max(0, v));
+  }
+  geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
 /** Собирает геометрию по ключам материалов и сливает в несколько мешей. */
 class Batch {
   constructor() { this.m = new Map(); }
@@ -320,7 +350,8 @@ class Batch {
     for (const [key, list] of this.m) {
       const mat = mats[key];
       const geo = merge(list);
-      if (mat.map || mat.bumpMap || mat.emissiveMap) worldUV(geo, mat.userData.uvs || 4);
+      if (mat.userData.floorUV) floorUV(geo);
+      else if (mat.map || mat.bumpMap || mat.emissiveMap) worldUV(geo, mat.userData.uvs || 4);
       const mesh = new THREE.Mesh(geo, mat);
       mesh.castShadow = cast && !noShadow.includes(key);
       mesh.receiveShadow = receive;
@@ -459,6 +490,14 @@ const T = {
       g.fillStyle = 'rgba(255,255,255,0.35)'; g.fillRect(0, y + Math.max(2, S / 120), S, Math.max(1, S / 256));
     }
   }),
+  dirt: () => canvasTex((g, S) => {
+    noise(g, S, 214, 14, 16, 5, 12);
+    const r = rng(17);
+    for (let i = 0; i < 70; i++) { // колеи и камешки
+      g.fillStyle = `rgba(${r() > 0.5 ? '90,80,60' : '255,250,235'},${0.05 + r() * 0.08})`;
+      g.beginPath(); g.ellipse(r() * S, r() * S, 2 + r() * S * 0.05, 1 + r() * S * 0.02, r() * 3, 0, Math.PI * 2); g.fill();
+    }
+  }),
   cobble: () => canvasTex((g, S) => {
     const r = rng(9);
     g.fillStyle = '#5e5547'; g.fillRect(0, 0, S, S);
@@ -510,19 +549,93 @@ const T = {
     gr.addColorStop(1, 'rgba(255,255,255,0)');
     g.fillStyle = gr; g.fillRect(0, 0, S, S);
   }, { size: 128, srgb: false }),
+  /** Подсветка колонн снизу: яркий низ, мягкий верх, пятно под капителью (v = 0 — низ ствола). */
+  colGrad: () => {
+    const t = canvasTex((g, S) => {
+      const gr = g.createLinearGradient(0, S, 0, 0);
+      gr.addColorStop(0, '#ffffff');
+      gr.addColorStop(0.3, '#d2d2d2');
+      gr.addColorStop(0.75, '#8c8c8c');
+      gr.addColorStop(1, '#b4b4b4');
+      g.fillStyle = gr; g.fillRect(0, 0, S, S);
+    }, { size: 64 });
+    t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+    return t;
+  },
 };
-function signTexture() {
+
+/* ---------- Надписи (canvas-текстуры; перерисовываются после загрузки шрифта) ---------- */
+const SERIF = '"Cormorant Garamond", "PT Serif", Georgia, "Times New Roman", serif';
+const SANS = '"PT Sans", Arial, sans-serif';
+const TEXT_TEX = [];
+function textTex(w, h, draw) {
   const c = document.createElement('canvas');
-  c.width = 1024; c.height = 128;
+  c.width = w; c.height = h;
   const g = c.getContext('2d');
-  g.fillStyle = '#efe6d2'; g.fillRect(0, 0, 1024, 128);
-  g.fillStyle = '#6b1d24';
-  g.font = '700 74px "PT Sans", Arial, sans-serif';
-  g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText('ЛЕНИНГРАДСКИЙ ВОКЗАЛ', 512, 68, 990);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  t.userData.redraw = () => { g.clearRect(0, 0, w, h); g.filter = 'none'; draw(g, w, h); t.needsUpdate = true; };
+  t.userData.redraw();
+  TEXT_TEX.push(t);
   return t;
+}
+/** Буквы вывески (белые на прозрачном; цвет и свечение задаёт материал). blur — для ореола. */
+function wordTex(word, w, h, blur = 0) {
+  return textTex(w, h, (g) => {
+    if (blur) g.filter = `blur(${blur}px)`;
+    g.fillStyle = '#fff';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `700 ${Math.round(h * 0.86)}px ${SERIF}`;
+    g.fillText(word, w / 2, h * 0.54, w * 0.98);
+  });
+}
+/** Правая часть вывески 2026: «ВОКЗАЛ» + логотип РЖД + «Московский транспорт» (x +5…+22 м). */
+function rightSignTex(w, h, blur = 0) {
+  return textTex(w, h, (g) => {
+    if (blur) g.filter = `blur(${blur}px)`;
+    const pxm = w / 17; // пикселей на метр
+    g.fillStyle = '#fff'; g.strokeStyle = '#fff';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `700 ${Math.round(h * 0.86)}px ${SERIF}`;
+    g.fillText('ВОКЗАЛ', pxm * 4, h * 0.54, pxm * 7.8);
+    // РЖД: курсивные слитные буквы
+    g.save();
+    g.translate(pxm * 10, h * 0.55);
+    g.transform(1, 0, -0.25, 1, 0, 0);
+    g.font = `700 ${Math.round(h * 0.78)}px ${SANS}`;
+    g.fillText('РЖД', 0, 0, pxm * 2.9);
+    g.restore();
+    // «Московский транспорт»: знак-капля и две строки
+    const cx = pxm * 12.9, cy = h * 0.5, r = h * 0.4;
+    g.lineWidth = r * 0.32;
+    g.beginPath(); g.arc(cx, cy, r * 0.8, -Math.PI * 0.35, Math.PI * 1.5); g.stroke();
+    g.beginPath(); g.arc(cx, cy, r * 0.22, 0, Math.PI * 2); g.fill();
+    g.textAlign = 'left';
+    g.font = `700 ${Math.round(h * 0.3)}px ${SANS}`;
+    g.fillText('Московский', cx + r * 1.2, h * 0.32, pxm * 3.6);
+    g.fillText('транспорт', cx + r * 1.2, h * 0.7, pxm * 3.6);
+  });
+}
+function moskvaTex() {
+  return textTex(1024, 192, (g, w, h) => {
+    g.fillStyle = '#fff';
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = `700 ${Math.round(h * 0.86)}px ${SERIF}`;
+    g.fillText('МОСКВА', w / 2, h * 0.54, w * 0.98);
+  });
+}
+function boardTex() {
+  return textTex(512, 128, (g, w, h) => {
+    g.fillStyle = '#0d0f10'; g.fillRect(0, 0, w, h);
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = '#b9d6c0';
+    g.font = `400 ${Math.round(h * 0.2)}px ${SANS}`;
+    g.fillText('Московское время', w / 2, h * 0.2);
+    g.fillStyle = '#ffb02e';
+    g.font = `700 ${Math.round(h * 0.6)}px "Courier New", monospace`;
+    g.fillText('08 53', w / 2, h * 0.64);
+  });
 }
 
 /* ------------------------------------------------------------------ */
@@ -555,8 +668,8 @@ function createWorld() {
 
   /* ---------- Текстуры и материалы ---------- */
   const tx = {
-    plaster: T.plaster(), roof: T.roof(), rust: T.rust(), cobble: T.cobble(), asphalt: T.asphalt(),
-    granite: T.granite(), cityWalls: T.cityWalls(), cityLit: T.cityLit(), contact: T.contact(),
+    plaster: T.plaster(), roof: T.roof(), rust: T.rust(), cobble: T.cobble(), asphalt: T.asphalt(), dirt: T.dirt(),
+    granite: T.granite(), cityWalls: T.cityWalls(), cityLit: T.cityLit(), contact: T.contact(), colGrad: T.colGrad(),
   };
   const ENV = []; // [материал, базовая envMapIntensity]
   function M_(color, rough, metal, extra = {}, env = 0.5, uvs) {
@@ -566,61 +679,125 @@ function createWorld() {
     ENV.push([m, env]);
     return m;
   }
+  const WARM = '#ffe6bf'; // тёплый белый ≈3000 K (ночная подсветка 2026)
+  const C = (c) => new THREE.Color(c);
+  const plasterMap = (bump = 0.5) => ({ map: tx.plaster, bumpMap: tx.plaster, bumpScale: bump });
   const M = {
-    wallA: M_('#dcc39a', 0.92, 0, { map: tx.plaster, bumpMap: tx.plaster, bumpScale: 0.6 }, 0.45, 3),
-    wallB: M_('#b98a5e', 0.92, 0, { map: tx.plaster, bumpMap: tx.plaster, bumpScale: 0.6 }, 0.45, 3),
-    trim: M_('#f1e9d8', 0.8, 0, { map: tx.plaster, bumpMap: tx.plaster, bumpScale: 0.4 }, 0.5, 2),
-    plinth: M_('#8f8a80', 0.9, 0, { map: tx.asphalt, bumpMap: tx.asphalt, bumpScale: 1.2 }, 0.4, 2),
-    roof: M_('#5f7a68', 0.55, 0.3, { map: tx.roof, bumpMap: tx.roof, bumpScale: 0.8 }, 0.6, 4),
-    dome: M_('#5c7d68', 0.55, 0.25, {}, 0.8),
-    glass: M_('#1d2833', 0.08, 0.0, { emissive: new THREE.Color('#ffcf8a'), emissiveIntensity: 0.05 }, 1.2),
-    door: M_('#3b2a1e', 0.5, 0.0, { emissive: new THREE.Color('#ffcf8a'), emissiveIntensity: 0.03 }, 0.6),
+    // здание Тона: цвета стен/деталей/кровли меняются по эпохам (look)
+    wallA: M_('#e8d9ae', 0.92, 0, { ...plasterMap(0.5), emissive: C(WARM), emissiveIntensity: 0 }, 0.45, 3),
+    trim: M_('#f3f0e6', 0.8, 0, { ...plasterMap(0.35), emissive: C(WARM), emissiveIntensity: 0 }, 0.5, 2),
+    colLit: M_('#f3f0e6', 0.75, 0, { emissive: C(WARM), emissiveMap: tx.colGrad, emissiveIntensity: 0 }, 0.5),
+    plinth: M_('#cfc6b0', 0.9, 0, { map: tx.asphalt, bumpMap: tx.asphalt, bumpScale: 0.8 }, 0.4, 2),
+    roof: M_('#aeb8b6', 0.5, 0.45, { map: tx.roof, bumpMap: tx.roof, bumpScale: 0.6 }, 0.7, 4),
+    dome: M_('#6e9a86', 0.5, 0.35, {}, 0.8),
+    glass: M_('#2e3a40', 0.1, 0.1, { emissive: C('#f6d9a0'), emissiveIntensity: 0.05 }, 1.2),
+    glassUp: M_('#2e3a40', 0.1, 0.1, { emissive: C('#f6d9a0'), emissiveIntensity: 0.05 }, 1.2),
+    frame: M_('#5a3e2b', 0.6, 0, {}, 0.4),
+    door: M_('#6b4a30', 0.55, 0, { emissive: C('#f6d9a0'), emissiveIntensity: 0.03 }, 0.5),
     dark: M_('#2b2a28', 0.6, 0.3, {}, 0.5),
     gold: M_('#c9a24a', 0.35, 0.8, {}, 1.0),
     bronze: M_('#6b5a3a', 0.45, 0.7, {}, 0.9),
-    clockFace: M_('#f4eedf', 0.5, 0, { emissive: new THREE.Color('#fff1cf'), emissiveIntensity: 0 }, 0.5),
-    rustA: M_('#dcc39a', 0.92, 0, { map: tx.rust, bumpMap: tx.rust, bumpScale: 1.2 }, 0.45, 3),
-    rustB: M_('#b98a5e', 0.92, 0, { map: tx.rust, bumpMap: tx.rust, bumpScale: 1.2 }, 0.45, 3),
+    clockFace: M_('#f2f4f2', 0.5, 0, { emissive: C('#eaf2ff'), emissiveIntensity: 0 }, 0.5),
     ground: M_('#8f7e62', 1, 0, {}, 0.3),
-    paving: M_('#b5a58a', 0.95, 0, { map: tx.cobble, bumpMap: tx.cobble, bumpScale: 1.2 }, 0.35, 3),
+    paving: M_('#b5a58a', 0.95, 0, { map: tx.dirt, bumpMap: tx.dirt, bumpScale: 1.2 }, 0.35, 3),
     road: M_('#55555a', 0.95, 0, { map: tx.asphalt }, 0.3, 6),
     platform: M_('#a29c90', 0.95, 0, { map: tx.asphalt, bumpMap: tx.asphalt, bumpScale: 0.6 }, 0.35, 4),
     edge: M_('#e3c13a', 0.8, 0, {}, 0.4),
-    ballast: M_('#5a5249', 1, 0, { map: tx.asphalt, bumpMap: tx.asphalt, bumpScale: 2 }, 0.2, 1.5),
-    rail: M_('#7a7a7a', 0.4, 0.8, {}, 0.8),
+    ballast: M_('#6f675e', 1, 0, { map: tx.asphalt, bumpMap: tx.asphalt, bumpScale: 2 }, 0.2, 1.5),
+    rail: M_('#5c5650', 0.4, 0.8, {}, 0.8),
     sleeper: M_('#4a3b2e', 1, 0, {}, 0.2),
-    city: M_('#c6c0b4', 0.9, 0, { map: tx.cityWalls, emissive: new THREE.Color('#ffffff'), emissiveMap: tx.cityLit, emissiveIntensity: 0 }, 0.3, 12),
+    city: M_('#c6c0b4', 0.9, 0, { map: tx.cityWalls, emissive: C('#ffffff'), emissiveMap: tx.cityLit, emissiveIntensity: 0 }, 0.3, 12),
     cityRoof: M_('#6e6a66', 0.9, 0, {}, 0.3),
     tree: M_('#55703f', 0.95, 0, {}, 0.3),
     trunk: M_('#5a4632', 1, 0, {}, 0.2),
-    lampGlass: M_('#fff1d0', 0.4, 0, { emissive: new THREE.Color('#ffc070'), emissiveIntensity: 0.8 }, 0.5),
-    iron: M_('#26262a', 0.55, 0.5, {}, 0.6),
+    lampGlass: M_('#fff1d0', 0.4, 0, { emissive: C('#ffc070'), emissiveIntensity: 0.8 }, 0.5),
+    iron: M_('#2e2e30', 0.55, 0.5, {}, 0.6),
     steel: M_('#9aa2a8', 0.4, 0.75, {}, 1.0),
-    // советские объёмы (крыло 1960-х, зал 1975–77, здание МЖА) — гладкая окраска, без декора Тона
-    sovWall: M_('#d6ccb6', 0.92, 0, { map: tx.plaster, bumpMap: tx.plaster, bumpScale: 0.3 }, 0.45, 3),
-    concrete: M_('#c4c1b8', 0.9, 0, { map: tx.plaster, bumpMap: tx.plaster, bumpScale: 0.3 }, 0.4, 3),
-    flatRoof: M_('#5f6164', 0.85, 0.1, {}, 0.4),
+    // дебаркадер 1851 (царская, советская)
+    debWall: M_('#d9c9a4', 0.92, 0, plasterMap(0.5), 0.4, 3),
+    debTrim: M_('#f0ede4', 0.85, 0, {}, 0.4),
+    debRoof: M_('#7d7f7b', 0.55, 0.5, { map: tx.roof, bumpMap: tx.roof, bumpScale: 0.6 }, 0.6, 4),
+    // соседи
+    customs: M_('#e3cf9a', 0.92, 0, plasterMap(0.4), 0.45, 3),
+    customsRust: M_('#e3cf9a', 0.92, 0, { map: tx.rust, bumpMap: tx.rust, bumpScale: 1.0 }, 0.45, 3),
+    customsTrim: M_('#f2eee2', 0.85, 0, {}, 0.45),
+    customsRoof: M_('#8c9496', 0.6, 0.3, { map: tx.roof, bumpMap: tx.roof, bumpScale: 0.5 }, 0.5, 4),
+    white: M_('#ecedea', 0.9, 0, plasterMap(0.3), 0.45, 3),
+    cream: M_('#e6ddb5', 0.92, 0, plasterMap(0.4), 0.45, 3),
+    creamTrim: M_('#f2efe4', 0.85, 0, {}, 0.45),
+    mansard: M_('#8ea3b3', 0.55, 0.4, { map: tx.roof, bumpMap: tx.roof, bumpScale: 0.5 }, 0.6, 4),
+    flatRoof: M_('#6a6c6e', 0.85, 0.1, {}, 0.4),
+    block: M_('#e2d6b2', 0.92, 0, plasterMap(0.3), 0.4, 3),
+    brick: M_('#8a4a3a', 0.95, 0, plasterMap(0.6), 0.3, 3),
+    blockRoof: M_('#8296a5', 0.6, 0.3, {}, 0.5),
+    metroWall: M_('#eef0ec', 0.85, 0, { ...plasterMap(0.3), emissive: C(WARM), emissiveIntensity: 0 }, 0.5, 3),
+    metroDome: M_('#aeb9be', 0.42, 0.55, {}, 0.9),
+    star: M_('#c8302a', 0.4, 0.3, { emissive: C('#c8302a'), emissiveIntensity: 0.15 }, 0.6),
+    mzhaWall: M_('#f2f0ea', 0.9, 0, plasterMap(0.3), 0.45, 3),
+    yar: M_('#e9e4d6', 0.9, 0, plasterMap(0.3), 0.4, 3),
+    yarGreen: M_('#3e7a5c', 0.7, 0, {}, 0.4),
+    yarRoof: M_('#5a6a5c', 0.6, 0.3, {}, 0.5),
+    // 2026: комплекс за зданием
+    hallWall: M_('#d8d6ce', 0.9, 0, plasterMap(0.2), 0.4, 3),
+    hallRoof: M_('#3f474b', 0.85, 0.1, {}, 0.4),
+    skylight: M_('#e8ecec', 0.4, 0.1, { emissive: C('#fff3dc'), emissiveIntensity: 0 }, 0.7),
+    darkWall: M_('#8f8f88', 0.85, 0.1, {}, 0.4),
+    darkRoof: M_('#4a5357', 0.7, 0.3, {}, 0.5),
+    lowWall: M_('#cfcfc8', 0.9, 0, {}, 0.4),
+    lowRoof: M_('#5a6064', 0.8, 0.2, {}, 0.4),
+    brown: M_('#6a4b33', 0.85, 0.05, {}, 0.4),
+    brownGlass: M_('#9fb3bf', 0.15, 0.3, { emissive: C('#f6d9a0'), emissiveIntensity: 0 }, 1.0),
+    facet: M_('#2a2a32', 0.22, 0.65, { flatShading: true, emissive: C('#b4c6ea'), emissiveIntensity: 0 }, 1.2),
     whiteSteel: M_('#e9ecee', 0.35, 0.55, {}, 0.9),
-    canopyRoof: M_('#cfd4d8', 0.5, 0.4, {}, 0.7),
+    canopy26: M_('#dadddc', 0.6, 0.3, {}, 0.6),
+    truss: M_('#9aa0a2', 0.5, 0.6, {}, 0.7),
+    canopySov: M_('#4e5250', 0.8, 0.2, {}, 0.4),
+    colSov: M_('#dad6c8', 0.8, 0, {}, 0.4),
+    fence: M_('#e6dcc4', 0.92, 0, plasterMap(0.4), 0.4, 3),
+    balcony: M_('#ede6d0', 0.8, 0, { side: THREE.DoubleSide, emissive: C(WARM), emissiveIntensity: 0 }, 0.5),
+    blueSign: M_('#1d4fd8', 0.4, 0, { emissive: C('#3d6bff'), emissiveIntensity: 0 }, 0.3),
+    rose: M_('#4a4440', 0.9, 0, {}, 0.3),
     glassRoof: new THREE.MeshStandardMaterial({
       color: '#b9d2e2', roughness: 0.05, metalness: 0.2, transparent: true, opacity: 0.34,
       side: THREE.DoubleSide, depthWrite: false, envMapIntensity: 1.6,
     }),
-    strip: M_('#fff6e2', 0.4, 0, { emissive: new THREE.Color('#ffe2b0'), emissiveIntensity: 1 }, 0.3),
+    strip: M_('#fff6e2', 0.4, 0, { emissive: C('#ffe2b0'), emissiveIntensity: 0 }, 0.3),
     horse: M_('#5b3a24', 0.9, 0, {}, 0.3),
     coach: M_('#2f1d1a', 0.5, 0.1, {}, 0.6),
     wheelW: M_('#2a211b', 0.8, 0, {}, 0.3),
-    sign: new THREE.MeshStandardMaterial({ map: signTexture(), roughness: 0.6 }),
+    stripeB: M_('#151515', 0.7, 0, {}, 0.3),
+    stripeW: M_('#eeeeea', 0.7, 0, {}, 0.3),
     contact: new THREE.MeshBasicMaterial({ alphaMap: tx.contact, transparent: true, opacity: 0.45, depthWrite: false, color: 0x000000, polygonOffset: true, polygonOffsetFactor: -2 }),
-    flagW: new THREE.MeshStandardMaterial({ color: '#f4f4f4', roughness: 0.8, side: THREE.DoubleSide }),
-    flagB: new THREE.MeshStandardMaterial({ color: '#1c3f94', roughness: 0.8, side: THREE.DoubleSide }),
-    flagR: new THREE.MeshStandardMaterial({ color: '#c01c28', roughness: 0.8, side: THREE.DoubleSide }),
-    car1: M_('#e6e1d4', 0.4, 0.3, {}, 0.9), car2: M_('#2f4f7a', 0.4, 0.3, {}, 0.9), car3: M_('#7a2a24', 0.4, 0.3, {}, 0.9),
-    car4: M_('#c9b37a', 0.4, 0.3, {}, 0.9), busC: M_('#d9b23a', 0.5, 0.2, {}, 0.8),
+    flagW: new THREE.MeshStandardMaterial({ color: '#f4f4f4', roughness: 0.8, side: THREE.DoubleSide, emissive: C('#ffffff'), emissiveIntensity: 0 }),
+    flagB: new THREE.MeshStandardMaterial({ color: '#1c3f94', roughness: 0.8, side: THREE.DoubleSide, emissive: C('#1c3f94'), emissiveIntensity: 0 }),
+    flagR: new THREE.MeshStandardMaterial({ color: '#c01c28', roughness: 0.8, side: THREE.DoubleSide, emissive: C('#c01c28'), emissiveIntensity: 0 }),
+    car1: M_('#e6e1d4', 0.4, 0.3, {}, 0.9), car2: M_('#7fa3c4', 0.4, 0.3, {}, 0.9), car3: M_('#d9cfb0', 0.4, 0.3, {}, 0.9),
+    car4: M_('#3c3f44', 0.4, 0.3, {}, 0.9), busC: M_('#e3d6b0', 0.5, 0.2, {}, 0.8), busR: M_('#b0362c', 0.5, 0.2, {}, 0.8),
+    tramR: M_('#a8352e', 0.5, 0.1, {}, 0.7), tramC: M_('#e8dec0', 0.5, 0.1, {}, 0.7),
   };
   ENV.push([M.glassRoof, 1.6]);
-  // trimN/wallN* — мелкие детали без теней (нет «лесенок» shadow acne)
-  const MK = { ...M, trimN: M.trim, wallN: M.wallA, wallNB: M.wallB };
+  M.colLit.userData.floorUV = true;
+  // вывески: буквы белые на прозрачном, цвет днём задаёт material.color, ночью — emissive
+  const wordL = wordTex('ЛЕНИНГРАДСКИЙ', 2048, 182);
+  const wordLHalo = wordTex('ЛЕНИНГРАДСКИЙ', 1024, 140, 9);
+  const signR = rightSignTex(2048, 192);
+  const signRHalo = rightSignTex(1024, 150, 9);
+  const signMat = (map) => M_('#1f3e8c', 0.55, 0, { map, alphaTest: 0.4, emissive: C('#f0f6ff'), emissiveMap: map, emissiveIntensity: 0 }, 0.5);
+  const haloMat = (map) => new THREE.MeshBasicMaterial({ map, color: '#3d6bff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+  Object.assign(M, {
+    signL: signMat(wordL), signR: signMat(signR), signSov: M_('#2f3f6a', 0.6, 0, { map: wordL, alphaTest: 0.4 }, 0.5),
+    haloL: haloMat(wordLHalo), haloR: haloMat(signRHalo),
+    moskva: M_('#b0332a', 0.6, 0, { map: moskvaTex(), alphaTest: 0.4 }, 0.4),
+    board: new THREE.MeshStandardMaterial({ map: boardTex(), roughness: 0.6, emissive: C('#ffffff'), emissiveMap: null, emissiveIntensity: 0 }),
+  });
+  if (document.fonts && document.fonts.load) {
+    Promise.all([
+      document.fonts.load(`700 120px ${SERIF}`, 'ЛЕНИНГРАДСКИЙ ВОКЗАЛ МОСКВА'),
+      document.fonts.load(`700 60px ${SANS}`, 'РЖД Московский транспорт'),
+    ]).then(() => TEXT_TEX.forEach((t) => t.userData.redraw())).catch(() => { /* остаются системные шрифты */ });
+  }
+  // мелкие детали без теней (нет «лесенок» shadow acne)
+  const MK = { ...M, trimN: M.trim, wallN: M.wallA };
 
   /* ---------- Небо с облаками ---------- */
   const skyU = {
@@ -680,19 +857,21 @@ function createWorld() {
   const SH = SMALL ? 1024 : 2048;
   sun.shadow.mapSize.set(SH, SH);
   const sc = sun.shadow.camera;
-  sc.left = -95; sc.right = 95; sc.top = 95; sc.bottom = -95; sc.near = 20; sc.far = 600;
+  sc.left = -100; sc.right = 100; sc.top = 100; sc.bottom = -100; sc.near = 20; sc.far = 600;
   sun.shadow.bias = -0.0008;
   sun.shadow.normalBias = 0.02;
-  const SUN_T = new THREE.Vector3(0, 0, -10);
+  const SUN_T = new THREE.Vector3(0, 0, -15);
   sun.target.position.copy(SUN_T);
   scene.add(sun, sun.target);
 
-  // Тёплая архитектурная подсветка (только «Настоящее»), без теней
+  // Ночная архитектурная подсветка 2026: тёплый белый ≈3000 K снизу (без теней)
   const spots = [];
-  for (const [x, y, z, tx2, ty, tz, base] of [
-    [-24, 0.6, 34, -14, 7, 10, 900], [24, 0.6, 34, 14, 7, 10, 900], [0, 14, 34, 0, 24, 3.3, 1300],
+  for (const [x, y, z, tx2, ty, tz, base, ang] of [
+    [-15, 0.4, 24, -14, 9, 10, 650, 0.8], [15, 0.4, 24, 14, 9, 10, 650, 0.8],
+    [39, 0.4, 13, 26.5, 9, -4, 520, 0.75], [-40, 0.4, 13, -26.5, 9, -4, 520, 0.75],
+    [0, 17.5, 26, 0, 28, 3.2, 700, 0.32],
   ]) {
-    const s = new THREE.SpotLight(0xffb066, 0, 90, 0.55, 0.9, 1.4);
+    const s = new THREE.SpotLight(WARM, 0, 70, ang, 0.85, 1.4);
     s.position.set(x, y, z);
     s.target.position.set(tx2, ty, tz);
     s.userData.base = base;
@@ -715,7 +894,7 @@ function createWorld() {
     const cache = new Map();
     const list = [];
     feats[name].traverse((o) => {
-      if (!o.isMesh) return;
+      if (!o.isMesh && !o.isPoints && !o.isLine) return;
       const m = o.material;
       if (!cache.has(m)) {
         const c = m.clone();
@@ -743,240 +922,32 @@ function createWorld() {
     }
   }
 
-  /* ---------- Земля, площадь, дороги ---------- */
-  const ground = new THREE.Mesh(new THREE.CircleGeometry(1500, 48).rotateX(-Math.PI / 2), M.ground);
-  ground.receiveShadow = true;
-  scene.add(ground);
-  {
-    const b = new Batch();
-    b.add('paving', place(box(124, 0.08, 46), 0, 0.04, 34.5));
-    b.add('road', place(box(260, 0.06, 16), 0, 0.03, 66));
-    b.add('road', place(box(16, 0.06, 140), 70, 0.03, 0));
-    scene.add(b.build(MK, { cast: false }));
+  /* ---------- Утилиты построения ---------- */
+  const extrude = (shape, depth, seg = 12) => new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: seg });
+  /** Полукольцо-архивольт: внутренний r0, внешний r1, толщина depth (центр дуги в 0,0). */
+  function halfRing(r0, r1, depth, seg = 16) {
+    const s = new THREE.Shape();
+    s.moveTo(r1, 0);
+    s.absarc(0, 0, r1, 0, Math.PI, false);
+    s.lineTo(-r0, 0);
+    s.absarc(0, 0, r0, Math.PI, 0, true);
+    s.lineTo(r1, 0);
+    return extrude(s, depth, seg);
   }
-  const PAVE = [tx.cobble, tx.asphalt, tx.granite];
-
-  /* ---------- Здание вокзала (≈54 × 22 м, этажи ≈6 и ≈5,4 м) ---------- */
-  const bld = new Batch();
-  const clockHands = [];
-
-  const Y_MID = 6.6, Y_TOP = 12.0;
-  function addArch(f, u, v, w, h, glassKey = 'glass') {
-    const fw = 0.2;
-    bld.face('trimN', new THREE.ShapeGeometry(archShape(w + fw * 2, h + fw), 12), f, u, v, 0.03);
-    bld.face(glassKey, new THREE.ShapeGeometry(archShape(w, h), 12), f, u, v, 0.05);
-    bld.face('trimN', box(0.08, h - w / 2, 0.04), f, u, v + (h - w / 2) / 2, 0.07);
-    bld.face('trimN', box(w, 0.08, 0.04), f, u, v + h - w / 2, 0.07);
-    bld.face('trimN', box(w + 0.6, 0.14, 0.3), f, u, v - 0.07, 0.15); // подоконник
-    bld.face('trimN', box(0.34, 0.5, 0.18), f, u, v + h + fw - 0.12, 0.1); // замковый камень
+  function triShape(w, h) {
+    const s = new THREE.Shape();
+    s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(0, h); s.lineTo(-w / 2, 0);
+    return s;
   }
-  /** Сдвоенное окно под общей архивольтой с «гирькой» между арками. */
-  function addPaired(f, u, v, w, h, wallKey = 'wallN') {
-    const fw = 0.22;
-    bld.face('trimN', new THREE.ShapeGeometry(archShape(w + fw * 2, h + fw), 14), f, u, v, 0.03);
-    bld.face(wallKey, new THREE.ShapeGeometry(archShape(w, h), 14), f, u, v, 0.045);
-    const sw = w * 0.4, sh = h - w / 2 - 0.15;
-    for (const s of [-1, 1]) {
-      bld.face('glass', new THREE.ShapeGeometry(archShape(sw, sh), 10), f, u + s * w * 0.26, v, 0.06);
-      bld.face('trimN', box(0.06, sh - sw / 2, 0.03), f, u + s * w * 0.26, v + (sh - sw / 2) / 2, 0.075);
+  function starShape(R, r) {
+    const s = new THREE.Shape();
+    for (let i = 0; i < 10; i++) {
+      const a = Math.PI / 2 + (i * Math.PI) / 5, rr = i % 2 ? r : R;
+      if (i) s.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); else s.moveTo(Math.cos(a) * rr, Math.sin(a) * rr);
     }
-    bld.face('glass', new THREE.CircleGeometry(w * 0.15, 14), f, u, v + h - w * 0.38, 0.06); // окулюс
-    bld.face('trimN', box(0.16, sh - 0.05, 0.12), f, u, v + (sh - 0.05) / 2, 0.08); // средний столбик
-    bld.face('trimN', cyl(0.07, 0.11, 0.4, 8), f, u, v + sh - 0.1, 0.16); // «гирька»
-    bld.face('trimN', box(w + 0.7, 0.14, 0.3), f, u, v - 0.07, 0.15);
-    bld.face('trimN', box(0.36, 0.5, 0.18), f, u, v + h + fw - 0.12, 0.1);
+    s.closePath();
+    return s;
   }
-  /** Приставная колонка: база, ствол, капитель. */
-  function column(f, u, v0, v1, r) {
-    bld.face('trim', box(r * 2.8, 0.35, r * 2.4), f, u, v0 + 0.175, r * 1.1);
-    bld.face('trim', cyl(r * 0.92, r, v1 - v0 - 0.75, 12), f, u, (v0 + v1) / 2, r * 1.0);
-    bld.face('trim', box(r * 2.9, 0.18, r * 2.5), f, u, v1 - 0.29, r * 1.1);
-    bld.face('trim', box(r * 3.3, 0.22, r * 2.8), f, u, v1 - 0.11, r * 1.2);
-  }
-  function quoins(f, u, v0, v1) {
-    let alt = false;
-    const dir = u > 0 ? -1 : 1;
-    for (let v = v0; v < v1 - 0.3; v += 0.62) {
-      const w = alt ? 0.95 : 0.62;
-      bld.face('trimN', box(w, 0.54, 0.12), f, u + dir * w / 2, v + 0.3, 0.06);
-      alt = !alt;
-    }
-  }
-  /** Рустовка 1-го этажа: горизонтальные русты по окрашенной штукатурке (не кирпич). */
-  function rustSkin(f, u, len, key = 'rustA', v0 = 0.9, v1 = Y_MID - 0.2) {
-    bld.face(key, box(len, v1 - v0, 0.02), f, u, (v0 + v1) / 2, 0.012);
-  }
-  /** Объём с цоколем, тягой, фризом, сухариками и двухступенчатым карнизом. */
-  function volume(key, cx, cz, w, d, h, { parapet = true } = {}) {
-    bld.add(key, place(box(w, h, d), cx, h / 2, cz));
-    bld.add('plinth', place(box(w + 0.24, 0.9, d + 0.24), cx, 0.45, cz));
-    bld.add('trim', place(box(w + 0.5, 0.36, d + 0.5), cx, Y_MID, cz));
-    bld.add('trimN', place(box(w + 0.14, 0.7, d + 0.14), cx, Y_TOP - 0.45, cz));
-    for (const [ax, len, fixed] of [['x', w, d / 2], ['x', w, -d / 2], ['z', d, w / 2], ['z', d, -w / 2]]) {
-      for (let s = -len / 2 + 0.3; s <= len / 2 - 0.3; s += 0.5) {
-        if (ax === 'x') bld.add('trimN', place(box(0.2, 0.2, 0.32), cx + s, Y_TOP - 0.02, cz + fixed + Math.sign(fixed) * 0.16));
-        else bld.add('trimN', place(box(0.32, 0.2, 0.2), cx + fixed + Math.sign(fixed) * 0.16, Y_TOP - 0.02, cz + s));
-      }
-    }
-    bld.add('trim', place(box(w + 0.75, 0.26, d + 0.75), cx, Y_TOP + 0.21, cz));
-    bld.add('trim', place(box(w + 1.35, 0.3, d + 1.35), cx, Y_TOP + 0.48, cz));
-    if (parapet && h <= Y_TOP + 0.01) {
-      bld.add(key, place(box(w - 0.1, 0.85, d - 0.1), cx, Y_TOP + 1.05, cz));
-      bld.add('trim', place(box(w + 0.1, 0.14, d + 0.1), cx, Y_TOP + 1.54, cz));
-    }
-  }
-
-  // крылья (единый корпус)
-  volume('wallA', 0, 0, 42, 20, Y_TOP);
-  bld.add('roof', place(hipRoof(41, 19, 3.6), 0, Y_TOP + 1.0, 0));
-  const front = { x: 0, z: 10, ry: 0 };
-  const back = { x: 0, z: -10, ry: Math.PI };
-  const AX = [7.5, 10.5, 13.5, 16.5, 19.5];
-  const COLS = [6.45, 9, 12, 15, 18, 20.55];
-  for (const f of [front, back]) {
-    for (const sgn of [-1, 1]) {
-      for (const x of AX) {
-        addArch(f, x * sgn, 1.6, 1.9, 4.0);
-        addPaired(f, x * sgn, 7.3, 2.1, 3.6);
-      }
-      for (const x of COLS) {
-        column(f, x * sgn, 0.9, Y_MID - 0.18, 0.2);
-        column(f, x * sgn, Y_MID + 0.18, Y_TOP - 0.8, 0.16);
-        bld.face('trim', box(0.7, 1.1, 0.5), f, x * sgn, Y_TOP + 1.2, 0.0); // тумбы парапета
-      }
-      rustSkin(f, 13.5 * sgn, 15);
-    }
-  }
-
-  // торцевые ризалиты
-  for (const sx of [-1, 1]) {
-    const cx = 24 * sx;
-    volume('wallB', cx, 0, 6, 21.2, Y_TOP);
-    bld.add('wallB', place(box(6, 0.9, 21.2), cx, Y_TOP + 1.05, 0));
-    bld.add('roof', place(hipRoof(5.8, 21, 2.4), cx, Y_TOP + 1.6, 0));
-    for (const f of [{ x: cx, z: 10.6, ry: 0 }, { x: cx, z: -10.6, ry: Math.PI }]) {
-      for (const u of [-1.5, 1.5]) {
-        addArch(f, u, 1.6, 1.9, 4.0);
-        addPaired(f, u, 7.3, 2.1, 3.6, 'wallNB');
-      }
-      quoins(f, 2.95, 0.9, Y_TOP - 0.8);
-      quoins(f, -2.95, 0.9, Y_TOP - 0.8);
-      rustSkin(f, 0, 6, 'rustB');
-    }
-    const side = { x: 27 * sx, z: 0, ry: (sx * Math.PI) / 2 };
-    for (const u of [-7.5, -4.5, -1.5, 1.5, 4.5, 7.5]) {
-      addArch(side, u, 1.6, 1.9, 4.0);
-      addPaired(side, u, 7.3, 2.1, 3.6, 'wallNB');
-    }
-    quoins(side, 10.55, 0.9, Y_TOP - 0.8);
-    quoins(side, -10.55, 0.9, Y_TOP - 0.8);
-    rustSkin(side, 0, 21.2, 'rustB');
-  }
-
-  // центральный ризалит с аттиком
-  {
-    const w = 12, d = 22.4, H = 15.5;
-    volume('wallB', 0, 0, w, d, H, { parapet: false });
-    bld.add('trim', place(box(w + 0.6, 0.3, d + 0.6), 0, H + 0.15, 0));
-    bld.add('trim', place(box(w + 1.1, 0.3, d + 1.1), 0, H + 0.45, 0));
-    bld.add('roof', place(box(w - 0.6, 0.6, d - 0.6), 0, H + 0.6, 0));
-    for (const f of [{ x: 0, z: d / 2, ry: 0 }, { x: 0, z: -d / 2, ry: Math.PI }]) {
-      const isFront = f.z > 0;
-      for (const u of [-3.6, 0, 3.6]) {
-        if (isFront) addArch(f, u, 0.9, 2.6, 4.7, 'door');
-        else addArch(f, u, 1.5, 2.2, 4.1);
-        addPaired(f, u, 7.2, 2.6, 3.9, 'wallNB');
-      }
-      for (const u of [-5.55, -1.8, 1.8, 5.55]) {
-        column(f, u, 0.9, Y_MID - 0.18, 0.26);
-        column(f, u, Y_MID + 0.18, Y_TOP - 0.8, 0.2);
-        if (Math.abs(u) > 3) bld.face('trim', box(0.8, 2.9, 0.3), f, u, 14.1, 0.15); // пилоны аттика
-      }
-      bld.face('trim', box(8.6, 1.9, 0.14), f, 0, 14.05, 0.08); // доска аттика
-      bld.face('bronze', box(8.2, 0.08, 0.05), f, 0, 13.2, 0.17);
-      bld.face('bronze', box(8.2, 0.08, 0.05), f, 0, 14.9, 0.17);
-      rustSkin(f, 0, 12, 'rustB');
-    }
-    for (const x of [-5.55, -1.8, 1.8, 5.55]) {
-      for (const z of [d / 2 - 0.2, -d / 2 + 0.2]) {
-        bld.add('trim', place(box(0.7, 0.55, 0.7), x, H + 0.88, z));
-        bld.add('trim', place(sphere(0.34, 12, 8), x, H + 1.45, z, 0, 0, 0, 1, 1.25, 1));
-      }
-    }
-  }
-
-  // башня с часами на 4 стороны и зелёной главкой со шпилем
-  const TOWER = { x: 0, z: 0 };
-  const POLE_Y = 34.7;
-  {
-    const { x, z } = TOWER;
-    bld.add('wallA', place(box(8, 5.5, 8), x, 15.5 + 2.75, z));
-    bld.add('trim', place(box(8.8, 0.3, 8.8), x, 21.05, z));
-    bld.add('trim', place(box(8.4, 0.22, 8.4), x, 20.8, z));
-    bld.add('wallB', place(box(6.6, 5.0, 6.6), x, 21.2 + 2.5, z));
-    bld.add('trim', place(box(7.4, 0.32, 7.4), x, 26.36, z));
-    bld.add('trim', place(box(7.0, 0.22, 7.0), x, 26.1, z));
-    bld.add('wallA', place(box(3.8, 1.9, 3.8), x, 26.5 + 0.95, z));
-    bld.add('trim', place(box(4.3, 0.26, 4.3), x, 28.5, z));
-    const prof = [[0.01, 0], [2.95, 0], [3.0, 0.35], [2.7, 1.2], [2.05, 2.25], [1.2, 3.05], [0.55, 3.55], [0.25, 3.85], [0.01, 4.0]].map(([r, y]) => new THREE.Vector2(r, y));
-    bld.add('dome', place(new THREE.LatheGeometry(prof, 4).rotateY(Math.PI / 4), x, 28.6, z));
-    bld.add('gold', place(sphere(0.3, 12, 8), x, 32.85, z));
-    bld.add('gold', place(cyl(0.05, 0.1, 2.2, 6), x, 33.9, z));
-
-    for (let k = 0; k < 4; k++) {
-      const ry = (k * Math.PI) / 2;
-      const c = Math.cos(ry), s = Math.sin(ry);
-      const f1 = { x: x + 4 * s, z: z + 4 * c, ry };
-      addArch(f1, 0, 16.3, 2.2, 3.4);
-      for (const u of [-3.5, 3.5]) column(f1, u, 15.5, 20.7, 0.22);
-      const f2 = { x: x + 3.3 * s, z: z + 3.3 * c, ry };
-      for (const u of [-2.85, 2.85]) bld.face('trim', box(0.55, 5.0, 0.2), f2, u, 23.7, 0.1);
-      const f3 = { x: x + 1.9 * s, z: z + 1.9 * c, ry };
-      for (const u of [-0.8, 0.8]) bld.face('glass', new THREE.ShapeGeometry(archShape(0.6, 1.2), 8), f3, u, 26.85, 0.03);
-      bld.face('clockFace', new THREE.CircleGeometry(1.9, 48), f2, 0, 23.85, 0.05);
-      bld.face('bronze', new THREE.TorusGeometry(1.96, 0.1, 6, 48), f2, 0, 23.85, 0.08);
-      for (let hh = 0; hh < 12; hh++) {
-        const a = (hh / 12) * Math.PI * 2;
-        const len = hh % 3 === 0 ? 0.4 : 0.22;
-        const g = box(0.09, len, 0.02).rotateZ(-a).translate(Math.sin(a) * 1.6, 23.85 + Math.cos(a) * 1.6, 0);
-        bld.face('dark', g, f2, 0, 0, 0.08);
-      }
-      const pivot = new THREE.Group();
-      pivot.position.set(f2.x + 0.13 * s, 23.85, f2.z + 0.13 * c);
-      pivot.rotation.y = ry;
-      const hourH = new THREE.Mesh(box(0.16, 1.0, 0.04).translate(0, 0.42, 0), M.dark);
-      const minH = new THREE.Mesh(box(0.1, 1.5, 0.04).translate(0, 0.65, 0.03), M.dark);
-      const cap = new THREE.Mesh(new THREE.CircleGeometry(0.13, 12), M.bronze);
-      cap.position.z = 0.06;
-      pivot.add(hourH, minH, cap);
-      scene.add(pivot);
-      clockHands.push({ hourH, minH });
-    }
-  }
-  scene.add(bld.build(MK, { noShadow: ['trimN', 'wallN', 'wallNB', 'rustA', 'rustB', 'glass', 'door', 'clockFace'] }));
-
-  // контактная тень под зданием
-  {
-    const cs = new THREE.Mesh(new THREE.PlaneGeometry(66, 36).rotateX(-Math.PI / 2), M.contact);
-    cs.position.set(0, 0.1, 0);
-    cs.renderOrder = 1;
-    scene.add(cs);
-  }
-
-
-  /* ---------- План комплекса (по docs/RESEARCH-LAYOUT.md, «Схема комплекса») ----------
-   * x — вдоль площади (лево = −x), z — к площади (+z). Здание Тона: x ±27, z ±10,6.
-   * Крыло 1960-х: слева, x −56…−27, в линию фасада. Кассовый зал 1975–77: за зданием по оси, z −10,4…−36.
-   * Царская: дебаркадер 1851 по оси, x ±13,5, z −10,5…−117,5, два пути, упоры у z −16,6.
-   * Советская/Настоящее: перронный переход z −36…−50, упоры путей z −50,5, платформы дальше.
-   * Настоящее: стеклянный дебаркадер над зоной выхода к поездам z −34,5…−66. */
-  const Z_HALL = -36;
-  const Z_BUF = -50.5;
-  const Z_BUF51 = -16.6;
-  const TRACKS = [-16.1, -7.9, -0.1, 8.1, 13.9, 22.1];
-  const TRACKS51 = [-4.2, 4.2];
-  const STOP_OF = { steam51: Z_BUF51 - 1.2, electro: Z_BUF - 1.2, sapsan: Z_BUF - 1.2 };
-  const TRACK_OF = { steam51: 4.2, electro: 13.9, sapsan: 22.1 };
   /** Балка между двумя точками (Vector3). */
   function beam(b, key, a, c, t, t2 = t) {
     const g = box(t, t2, a.distanceTo(c));
@@ -989,323 +960,850 @@ function createWorld() {
     b.add(key, g);
   }
   const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+  const span = (a, c, step) => { const r = []; for (let x = a; x <= c + 1e-6; x += step) r.push(x); return r; };
+  /** Ряды прямоугольных окон с обрамлением на грани f (см. Batch.face). */
+  function winRows(b, f, us, ys, w, h, glassKey = 'glass', frameKey = 'trimN') {
+    for (const v of ys) for (const u of us) {
+      b.face(frameKey, box(w + 0.3, h + 0.3, 0.06), f, u, v + h / 2, 0.03);
+      b.face(glassKey, box(w, h, 0.08), f, u, v + h / 2, 0.06);
+    }
+  }
+  function contactShadow(parent, cx, cz, w, d) {
+    const cs = new THREE.Mesh(new THREE.PlaneGeometry(w, d).rotateX(-Math.PI / 2), M.contact);
+    cs.position.set(cx, 0.1, cz);
+    cs.renderOrder = 1;
+    parent.add(cs);
+  }
 
-  /* ---------- Пути и перроны (тупиковый вокзал: пути заканчиваются упорами) ---------- */
-  function trackSet(xs, parent, zb, len = 680) {
+  /* ---------- Земля, площадь, дороги ---------- */
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(1500, 48).rotateX(-Math.PI / 2), M.ground);
+  ground.receiveShadow = true;
+  scene.add(ground);
+  {
     const b = new Batch();
-    for (const t of xs) {
-      b.add('ballast', place(box(3.2, 0.3, len), t, 0.15, zb + 0.3 - len / 2));
-      b.add('rail', place(box(0.08, 0.16, len), t - 0.76, 0.38, zb + 0.3 - len / 2));
-      b.add('rail', place(box(0.08, 0.16, len), t + 0.76, 0.38, zb + 0.3 - len / 2));
-      b.add('dark', place(box(2.6, 1.0, 0.6), t, 0.8, zb)); // упор
-      b.add('edge', place(box(2.62, 0.16, 0.62), t, 1.1, zb));
+    b.add('paving', place(box(150, 0.08, 48), 4, 0.04, 36));
+    b.add('road', place(box(300, 0.06, 16), 0, 0.03, 68));
+    b.add('road', place(box(16, 0.06, 150), 196, 0.03, -10));
+    scene.add(b.build(MK, { cast: false }));
+  }
+  const PAVE = [tx.dirt, tx.asphalt, tx.granite];
+
+  /* ================================================================== */
+  /* Здание К. А. Тона: 53 × 25,6 м, 2 этажа (≈8,5 и 7 м), антаблемент и аттик до 18,3 м, 9 осей  */
+  /* ================================================================== */
+  const bld = new Batch();
+  const clockHands = [];
+  const TON = { hw: 26.5, zf: 10, zb: -15.6, zc: -2.8 };
+  const AX_F = [-22.8, -17.4, -11.6, -5.8, 0, 5.8, 11.6, 17.4, 22.8];
+  const COL_F = [-20.3, -14.5, -8.7, -2.9, 2.9, 8.7, 14.5, 20.3];
+  const CORN_F = [25.3, 26.15]; // парные угловые полуколонны
+  const AX_S = [-7.6, 0, 7.6], COL_S = [-3.6, 3.6], CORN_S = [11.6, 12.45];
+  const DOOR_AX = [-5.8, 0, 5.8];
+  const FACES = [
+    { f: { x: 0, z: TON.zf, ry: 0 }, len: 53, ax: AX_F, cols: COL_F, corn: CORN_F, doors: DOOR_AX },
+    { f: { x: 0, z: TON.zb, ry: Math.PI }, len: 53, ax: AX_F, cols: COL_F, corn: CORN_F, doors: [] },
+    { f: { x: TON.hw, z: TON.zc, ry: Math.PI / 2 }, len: 25.6, ax: AX_S, cols: COL_S, corn: CORN_S, doors: [] },
+    { f: { x: -TON.hw, z: TON.zc, ry: -Math.PI / 2 }, len: 25.6, ax: AX_S, cols: COL_S, corn: CORN_S, doors: [] },
+  ];
+  /** Высота кровли Тона (вальма от y 17,45 до конька y 20,95) в точке (x, z). */
+  const tonRoofY = (x, z) => 17.45 + 3.5 * Math.min(1, Math.max(0, Math.min(9.8 - z, z + 15.4, 26.3 - Math.abs(x))) / 12.6);
+
+  const archivolt = halfRing(1.75, 2.1, 0.2, 18);
+  const medallion = cyl(0.34, 0.34, 0.14, 20).rotateX(Math.PI / 2);
+  const medRing = new THREE.TorusGeometry(0.36, 0.06, 6, 20);
+  /** Ось фасада: 1-й этаж — два арочных проёма под общей аркой с медальоном; 2-й — парные окна в общем наличнике с сандриком. */
+  function bay(f, u, isDoor) {
+    // 1-й этаж
+    bld.face('trim', archivolt, f, u, 5.5, 0.02);
+    for (const s of [-1, 1]) bld.face('trim', box(0.35, 4.6, 0.2), f, u + s * 1.925, 0.9 + 2.3, 0.1);
+    for (const s of [-1, 1]) {
+      const cx = u + s * 0.95, y0 = isDoor ? 0.12 : 1.0, h = 6.2 - y0;
+      bld.face('trimN', new THREE.ShapeGeometry(archShape(1.74, h + 0.12), 10), f, cx, y0, 0.02);
+      bld.face(isDoor ? 'door' : 'glass', new THREE.ShapeGeometry(archShape(1.5, h), 10), f, cx, y0, 0.04);
+      bld.face('frame', box(0.07, h - 0.75, 0.03), f, cx, y0 + (h - 0.75) / 2, 0.06);
+      bld.face('frame', box(1.5, 0.08, 0.03), f, cx, y0 + h - 0.75, 0.06);
+      if (!isDoor) bld.face('frame', box(1.5, 0.06, 0.03), f, cx, y0 + (h - 0.75) * 0.5, 0.06);
+      else bld.face('frame', box(1.5, 0.1, 0.03), f, cx, 3.4, 0.06);
+    }
+    bld.face('trim', box(0.4, 4.4, 0.24), f, u, (isDoor ? 0.12 : 1.0) + 2.2, 0.12); // колонка-импост
+    bld.face('trim', box(0.55, 0.22, 0.3), f, u, 5.48, 0.14);
+    bld.face('trim', medallion, f, u, 6.78, 0.1);
+    bld.face('trimN', medRing, f, u, 6.78, 0.17);
+    if (!isDoor) bld.face('trim', box(4.0, 0.16, 0.34), f, u, 0.95, 0.15); // подоконник
+    // 2-й этаж
+    bld.face('trim', box(3.2, 0.85, 0.06), f, u, 9.35, 0.03); // подоконная филёнка
+    bld.face('wallN', box(2.7, 0.5, 0.06), f, u, 9.35, 0.06);
+    bld.face('trim', box(3.4, 0.2, 0.16), f, u, 9.9, 0.08); // наличник
+    bld.face('trim', box(3.4, 0.2, 0.16), f, u, 13.1, 0.08);
+    for (const s of [-1, 1]) bld.face('trim', box(0.2, 3.4, 0.16), f, u + s * 1.6, 11.5, 0.08);
+    bld.face('trim', box(0.4, 3.0, 0.1), f, u, 11.5, 0.05);
+    for (const s of [-1, 1]) {
+      bld.face('glassUp', box(1.3, 3.0, 0.04), f, u + s * 0.85, 11.5, 0.02);
+      bld.face('frame', box(0.06, 3.0, 0.03), f, u + s * 0.85, 11.5, 0.05);
+      bld.face('frame', box(1.3, 0.07, 0.03), f, u + s * 0.85, 12.35, 0.05);
+    }
+    bld.face('trim', box(3.5, 0.16, 0.26), f, u, 13.3, 0.13); // фриз над наличником
+    bld.face('trim', box(3.8, 0.32, 0.5), f, u, 13.53, 0.25); // сандрик
+  }
+  /** Коринфская полуколонна 1-го этажа и колонна 2-го (упрощённо), с раскреповкой карнизов. */
+  function orderColumn(f, u) {
+    bld.face('trim', box(1.0, 1.15, 0.8), f, u, 1.375, 0.35); // пьедестал
+    bld.face('trim', box(0.92, 0.2, 0.74), f, u, 2.05, 0.33);
+    bld.face('colLit', cyl(0.36, 0.4, 5.55, 14), f, u, 4.925, 0.32);
+    bld.face('trim', cyl(0.6, 0.4, 0.45, 14), f, u, 7.925, 0.32); // капитель
+    bld.face('trim', box(1.2, 0.15, 0.96), f, u, 8.225, 0.36);
+    bld.face('trim', box(1.25, 0.5, 1.15), f, u, 8.55, 0.2); // раскреповка тяги
+    bld.face('trim', box(0.9, 0.9, 0.7), f, u, 9.25, 0.3);
+    bld.face('trim', box(0.8, 0.15, 0.65), f, u, 9.775, 0.3);
+    bld.face('colLit', cyl(0.3, 0.33, 5.0, 14), f, u, 12.35, 0.28);
+    bld.face('trim', cyl(0.5, 0.33, 0.45, 14), f, u, 15.075, 0.28);
+    bld.face('trim', box(1.0, 0.2, 0.84), f, u, 15.4, 0.3);
+    bld.face('trim', box(1.15, 1.5, 0.75), f, u, 16.25, 0.3); // раскреповка антаблемента
+    bld.face('trim', box(1.3, 0.62, 0.5), f, u, 16.7, 0.9);
+    bld.face('trim', box(0.75, 1.6, 0.8), f, u, 17.8, -0.25); // тумба аттика
+    bld.face('trim', box(0.95, 0.16, 1.0), f, u, 18.68, -0.25);
+  }
+
+  bld.add('wallA', place(box(53, 17, 25.6), 0, 8.5, TON.zc));
+  for (const { f, len, ax, cols, corn, doors } of FACES) {
+    const hl = len / 2;
+    // цоколь (с проёмами дверей)
+    const gaps = [];
+    for (const u of doors) for (const s of [-1, 1]) gaps.push([u + s * 0.95 - 0.8, u + s * 0.95 + 0.8]);
+    gaps.sort((a, c) => a[0] - c[0]);
+    let u0 = -hl - 0.15;
+    for (const [a, c] of [...gaps, [hl + 0.15, hl + 0.15]]) {
+      if (a - u0 > 0.05) bld.face('plinth', box(a - u0, 0.8, 0.3), f, (u0 + a) / 2, 0.4, 0);
+      u0 = c;
+    }
+    bld.face('trim', box(len + 0.8, 0.5, 0.8), f, 0, 8.55, 0); // междуэтажная тяга
+    bld.face('trim', box(len + 0.4, 0.45, 0.4), f, 0, 15.72, 0); // архитрав
+    bld.face('trim', box(len + 1.0, 0.3, 1.0), f, 0, 16.5, 0);
+    bld.face('trim', box(len + 1.6, 0.35, 1.6), f, 0, 16.82, 0); // венчающий карниз
+    for (let u = -hl + 0.5; u <= hl - 0.5; u += 0.75) bld.face('trimN', box(0.18, 0.2, 0.5), f, u, 16.25, 0.45); // модульоны
+    bld.face('trim', box(len - 0.2, 1.3, 0.6), f, 0, 17.65, -0.35); // аттик
+    bld.face('trim', box(len + 0.1, 0.16, 0.85), f, 0, 18.36, -0.35);
+    const colU = [...cols, ...corn, ...corn.map((c) => -c)];
+    for (const u of colU) orderColumn(f, u);
+    // глухие филёнки аттика между тумбами
+    const tumbs = [...colU].sort((a, c) => a - c);
+    for (let i = 0; i < tumbs.length - 1; i++) {
+      const a = tumbs[i] + 0.5, c = tumbs[i + 1] - 0.5;
+      if (c - a > 1) bld.face('wallN', box(c - a, 0.7, 0.05), f, (a + c) / 2, 17.65, -0.03);
+    }
+    for (const u of ax) bay(f, u, doors.includes(u));
+  }
+  // пологая вальмовая кровля светло-серого металла за аттиком
+  bld.add('roof', place(hipRoof(52.6, 25.2, 3.5), 0, 17.45, TON.zc));
+
+  /* ---------- Башня 7,5 × 7,5 м по оси: ярус с окном под фронтончиком, часовой ярус, карниз, аттик, пологий купол ---------- */
+  const TWR = { x: 0, z: 3.2 };
+  {
+    const { x, z } = TWR;
+    bld.add('wallA', place(box(7.5, 8.2, 7.5), x, 20.9, z));
+    bld.add('trim', place(box(7.9, 0.4, 7.9), x, 18.5, z));
+    bld.add('trim', place(box(8.1, 0.5, 8.1), x, 25.05, z)); // тяга
+    bld.add('wallA', place(box(7.3, 6.2, 7.3), x, 28.4, z));
+    bld.add('trim', place(box(7.9, 0.4, 7.9), x, 31.7, z)); // карниз
+    bld.add('trim', place(box(8.7, 0.4, 8.7), x, 32.1, z));
+    bld.add('wallA', place(box(6.8, 1.2, 6.8), x, 32.9, z)); // аттик
+    bld.add('trim', place(box(7.1, 0.14, 7.1), x, 33.55, z));
+    const prof = [[4.6, 0], [4.62, 0.22], [4.3, 0.9], [3.55, 1.65], [2.4, 2.35], [1.15, 2.82], [0.45, 2.97], [0.01, 3.0]].map(([r, y]) => new THREE.Vector2(r, y));
+    const dome = new THREE.LatheGeometry(prof, 4).toNonIndexed();
+    dome.computeVertexNormals();
+    bld.add('dome', place(dome.rotateY(Math.PI / 4), x, 33.6, z));
+    bld.add('dome', place(cyl(0.32, 0.5, 0.5, 8), x, 36.8, z)); // главка
+    bld.add('dome', place(sphere(0.34, 10, 8), x, 37.2, z));
+    for (let k = 0; k < 4; k++) {
+      const ry = (k * Math.PI) / 2, c = Math.cos(ry), s = Math.sin(ry);
+      const f1 = { x: x + 3.75 * s, z: z + 3.75 * c, ry };
+      for (const u of [-3.4, 3.4]) bld.face('colLit', box(0.7, 6.4, 0.16), f1, u, 21.7, 0.08);
+      bld.face('glassUp', box(1.4, 2.6, 0.04), f1, 0, 21.4, 0.02);
+      bld.face('frame', box(0.06, 2.6, 0.03), f1, 0, 21.4, 0.05);
+      bld.face('frame', box(1.4, 0.07, 0.03), f1, 0, 22.0, 0.05);
+      for (const sx of [-1, 1]) bld.face('trim', box(0.18, 2.9, 0.14), f1, sx * 0.8, 21.4, 0.07);
+      bld.face('trim', box(1.9, 0.14, 0.3), f1, 0, 19.98, 0.12); // подоконник
+      bld.face('trim', box(2.0, 0.16, 0.32), f1, 0, 22.88, 0.14);
+      bld.face('trim', extrude(triShape(2.15, 0.62), 0.24), f1, 0, 22.96, 0.04); // фронтончик
+      const f2 = { x: x + 3.65 * s, z: z + 3.65 * c, ry };
+      for (const u of [-3.3, 3.3]) bld.face('colLit', box(0.7, 6.2, 0.16), f2, u, 28.4, 0.08);
+      bld.face('clockFace', new THREE.CircleGeometry(1.3, 40), f2, 0, 28.4, 0.06);
+      bld.face('trim', new THREE.TorusGeometry(1.38, 0.12, 6, 40), f2, 0, 28.4, 0.08);
+      for (let hh = 0; hh < 12; hh++) {
+        const a = (hh / 12) * Math.PI * 2;
+        const len = hh % 3 === 0 ? 0.28 : 0.16;
+        bld.face('dark', box(0.07, len, 0.02).rotateZ(-a).translate(Math.sin(a) * 1.1, 28.4 + Math.cos(a) * 1.1, 0), f2, 0, 0, 0.08);
+      }
+      const pivot = new THREE.Group();
+      pivot.position.set(f2.x + 0.12 * s, 28.4, f2.z + 0.12 * c);
+      pivot.rotation.y = ry;
+      const hourH = new THREE.Mesh(box(0.13, 0.75, 0.03).translate(0, 0.3, 0), M.dark);
+      const minH = new THREE.Mesh(box(0.08, 1.1, 0.03).translate(0, 0.48, 0.02), M.dark);
+      pivot.add(hourH, minH);
+      scene.add(pivot);
+      clockHands.push({ hourH, minH });
+    }
+  }
+  scene.add(bld.build(MK, { noShadow: ['trimN', 'wallN', 'glass', 'glassUp', 'door', 'frame', 'clockFace', 'dark'] }));
+  contactShadow(scene, 0, TON.zc, 62, 34);
+
+  /* ---------- Здание таможни (К. А. Тон, 1850-е) на углу площади слева — во всех эпохах ---------- */
+  {
+    const b = new Batch();
+    const x0 = -100, x1 = -44, z0 = -4, z1 = 12, H = 16;
+    const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2, zc = (z0 + z1) / 2;
+    b.add('customs', place(box(w, H, d), cx, H / 2, zc));
+    b.add('customsRust', place(box(w + 0.1, 5.2, d + 0.1), cx, 2.8, zc));
+    b.add('plinth', place(box(w + 0.3, 0.6, d + 0.3), cx, 0.3, zc));
+    for (const y of [5.5, 10.6]) b.add('customsTrim', place(box(w + 0.3, 0.3, d + 0.3), cx, y, zc));
+    b.add('customsTrim', place(box(w + 0.9, 0.5, d + 0.9), cx, 15.75, zc));
+    b.add('customsRoof', place(hipRoof(w + 0.8, d + 0.8, 4), cx, 16, zc));
+    const fF = { x: cx, z: z1, ry: 0 }, fR = { x: x1, z: zc, ry: Math.PI / 2 };
+    const us = span(-w / 2 + 2.4, w / 2 - 2.4, 3.6);
+    for (const u of us) {
+      b.face('customsTrim', new THREE.ShapeGeometry(archShape(1.7, 3.0), 8), fF, u, 1.3, 0.03);
+      b.face('glass', new THREE.ShapeGeometry(archShape(1.4, 2.8), 8), fF, u, 1.4, 0.05);
+    }
+    winRows(b, fF, us, [6.6, 11.6], 1.3, 2.3, 'glass', 'customsTrim');
+    for (const u of span(-w / 2 + 0.6, w / 2 - 0.6, 7.2)) b.face('customsTrim', box(0.6, 10.1, 0.25), fF, u, 10.6, 0.12);
+    const rs = span(-d / 2 + 2.4, d / 2 - 2.4, 3.6);
+    for (const u of rs) {
+      b.face('customsTrim', new THREE.ShapeGeometry(archShape(1.7, 3.0), 8), fR, u, 1.3, 0.03);
+      b.face('glass', new THREE.ShapeGeometry(archShape(1.4, 2.8), 8), fR, u, 1.4, 0.05);
+    }
+    winRows(b, fR, rs, [6.6, 11.6], 1.3, 2.3, 'glass', 'customsTrim');
+    const g = b.build(MK, { noShadow: ['glass', 'customsTrim'] });
+    contactShadow(g, cx, zc, w + 6, d + 6);
+    scene.add(g);
+  }
+
+  /* ================================================================== */
+  /* Пути и платформы                                                     */
+  /* ================================================================== */
+  const FAR_TRACK = -700;
+  function trackSet(list, parent) {
+    const b = new Batch();
+    for (const { x, head } of list) {
+      const len = head - FAR_TRACK;
+      b.add('ballast', place(box(3.2, 0.3, len), x, 0.15, head - len / 2));
+      for (const s of [-0.76, 0.76]) b.add('rail', place(box(0.08, 0.16, len), x + s, 0.38, head - len / 2));
+      b.add('dark', place(box(2.6, 1.0, 0.6), x, 0.8, head)); // упор
+      b.add('edge', place(box(2.62, 0.16, 0.62), x, 1.1, head));
     }
     parent.add(b.build(MK, { cast: false }));
     const per = 230;
-    const sl = new THREE.InstancedMesh(box(2.6, 0.1, 0.26), M.sleeper, per * xs.length);
+    const sl = new THREE.InstancedMesh(box(2.6, 0.1, 0.26), M.sleeper, per * list.length);
     let k = 0;
-    for (const t of xs) for (let i = 0; i < per; i++) {
-      _o.position.set(t, 0.32, zb - 0.7 - i * 0.9); _o.rotation.set(0, 0, 0); _o.scale.set(1, 1, 1); _o.updateMatrix();
+    for (const { x, head } of list) for (let i = 0; i < per; i++) {
+      _o.position.set(x, 0.32, head - 0.7 - i * 0.9); _o.rotation.set(0, 0, 0); _o.scale.set(1, 1, 1); _o.updateMatrix();
       sl.setMatrixAt(k++, _o.matrix);
     }
     sl.receiveShadow = true;
     parent.add(sl);
   }
-  trackSet(TRACKS51, featGroup('tracks51'), Z_BUF51);
-  trackSet(TRACKS, featGroup('tracksX'), Z_BUF);
-  const PLAT_X = [-12, 4, 18];
-  const PLAT_Z0 = Z_BUF + 0.3;
-  {
-    // перронный переход за кассовым залом + высокие платформы
-    const g = featGroup('platHigh');
+  /** Платформы {x, z0, z1, w} высотой h и поперечные переходы {x0, x1, z0, z1}. */
+  function platformSet(parent, plats, cross = [], h = 1.1) {
     const b = new Batch();
-    b.add('platform', place(box(52, 1.1, Z_HALL - PLAT_Z0), 3, 0.55, (Z_HALL + PLAT_Z0) / 2));
-    for (const px of PLAT_X) {
-      b.add('platform', place(box(5, 1.1, 240), px, 0.55, PLAT_Z0 - 120));
-      b.add('edge', place(box(0.3, 0.03, 240), px - 2.3, 1.11, PLAT_Z0 - 120));
-      b.add('edge', place(box(0.3, 0.03, 240), px + 2.3, 1.11, PLAT_Z0 - 120));
+    for (const { x, z0, z1, w = 6 } of plats) {
+      const len = z0 - z1, zc = (z0 + z1) / 2;
+      b.add('platform', place(box(w, h, len), x, h / 2, zc));
+      for (const s of [-1, 1]) b.add('edge', place(box(0.3, 0.03, len), x + s * (w / 2 - 0.2), h + 0.01, zc));
+    }
+    for (const { x0, x1, z0, z1 } of cross) b.add('platform', place(box(x1 - x0, h, z0 - z1), (x0 + x1) / 2, h / 2, (z0 + z1) / 2));
+    parent.add(b.build(MK));
+  }
+
+  /* ---------- Царская и советская: пути под старым дебаркадером (упоры у здания) ---------- */
+  const Z_BUF51 = -19.3;
+  trackSet([{ x: -4.2, head: Z_BUF51 }, { x: 4.2, head: Z_BUF51 }], featGroup('tracks51'));
+  platformSet(featGroup('platLow'), [{ x: -9.7, z0: -18.6, z1: -121, w: 6.2 }, { x: 9.7, z0: -18.6, z1: -121, w: 6.2 }],
+    [{ x0: -12.9, x1: 12.9, z0: -15.6, z1: -18.6 }], 0.45);
+
+  /* ---------- Советская 1960-е: пути по сторонам дебаркадера, низкие навесы ---------- */
+  const SOV_PLAT = [
+    { x: -32.2, z0: -27.5, z1: -260 }, { x: -17.6, z0: -16, z1: -260 }, { x: 17.6, z0: -16, z1: -260 },
+    { x: 32.2, z0: -27.5, z1: -260 }, { x: 46.8, z0: -46, z1: -260 },
+  ];
+  const SOV_TRACKS = [
+    { x: -37.2, head: -28 }, { x: -27.2, head: -28 }, { x: -22.6, head: -28 }, { x: 22.6, head: -28 }, { x: 27.2, head: -28 },
+    { x: 37.2, head: -46.5 }, { x: 41.8, head: -46.5 }, { x: 51.8, head: -46.5 },
+  ];
+  trackSet(SOV_TRACKS, featGroup('tracksSov'));
+  platformSet(featGroup('platSov'), SOV_PLAT, [{ x0: -40, x1: -14.1, z0: -16, z1: -27.5 }, { x0: 14.1, x1: 35, z0: -16, z1: -27.5 }]);
+  {
+    const g = featGroup('canopySov');
+    const b = new Batch();
+    for (const { x, z0, z1 } of SOV_PLAT) {
+      const a = z0 - 1, c = Math.max(z1, -200), len = a - c, zc = (a + c) / 2;
+      b.add('canopySov', place(box(6, 0.25, len), x, 4.62, zc));
+      b.add('colSov', place(box(6.1, 0.4, len), x, 4.35, zc));
+      for (let z = a - 2; z >= c; z -= 8) b.add('colSov', place(cyl(0.16, 0.18, 3.3, 8), x, 1.1 + 1.65, z));
     }
     g.add(b.build(MK));
   }
   {
-    // 1851: каменные платформы под дебаркадером — поперечная у здания и две боковые
-    const g = featGroup('platLow');
+    const g = featGroup('catSov');
     const b = new Batch();
-    b.add('platform', place(box(26.4, 0.45, 5.6), 0, 0.225, -13.3));
-    for (const s of [-1, 1]) b.add('platform', place(box(6.2, 0.45, 101), s * 9.7, 0.225, -66.5));
-    g.add(b.build(MK));
-  }
-
-  /* ---------- Дебаркадер 1851 (Р. А. Желязевич): металлический, ≈107 × 27 м, за зданием по оси, над двумя путями ---------- */
-  {
-    const g = featGroup('debark');
-    const b = new Batch();
-    const HALF = 13.5, Z0 = -10.5, Z1 = -117.5, LEN = Z0 - Z1, ZC = (Z0 + Z1) / 2;
-    const EAVE = 8.0, RISE = 4.4, LX = 2.2; // LX — полуширина светового фонаря по коньку
-    const yAt = (x) => EAVE + RISE * (1 - Math.abs(x) / HALF);
-    // кровля: два ската из металлических листов, по коньку — остеклённый фонарь
-    for (const s of [-1, 1]) {
-      const xa = s * LX, xb = s * (HALF + 0.5);
-      const ya = yAt(LX), yb = EAVE - RISE * 0.5 / HALF;
-      const len = Math.hypot(xb - xa, yb - ya);
-      b.add('roof', place(box(len, 0.16, LEN + 0.6), (xa + xb) / 2, (ya + yb) / 2 + 0.1, ZC, 0, 0, Math.atan2(yb - ya, xb - xa)));
-      b.add('glass', place(box(0.06, 1.3, LEN), xa, ya + 0.75, ZC));
-      // продольная решётчатая балка по колоннам
-      b.add('iron', place(box(0.3, 0.9, LEN), s * (HALF - 0.2), EAVE - 0.45, ZC));
-      b.add('iron', place(box(0.34, 0.12, LEN), s * (HALF - 0.2), EAVE - 1.6, ZC));
-    }
-    b.add('roof', place(box(LX * 2 + 0.8, 0.14, LEN + 0.6), 0, yAt(LX) + 1.45, ZC));
-    // колонны и фермы с затяжкой (шаг ≈7,6 м)
-    for (let z = Z0 - 1.6; z >= Z1 + 0.5; z -= 7.6) {
-      for (const s of [-1, 1]) {
-        const x = s * (HALF - 0.2);
-        b.add('iron', place(box(0.7, 0.5, 0.7), x, 0.25, z));
-        b.add('iron', place(cyl(0.16, 0.22, EAVE - 0.5, 8), x, 0.25 + (EAVE - 0.5) / 2, z));
-        b.add('iron', place(box(0.6, 0.3, 0.6), x, EAVE - 0.1, z));
-        // стропило и подкосы
-        beam(b, 'iron', V3(x, EAVE, z), V3(0, yAt(0) - 0.05, z), 0.18, 0.32);
-        beam(b, 'iron', V3(s * HALF * 0.5, yAt(HALF * 0.5) - 0.1, z), V3(s * HALF * 0.22, EAVE + 0.05, z), 0.1);
-        beam(b, 'iron', V3(s * HALF * 0.78, yAt(HALF * 0.78) - 0.1, z), V3(s * HALF * 0.5, EAVE + 0.05, z), 0.1);
-        beam(b, 'iron', V3(s * HALF * 0.25, yAt(HALF * 0.25) - 0.1, z), V3(0, EAVE + 0.05, z), 0.1);
+    for (let z = -55; z > -420; z -= 50) {
+      const nearDeb = z > -125;
+      const segs = nearDeb ? [[-40.5, -15], [15, 55]] : [[-40.5, 55]];
+      for (const [a, c] of segs) {
+        for (const x of [a, c]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
+        b.add('steel', place(box(c - a, 0.35, 0.35), (a + c) / 2, 10.6, z));
       }
-      b.add('iron', place(box(HALF * 2 - 0.4, 0.1, 0.1), 0, EAVE, z)); // затяжка
-      b.add('iron', place(box(0.12, RISE, 0.12), 0, EAVE + RISE / 2, z)); // бабка
+      if (!nearDeb) b.add('steel', place(box(0.5, 11, 0.5), 0, 5.5, z));
+      for (const t of SOV_TRACKS) if (z < t.head) b.add('steel', place(box(0.05, 4.1, 0.05), t.x, 8.5, z));
     }
-    // торец к путям: остеклённый фронтон над проездом
-    const tri = new THREE.Shape();
-    tri.moveTo(-HALF, 0); tri.lineTo(HALF, 0); tri.lineTo(0, RISE); tri.lineTo(-HALF, 0);
-    b.add('glass', place(new THREE.ShapeGeometry(tri), 0, EAVE, Z1 + 0.05, Math.PI));
-    b.add('iron', place(box(HALF * 2, 0.6, 0.3), 0, EAVE - 0.1, Z1 + 0.1));
-    g.add(b.build(MK, { noShadow: ['glass'] }));
-  }
-
-  /* ---------- 2026: стеклянный дебаркадер над зоной выхода к поездам («парящая» криволинейная кровля, h ≈ 15 м) ---------- */
-  {
-    const g = featGroup('canopy');
-    const steel = new Batch();
-    const glass = new Batch();
-    const X0 = -25, X1 = 31, Z0 = Z_HALL + 1.5, Z1 = -66;
-    const W = X1 - X0, D = Z0 - Z1, CX = (X0 + X1) / 2, ZC = (Z0 + Z1) / 2;
-    const NX = 28, NZ = 14;
-    const roofY = (u, v) => 11.4 + 2.8 * Math.sin(Math.PI * u) + 0.8 * Math.sin(Math.PI * v) * (0.6 + 0.4 * Math.sin(Math.PI * u));
-    const P = (u, v) => V3(X0 + W * u, roofY(u, v), Z0 - D * v);
-    const roof = new THREE.PlaneGeometry(W, D, NX, NZ).rotateX(-Math.PI / 2);
-    const pa = roof.attributes.position;
-    for (let i = 0; i < pa.count; i++) {
-      const u = (pa.getX(i) + W / 2) / W, v = (pa.getZ(i) + D / 2) / D;
-      pa.setY(i, roofY(u, v));
-      pa.setZ(i, -pa.getZ(i)); // v растёт к путям (−z)
-    }
-    roof.computeVertexNormals();
-    glass.add('glassRoof', place(roof, CX, 0, ZC));
-    // рёбра оболочки
-    for (let j = 0; j <= NZ; j += 2) for (let i = 0; i < NX; i++) {
-      beam(steel, 'whiteSteel', P(i / NX, j / NZ), P((i + 1) / NX, j / NZ), j === 0 || j === NZ ? 0.45 : 0.16, j === 0 || j === NZ ? 0.7 : 0.16);
-    }
-    for (let i = 0; i <= NX; i += 4) for (let j = 0; j < NZ; j++) {
-      beam(steel, 'whiteSteel', P(i / NX, j / NZ), P(i / NX, (j + 1) / NZ), i === 0 || i === NX ? 0.45 : 0.16, i === 0 || i === NX ? 0.7 : 0.16);
-    }
-    // опоры-«деревья»
-    for (const u of [0.22, 0.5, 0.78]) for (const v of [0.3, 0.74]) {
-      const base = P(u, v);
-      const x = base.x, z = base.z, top = 8.2;
-      steel.add('whiteSteel', place(cyl(0.32, 0.42, top - 1.1, 12), x, 1.1 + (top - 1.1) / 2, z));
-      for (const [du, dv] of [[-0.06, -0.12], [0.06, -0.12], [-0.06, 0.12], [0.06, 0.12]]) {
-        beam(steel, 'whiteSteel', V3(x, top, z), P(u + du, v + dv), 0.2);
-      }
-    }
-    // боковые витражи до кромки кровли и стеклянный фриз над выходом на платформы
-    for (const [u, xf] of [[0, X0], [1, X1]]) {
-      for (let j = 0; j < NZ; j++) {
-        const a = P(u, j / NZ), c = P(u, (j + 1) / NZ), h = Math.min(a.y, c.y);
-        glass.add('glassRoof', place(box(0.05, h - 0.2, a.z - c.z), xf, 0.1 + (h - 0.2) / 2, (a.z + c.z) / 2));
-        steel.add('whiteSteel', place(box(0.22, a.y, 0.22), xf, a.y / 2, a.z));
-      }
-      steel.add('whiteSteel', place(box(0.24, 0.3, D), xf, 4.2, ZC));
-    }
-    for (let i = 0; i < NX; i++) {
-      const a = P(i / NX, 1), c = P((i + 1) / NX, 1), h = Math.min(a.y, c.y) - 7.2;
-      glass.add('glassRoof', place(box(c.x - a.x, h, 0.05), (a.x + c.x) / 2, 7.2 + h / 2, Z1));
-      const f = P(i / NX, 0), e = P((i + 1) / NX, 0), h2 = Math.min(f.y, e.y) - 10.8;
-      glass.add('glassRoof', place(box(e.x - f.x, h2, 0.05), (f.x + e.x) / 2, 10.8 + h2 / 2, Z0));
-    }
-    steel.add('whiteSteel', place(box(W, 0.4, 0.4), CX, 7.2, Z1));
-    g.add(steel.build(MK, { receive: false }));
-    const gm = glass.build(MK, { cast: false, receive: false });
-    gm.children.forEach((m) => { m.renderOrder = 3; });
-    g.add(gm);
-  }
-
-  /* ---------- Навесы над платформами (Советская, Настоящее) — ниже дебаркадера ---------- */
-  {
-    const g = featGroup('platCanopy');
-    const b = new Batch();
-    const Z0 = -60, LEN = 150, ZC = Z0 - LEN / 2, Y = 6.7;
-    for (const px of PLAT_X) {
-      for (const s of [-1, 1]) b.add('canopyRoof', place(box(3.8, 0.2, LEN), px + s * 1.85, Y + 0.13, ZC, 0, 0, s * 0.07));
-      b.add('canopyRoof', place(box(0.5, 0.45, LEN), px, Y - 0.1, ZC));
-      for (let z = Z0 - 2; z >= Z0 - LEN; z -= 12) b.add('canopyRoof', place(cyl(0.17, 0.2, Y - 1.1, 8), px, 1.1 + (Y - 1.1) / 2, z));
-      b.add('strip', place(box(0.3, 0.1, LEN - 4), px, Y - 0.38, ZC));
-    }
-    g.add(b.build(MK, { noShadow: ['strip'] }));
-  }
-
-  /* ---------- Контактная сеть (Советская, Настоящее) — от упоров путей ---------- */
-  {
-    const g = featGroup('catenary');
-    const b = new Batch();
-    for (let z = -70; z > -420; z -= 30) {
-      for (const x of [-21, 27]) b.add('steel', place(cyl(0.16, 0.22, 10, 6), x, 5, z));
-      b.add('steel', place(box(48.4, 0.3, 0.3), 3, 9.6, z));
-      for (const t of TRACKS) b.add('steel', place(box(0.05, 2.8, 0.05), t, 8.1, z));
-    }
-    const wl = Z_BUF - 1 + 420;
-    for (const t of TRACKS) {
-      b.add('dark', place(box(0.04, 0.04, wl), t, 6.7, Z_BUF - 1 - wl / 2));
-      b.add('dark', place(box(0.04, 0.04, wl), t, 8.0, Z_BUF - 1 - wl / 2));
+    for (const t of SOV_TRACKS) {
+      const wl = t.head - 1 + 420;
+      b.add('dark', place(box(0.04, 0.04, wl), t.x, 6.5, t.head - 1 - wl / 2));
+      b.add('dark', place(box(0.04, 0.04, wl), t.x, 7.6, t.head - 1 - wl / 2));
     }
     g.add(b.build(MK, { cast: false }));
   }
 
-  /** Прямоугольные окна «советского» объёма на грани f (см. Batch.face). */
-  function sovWindows(b, f, us, ys, w, h) {
-    for (const v of ys) for (const u of us) {
-      b.face('trimN', box(w + 0.3, h + 0.3, 0.06), f, u, v + h / 2, 0.03);
-      b.face('glass', box(w, h, 0.08), f, u, v + h / 2, 0.06);
-    }
-  }
-  const span = (a, c, step) => { const r = []; for (let x = a; x <= c + 1e-6; x += step) r.push(x); return r; };
-
-  /* ---------- Крыло 1960-х: трёхэтажное, примыкает к левому торцу здания Тона в линию фасада ---------- */
+  /* ---------- 2026: 12 путей, левые (x < −5) с упорами у z −108, правые — у z −130 ---------- */
+  const P26 = [-34, -20.4, -6.8, 6.8, 20.4, 34];
+  const TRACKS26 = P26.flatMap((p) => [p - 4.6, p + 4.6]).map((x) => ({ x, head: x < -5 ? -108 : -130 }));
+  trackSet(TRACKS26, featGroup('tracks26'));
+  const PLAT26 = P26.map((x) => ({ x, z0: x < 0 ? -104 : -129.5, z1: -400 }));
+  platformSet(featGroup('plat26'), PLAT26, [{ x0: -40, x1: -3.8, z0: -103.5, z1: -107.5 }, { x0: -3.8, x1: 40, z0: -104, z1: -129.5 }]);
   {
-    const g = featGroup('annex');
-    const ab = new Batch();
-    const x0 = -56, x1 = -27.02, z0 = -9.6, z1 = 9.8, H = 13.4;
-    const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2, zc = (z0 + z1) / 2;
-    ab.add('sovWall', place(box(w, H, d), cx, H / 2, zc));
-    ab.add('plinth', place(box(w + 0.2, 0.9, d + 0.2), cx, 0.45, zc));
-    ab.add('concrete', place(box(w + 0.4, 0.45, d + 0.4), cx, H - 0.1, zc));
-    ab.add('flatRoof', place(box(w - 0.6, 0.2, d - 0.6), cx, H + 0.05, zc));
-    for (const y of [4.95, 9.15]) ab.add('concrete', place(box(w + 0.08, 0.16, d + 0.08), cx, y, zc)); // междуэтажные пояски
-    const ys = [1.7, 5.8, 10.0], WH = 2.3;
-    const frontU = span(x0 + 2.2, x1 - 1.8, 3.2).map((x) => x - cx);
-    const fFront = { x: cx, z: z1, ry: 0 }, fBack = { x: cx, z: z0, ry: Math.PI };
-    const fLeft = { x: x0, z: zc, ry: -Math.PI / 2 };
-    // фасад на площадь: вход в центре нижнего этажа
-    const ENTRY = 0.5;
-    sovWindows(ab, fFront, frontU.filter((u) => Math.abs(u - ENTRY) > 3), [ys[0]], 1.9, WH);
-    sovWindows(ab, fFront, frontU, [ys[1], ys[2]], 1.9, WH);
-    ab.face('door', box(5.2, 3.0, 0.1), fFront, ENTRY, 2.4, 0.06);
-    ab.face('concrete', box(7.0, 0.25, 2.4), fFront, ENTRY, 4.1, 1.2);
-    sovWindows(ab, fBack, frontU, ys, 1.9, WH);
-    sovWindows(ab, fLeft, span(-d / 2 + 2.4, d / 2 - 2.4, 3.2), ys, 1.9, WH);
-    g.add(ab.build(MK, { noShadow: ['trimN', 'glass', 'door'] }));
-    const cs = new THREE.Mesh(new THREE.PlaneGeometry(w + 8, d + 8).rotateX(-Math.PI / 2), M.contact);
-    cs.position.set(cx, 0.1, zc);
-    cs.renderOrder = 1;
-    g.add(cs);
-  }
-
-  /* ---------- Главный (кассовый) зал 1975–77, В. И. Кузнецов / Ленгипротранс: за зданием по оси, на месте дебаркадера ---------- */
-  {
-    const g = featGroup('hall70');
-    const hb = new Batch();
-    // двухуровневый подиум (нижний и верхний кассовые залы) + надстроенные этажи с залами ожидания
-    const HX = 23, z0 = Z_HALL, z1 = -10.4, H1 = 10.8;
-    const UX = 19, uz0 = -31.5, uz1 = -13.5, H2 = 18.4;
-    const d = z1 - z0, zc = (z0 + z1) / 2, ud = uz1 - uz0, uzc = (uz0 + uz1) / 2;
-    hb.add('concrete', place(box(HX * 2, H1, d), 0, H1 / 2, zc));
-    hb.add('plinth', place(box(HX * 2 + 0.2, 0.7, d + 0.2), 0, 0.35, zc));
-    hb.add('concrete', place(box(HX * 2 + 0.6, 0.7, d + 0.6), 0, H1 - 0.2, zc));
-    hb.add('flatRoof', place(box(HX * 2 - 0.4, 0.2, d - 0.4), 0, H1 + 0.18, zc));
-    hb.add('sovWall', place(box(UX * 2, H2 - H1, ud), 0, (H1 + H2) / 2, uzc));
-    hb.add('concrete', place(box(UX * 2 + 0.5, 0.6, ud + 0.5), 0, H2 - 0.15, uzc));
-    hb.add('flatRoof', place(box(UX * 2 - 0.4, 0.2, ud - 0.4), 0, H2 + 0.18, uzc));
-    // фасады подиума: ленточное остекление двух уровней, пилоны, пояс между уровнями
-    const faces = [
-      { f: { x: 0, z: z0, ry: Math.PI }, len: HX * 2 },
-      { f: { x: -HX, z: zc, ry: -Math.PI / 2 }, len: d },
-      { f: { x: HX, z: zc, ry: Math.PI / 2 }, len: d },
-    ];
-    for (const { f, len } of faces) {
-      const back = f.ry === Math.PI;
-      hb.face('glass', box(len - 1.2, 3.6, 0.08), f, 0, 1.0 + 1.8, 0.05);
-      hb.face('glass', box(len - 1.2, 3.9, 0.08), f, 0, 5.9 + 1.95, 0.05);
-      hb.face('concrete', box(len + 0.1, 1.1, 0.4), f, 0, 5.25, 0.2);
-      for (const u of span(-len / 2 + 0.6, len / 2 - 0.6, len > 30 ? 3.75 : 3.15)) {
-        hb.face('concrete', box(0.55, H1 - 1.1, 0.55), f, u, 0.7 + (H1 - 1.1) / 2, 0.27);
-      }
-      if (back) {
-        hb.face('door', box(10, 3.2, 0.1), f, 0, 0.7 + 1.6, 0.6);
-        hb.face('concrete', box(14, 0.3, 3.2), f, 0, 4.55, 1.6);
-      }
-    }
-    // надстройка: два этажа с ленточными окнами на все стороны
-    const ufaces = [
-      { f: { x: 0, z: uz0, ry: Math.PI }, len: UX * 2 }, { f: { x: 0, z: uz1, ry: 0 }, len: UX * 2 },
-      { f: { x: -UX, z: uzc, ry: -Math.PI / 2 }, len: ud }, { f: { x: UX, z: uzc, ry: Math.PI / 2 }, len: ud },
-    ];
-    for (const { f, len } of ufaces) {
-      for (const y of [11.9, 15.2]) {
-        hb.face('glass', box(len - 1.6, 2.0, 0.08), f, 0, y + 1.0, 0.05);
-        for (const u of span(-len / 2 + 0.8, len / 2 - 0.8, len > 30 ? 3.75 : 3.0)) hb.face('trimN', box(0.18, 2.0, 0.12), f, u, y + 1.0, 0.08);
-      }
-    }
-    g.add(hb.build(MK, { noShadow: ['trimN', 'glass', 'door'] }));
-  }
-
-  /* ---------- Надстройка 3-го этажа над крыльями (утоплена от фасада) ---------- */
-  {
-    const g = featGroup('superstr');
+    const g = featGroup('canopy26');
     const b = new Batch();
-    for (const s of [-1, 1]) {
-      const cx = 13.5 * s, w = 14.2, d = 15, y0 = Y_TOP + 0.6, H = 3.2;
-      b.add('wallA', place(box(w, H, d), cx, y0 + H / 2, 0));
-      b.add('trim', place(box(w + 0.3, 0.2, d + 0.3), cx, y0 + H + 0.1, 0));
-      b.add('roof', place(box(w - 0.4, 0.3, d - 0.4), cx, y0 + H + 0.3, 0));
-      for (const x of AX) {
-        for (const zf of [d / 2, -d / 2]) {
-          const sg = zf > 0 ? 1 : -1;
-          b.add('glass', place(box(1.5, 1.6, 0.08), x * s, y0 + 1.6, zf + sg * 0.04));
+    for (const { x, z0, z1 } of PLAT26) {
+      const a = x < 0 ? z0 - 2 : -161, c = z1, len = a - c, zc = (a + c) / 2;
+      b.add('canopy26', place(box(8, 0.3, len), x, 6.15, zc));
+      b.add('strip', place(box(0.4, 0.08, len - 2), x, 5.97, zc));
+      for (let z = a - 3; z >= c; z -= 12) {
+        b.add('truss', place(cyl(0.18, 0.2, 4.9, 8), x, 1.1 + 2.45, z));
+        if (x < 0) { // решётчатые арочные фермы по краю левых навесов
+          for (const s of [-1, 1]) {
+            beam(b, 'truss', V3(x + s * 4, 6.3, z), V3(x + s * 2.2, 7.0, z), 0.12);
+            beam(b, 'truss', V3(x + s * 2.2, 7.0, z), V3(x, 7.2, z), 0.12);
+          }
         }
       }
+      if (x < 0) for (const s of [-1, 1]) b.add('truss', place(box(0.12, 0.12, len), x + s * 2.2, 7.0, zc));
     }
-    g.add(b.build(MK, { noShadow: ['glass'] }));
+    g.add(b.build(MK, { noShadow: ['strip'] }));
   }
-
-  /* ---------- Вывеска (образец середины 1970-х; Советская и Настоящее) ---------- */
   {
-    const g = featGroup('sign');
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(8.0, 1.0), M.sign);
-    m.position.set(0, 14.05, 11.2 + 0.17);
-    g.add(m);
-  }
-
-  /* ---------- Флагшток (Царская, Настоящее) и флаг (Настоящее) ---------- */
-  {
-    const g = featGroup('pole');
+    const g = featGroup('cat26');
     const b = new Batch();
-    b.add('steel', place(cyl(0.06, 0.1, 7.2, 8), TOWER.x, POLE_Y + 3.6, TOWER.z));
-    b.add('gold', place(sphere(0.2, 10, 8), TOWER.x, POLE_Y + 7.3, TOWER.z));
+    for (let z = -165; z > -420; z -= 50) {
+      for (const x of [-41.2, -20.4, 20.4, 41.6]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
+      b.add('steel', place(box(82.8, 0.35, 0.35), 0.2, 10.6, z));
+      for (const t of TRACKS26) b.add('steel', place(box(0.05, 4.1, 0.05), t.x, 8.5, z));
+    }
+    for (const t of TRACKS26) {
+      const wl = t.head - 1 + 420;
+      b.add('dark', place(box(0.04, 0.04, wl), t.x, 6.6, t.head - 1 - wl / 2));
+      b.add('dark', place(box(0.04, 0.04, wl), t.x, 7.7, t.head - 1 - wl / 2));
+    }
+    g.add(b.build(MK, { cast: false }));
+  }
+
+  /* ---------- Старый дебаркадер ≈27 × 107 м по оси за зданием: стены-аркады, двускатная металлическая кровля ---------- */
+  const DEB = { hx: 13.5, z0: TON.zb, z1: -122.6, t: 1.2 };
+  {
+    const g = featGroup('debark');
+    const b = new Batch();
+    const { hx, z0, z1, t } = DEB;
+    const LEN = z0 - z1, ZC = (z0 + z1) / 2;
+    const NB = 21, P = 5.0, zs = ZC + (NB * P) / 2;
+    const upper = new THREE.Shape();
+    upper.moveTo(-2.5, 5.7); upper.lineTo(-1.8, 5.7); upper.absarc(0, 5.7, 1.8, Math.PI, 0, true);
+    upper.lineTo(2.5, 5.7); upper.lineTo(2.5, 9.5); upper.lineTo(-2.5, 9.5); upper.lineTo(-2.5, 5.7);
+    const upperGeo = extrude(upper, t, 10).translate(0, 0, -t / 2).rotateY(Math.PI / 2);
+    for (const sx of [-1, 1]) {
+      for (let i = 0; i < NB; i++) {
+        const zc = zs - P / 2 - i * P;
+        b.add('debWall', place(upperGeo, sx * hx, 0, zc));
+        b.add('debWall', place(box(t, 5.7, 1.4), sx * hx, 2.85, zc + P / 2));
+        b.add('debTrim', place(box(t + 0.16, 0.22, 1.56), sx * hx, 5.75, zc + P / 2));
+        b.add('debWall', place(box(t + 0.3, 9.4, 0.6), sx * hx, 4.7, zc + P / 2)); // лопатка
+      }
+      b.add('debWall', place(box(t, 5.7, 1.4), sx * hx, 2.85, zs - NB * P));
+      b.add('debWall', place(box(t, 9.5, zs - NB * P - z1 + 0.5), sx * hx, 4.75, (zs - NB * P + z1) / 2));
+      b.add('debTrim', place(box(t + 0.5, 0.35, LEN), sx * hx, 9.65, ZC)); // карниз
+    }
+    const EAVE = 9.8, RIDGE = 14.7, half = hx + 0.6;
+    const ang = Math.atan2(RIDGE - EAVE, half), sl = Math.hypot(half, RIDGE - EAVE);
+    for (const s of [-1, 1]) b.add('debRoof', place(box(sl + 0.3, 0.2, LEN), (s * half) / 2, (EAVE + RIDGE) / 2 + 0.1, ZC, 0, 0, -s * ang));
+    b.add('debRoof', place(box(0.6, 0.3, LEN), 0, RIDGE + 0.15, ZC));
+    for (const z of [-40, -80]) { // вентиляционные фонари на коньке
+      b.add('debRoof', place(box(3, 1.4, 8), 0, RIDGE + 0.8, z));
+      for (const s of [-1, 1]) b.add('dark', place(box(0.05, 0.8, 7.2), s * 1.53, RIDGE + 0.9, z));
+      b.add('debRoof', place(hipRoof(3.8, 8.8, 0.9), 0, RIDGE + 1.5, z));
+    }
+    for (let z = z0 - 5; z > z1 + 2; z -= 10) { // затяжки ферм
+      b.add('iron', place(box(2 * hx - 1.2, 0.18, 0.18), 0, EAVE - 0.3, z));
+      b.add('iron', place(box(0.14, RIDGE - EAVE, 0.14), 0, (EAVE + RIDGE) / 2 - 0.1, z));
+    }
+    // торец к путям: щипец по всей ширине с огромным полуциркульным проёмом
+    const gs = new THREE.Shape();
+    gs.moveTo(-14.1, 0); gs.lineTo(-6.5, 0); gs.lineTo(-6.5, 6); gs.absarc(0, 6, 6.5, Math.PI, 0, true);
+    gs.lineTo(6.5, 0); gs.lineTo(14.1, 0); gs.lineTo(14.1, 11); gs.lineTo(0, 16); gs.lineTo(-14.1, 11); gs.lineTo(-14.1, 0);
+    b.add('debWall', place(extrude(gs, 1.0, 28), 0, 0, z1 - 0.5));
+    const fg = { x: 0, z: z1 - 0.5, ry: Math.PI };
+    b.face('debTrim', halfRing(6.5, 7.1, 0.25, 28), fg, 0, 6, 0);
+    for (const s of [-1, 1]) {
+      b.face('debTrim', box(0.6, 6, 0.25), fg, s * 6.8, 3, 0.125);
+      b.face('debTrim', box(9.1, 0.4, 0.4), fg, s * 9.55, 11, 0.2);
+      b.face('debTrim', box(15.2, 0.4, 0.4).rotateZ(s * Math.atan2(5, 14.1)), fg, -s * 7.05, 13.55, 0.2);
+      b.face('debTrim', box(0.9, 11, 0.4), fg, s * 13.65, 5.5, 0.2);
+    }
+    g.add(b.build(MK, { noShadow: ['debTrim', 'iron', 'dark'] }));
+  }
+  {
+    // Советская: надпись «МОСКВА» на щипце и табло «Московское время» в проёме
+    const g = featGroup('moskva');
+    const z1 = DEB.z1 - 0.5;
+    const letters = new THREE.Mesh(new THREE.PlaneGeometry(7, 1.25), M.moskva);
+    letters.position.set(0, 13.85, z1 - 0.27);
+    letters.rotation.y = Math.PI;
+    const b = new Batch();
+    b.add('dark', place(box(6.2, 1.7, 0.2), 0, 9.5, z1 + 0.2));
+    for (const s of [-1, 1]) b.add('dark', place(box(0.06, 2.4, 0.06), s * 2.6, 11.5, z1 + 0.2));
+    const board = new THREE.Mesh(new THREE.PlaneGeometry(6, 1.5), M.board);
+    board.position.set(0, 9.5, z1 + 0.08);
+    board.rotation.y = Math.PI;
+    g.add(letters, board, b.build(MK, { cast: false }));
+  }
+
+  /* ---------- Царская: ограды с арочными воротами, полосатая будка, служебные домики, трубы, шпиль ---------- */
+  {
+    const g = featGroup('tsarSite');
+    const b = new Batch();
+    const gate = new THREE.Shape();
+    gate.moveTo(-2.6, 0); gate.lineTo(-1.75, 0); gate.lineTo(-1.75, 2.75); gate.absarc(0, 2.75, 1.75, Math.PI, 0, true);
+    gate.lineTo(1.75, 0); gate.lineTo(2.6, 0); gate.lineTo(2.6, 5.8); gate.lineTo(-2.6, 5.8); gate.lineTo(-2.6, 0);
+    const gateGeo = extrude(gate, 0.9, 12).translate(0, 0, -0.45);
+    const fenceRun = (x0, x1, gx) => {
+      const z = 9;
+      for (const [a, c] of [[x0, gx - 2.6], [gx + 2.6, x1]]) {
+        if (c - a < 0.2) continue;
+        b.add('fence', place(box(c - a, 4, 0.6), (a + c) / 2, 2, z));
+        b.add('debTrim', place(box(c - a, 0.25, 0.8), (a + c) / 2, 4.1, z));
+        for (const x of span(a + 0.4, c - 0.4, 5)) b.add('fence', place(box(0.8, 4.3, 0.9), x, 2.15, z));
+      }
+      b.add('fence', place(gateGeo, gx, 0, z));
+      b.add('debTrim', place(halfRing(1.75, 2.1, 0.2, 12), gx, 2.75, z + 0.45));
+      b.add('debTrim', place(box(5.6, 0.3, 1.1), gx, 5.95, z));
+      b.add('dark', place(box(3.5, 4.5, 0.1), gx, 2.25, z - 0.35));
+    };
+    fenceRun(-44, -26.5, -34);
+    fenceRun(26.5, 75, 36);
+    // полосатая будка у правых ворот
+    for (let i = 0; i < 5; i++) b.add(i % 2 ? 'stripeW' : 'stripeB', place(box(1, 0.5, 1), 39.5, 0.25 + i * 0.5, 10.3));
+    b.add('stripeB', place(new THREE.ConeGeometry(0.8, 0.6, 4).rotateY(Math.PI / 4), 39.5, 2.8, 10.3));
+    // одноэтажный служебный домик за левой оградой и дом с фронтоном за правой
+    b.add('fence', place(box(12, 5, 14), -34, 2.5, -3));
+    b.add('debRoof', place(hipRoof(14, 12.6, 3), -34, 5, -3, Math.PI / 2));
+    b.add('fence', place(box(25, 5, 15), 67.5, 2.5, -12.5));
+    b.add('debRoof', place(hipRoof(25.6, 15.6, 3), 67.5, 5, -12.5));
+    // трубы на кровле Тона
+    for (const [x, z] of [[-8, 1], [8, 1], [-16, -6], [16, -6], [-22, 0], [22, 0]]) {
+      const top = tonRoofY(x, z) + 2.5;
+      b.add('fence', place(box(0.8, top - 17, 0.8), x, (top + 17) / 2, z));
+      b.add('debTrim', place(box(1.0, 0.2, 1.0), x, top, z));
+    }
+    // шпиль-игла башни
+    b.add('iron', place(new THREE.ConeGeometry(0.16, 4.3, 8), TWR.x, 39.6, TWR.z));
+    b.add('iron', place(sphere(0.22, 10, 8), TWR.x, 38.3, TWR.z));
     g.add(b.build(MK));
   }
+
+  /* ---------- Советская: шпиль со звездой, буквы «ЛЕНИНГРАДСКИЙ» на ферме за аттиком ---------- */
+  function signTruss(b, x0, x1, y0, y1) {
+    const z = 7.35;
+    b.add('dark', place(box(x1 - x0, 0.08, 0.08), (x0 + x1) / 2, y1 + 0.05, z));
+    b.add('dark', place(box(x1 - x0, 0.08, 0.08), (x0 + x1) / 2, y0 - 0.05, z));
+    for (const x of span(x0 + 0.3, x1 - 0.3, 1.6)) {
+      const yr = tonRoofY(x, z);
+      b.add('dark', place(box(0.07, y1 - yr + 0.1, 0.07), x, (y1 + yr) / 2, z));
+      beam(b, 'dark', V3(x, y1, z), V3(x, tonRoofY(x, z - 2.5), z - 2.5), 0.06);
+    }
+  }
+  {
+    const g = featGroup('sovSite');
+    const b = new Batch();
+    b.add('steel', place(cyl(0.05, 0.14, 5.4, 8), TWR.x, 40.1, TWR.z)); // шпиль до y 42,5
+    const st = extrude(starShape(0.6, 0.25), 0.1, 2).translate(0, 0, -0.05);
+    b.add('star', place(st, TWR.x, 43.1, TWR.z));
+    b.add('star', place(st, TWR.x, 43.1, TWR.z, Math.PI / 2));
+    signTruss(b, -24, -6, 18.6, 20.0);
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(18, 1.6), M.signSov);
+    m.position.set(-15, 19.3, 7.42);
+    g.add(b.build(MK, { cast: false }), m);
+  }
+
+  /* ---------- 2026: вывеска «ЛЕНИНГРАДСКИЙ ВОКЗАЛ» + РЖД + «Московский транспорт» (светится ночью) ---------- */
+  {
+    const g = featGroup('sign26');
+    const b = new Batch();
+    signTruss(b, -24, -6, 18.6, 20.2);
+    signTruss(b, 5, 22, 18.6, 20.2);
+    g.add(b.build(MK, { cast: false }));
+    const l = new THREE.Mesh(new THREE.PlaneGeometry(18, 1.6), M.signL);
+    l.position.set(-15, 19.4, 7.42);
+    const r = new THREE.Mesh(new THREE.PlaneGeometry(17, 1.6), M.signR);
+    r.position.set(13.5, 19.4, 7.42);
+    const hl = new THREE.Mesh(new THREE.PlaneGeometry(19.5, 3.0), M.haloL);
+    hl.position.set(-15, 19.4, 7.47);
+    const hr = new THREE.Mesh(new THREE.PlaneGeometry(18.4, 3.0), M.haloR);
+    hr.position.set(13.5, 19.4, 7.47);
+    hl.renderOrder = hr.renderOrder = 5;
+    hl.userData.glow = hr.userData.glow = { key: 'signHalo', k: 1 };
+    g.add(l, r, hl, hr);
+  }
+
+  /* ---------- 2026: угловые балкончики башни, строительный забор у правого угла, навесы выходов метро, роза на площади ---------- */
+  {
+    const g = featGroup('nowSite');
+    const b = new Batch();
+    for (const s of [-1, 1]) {
+      const x = TWR.x + s * 3.75, z = TWR.z + 3.75;
+      b.add('balcony', place(cyl(1.2, 1.1, 0.25, 20), x, 18.45, z));
+      b.add('balcony', place(new THREE.CylinderGeometry(1.15, 1.15, 0.9, 20, 1, true), x, 19.0, z));
+      b.add('balcony', place(new THREE.TorusGeometry(1.15, 0.06, 4, 20).rotateX(Math.PI / 2), x, 19.45, z));
+    }
+    b.add('rose', place(new THREE.CircleGeometry(7, 40).rotateX(-Math.PI / 2), 0, 0.1, 30));
+    b.add('debTrim', place(new THREE.RingGeometry(7, 7.4, 40).rotateX(-Math.PI / 2), 0, 0.11, 30));
+    for (const x of [-19, 19]) { // стеклянные навесы над выходами метро
+      b.add('whiteSteel', place(box(6.4, 0.25, 4.4), x, 3.0, 25));
+      for (const [dx, dz] of [[-3, -2], [3, -2], [-3, 2], [3, 2]]) b.add('whiteSteel', place(box(0.15, 3, 0.15), x + dx, 1.5, 25 + dz));
+    }
+    b.add('iron', place(box(14, 2.6, 0.2), 30, 1.3, 13.5)); // строительный забор
+    b.add('iron', place(box(0.2, 2.6, 12), 37, 1.3, 7.5));
+    b.add('blueSign', place(box(3, 2.6, 2.4), 24, 1.3, 15.5)); // бытовка
+    // МЖА: в 2026 частично разобрано, за строительным забором
+    b.add('mzhaWall', place(box(20, 5, 26), 92, 2.5, -7));
+    b.add('iron', place(box(24, 2.6, 0.2), 92, 1.3, 8.5));
+    b.add('iron', place(box(0.2, 2.6, 30), 79.5, 1.3, -7));
+    g.add(b.build(MK));
+    const gl = new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.06, 4.2), M.glassRoof);
+    const gr = gl.clone();
+    gl.position.set(-19, 3.15, 25);
+    gr.position.set(19, 3.15, 25);
+    g.add(gl, gr);
+  }
+
+  /* ---------- Флагшток с флагом России (2026) ---------- */
+  const POLE_TOP = 43;
   const flagGeos = [];
   {
     const g = featGroup('flag');
+    const b = new Batch();
+    b.add('steel', place(cyl(0.05, 0.07, POLE_TOP - 37.3, 8), TWR.x, (POLE_TOP + 37.3) / 2, TWR.z));
+    b.add('gold', place(sphere(0.14, 10, 8), TWR.x, POLE_TOP + 0.1, TWR.z));
+    g.add(b.build(MK));
     const cols = [M.flagW, M.flagB, M.flagR];
     for (let i = 0; i < 3; i++) {
-      const geo = new THREE.PlaneGeometry(2.7, 0.6, 12, 1);
-      geo.translate(1.35 + 0.08, POLE_Y + 6.9 - i * 0.6, 0);
+      const geo = new THREE.PlaneGeometry(2.0, 0.443, 12, 1);
+      geo.translate(1.0 + 0.06, POLE_TOP - 0.3 - 0.222 - i * 0.443, 0);
       geo.userData.base = geo.attributes.position.array.slice();
       flagGeos.push(geo);
       const m = new THREE.Mesh(geo, cols[i]);
-      m.position.set(TOWER.x, 0, TOWER.z);
+      m.position.set(TWR.x, 0, TWR.z);
       m.castShadow = true;
       g.add(m);
     }
   }
 
-  /* ---------- Фонари ---------- */
+  /* ---------- Советская и 2026: пилоны въезда, павильон у левого угла, второй ряд корпусов слева ---------- */
+  {
+    const g = featGroup('modernSite');
+    const b = new Batch();
+    for (const x of [-40, -36, -31, -28]) b.add('white', place(box(1, 3.5, 1), x, 1.75, 11));
+    // маленький белый павильон-воротца у левого угла Тона
+    const gp = new THREE.Shape();
+    gp.moveTo(-2, 0); gp.lineTo(-1.1, 0); gp.lineTo(-1.1, 2.6); gp.absarc(0, 2.6, 1.1, Math.PI, 0, true);
+    gp.lineTo(1.1, 0); gp.lineTo(2, 0); gp.lineTo(2, 5); gp.lineTo(-2, 5); gp.lineTo(-2, 0);
+    b.add('white', place(extrude(gp, 3, 10), -29, 0, 6.5));
+    b.add('white', place(box(4.4, 0.3, 3.4), -29, 5.15, 8));
+    // второй ряд служебных корпусов (3–4 этажа) за длинным корпусом
+    for (const [cx, cz, w, d, h, key] of [[-84, -32, 34, 40, 15, 'block'], [-88, -92, 38, 46, 17, 'brick'], [-84, -150, 32, 44, 14, 'block']]) {
+      b.add(key, place(box(w, h, d), cx, h / 2, cz));
+      b.add('blockRoof', place(hipRoof(w + 0.6, d + 0.6, 4), cx, h, cz));
+      for (const dx of [-w / 4, w / 4]) b.add('brick', place(box(0.9, 2.6, 0.9), cx + dx, h + 2.6, cz));
+    }
+    g.add(b.build(MK));
+  }
+
+  /* ---------- Длинный корпус вдоль проезда слева (x −60…−42, z −160…−4) ---------- */
+  {
+    // Советская: белый, 3 этажа, плоская кровля, простые ряды окон
+    const g = featGroup('longSov');
+    const b = new Batch();
+    const x0 = -60, x1 = -42, z0 = -160, z1 = -4, H = 12;
+    const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2, zc = (z0 + z1) / 2;
+    b.add('white', place(box(w, H, d), cx, H / 2, zc));
+    b.add('white', place(box(w + 0.4, 0.5, d + 0.4), cx, H + 0.1, zc));
+    b.add('flatRoof', place(box(w - 0.4, 0.2, d - 0.4), cx, H + 0.25, zc));
+    b.add('plinth', place(box(w + 0.2, 0.7, d + 0.2), cx, 0.35, zc));
+    const fR = { x: x1, z: zc, ry: Math.PI / 2 }, fF = { x: cx, z: z1, ry: 0 };
+    winRows(b, fR, span(-d / 2 + 2, d / 2 - 2, 3.2), [1.3, 5.2, 9.0], 1.7, 2.1, 'glass', 'trimN');
+    winRows(b, fF, span(-w / 2 + 2.5, w / 2 - 2.5, 3.2), [1.3, 5.2, 9.0], 1.7, 2.1, 'glass', 'trimN');
+    g.add(b.build(MK, { noShadow: ['glass', 'trimN'] }));
+  }
+  {
+    // 2026: кремовый с белыми пилястрами, 3 этажа + серая мансардная кровля со слуховыми окнами
+    const g = featGroup('long26');
+    const b = new Batch();
+    const x0 = -60, x1 = -42, w = x1 - x0, cx = (x0 + x1) / 2;
+    for (const [z0, z1, H] of [[-56, -4, 13], [-108, -57, 13.6], [-160, -109, 12.8]]) {
+      const d = z1 - z0, zc = (z0 + z1) / 2;
+      b.add('cream', place(box(w, H, d), cx, H / 2, zc));
+      b.add('plinth', place(box(w + 0.2, 0.8, d + 0.2), cx, 0.4, zc));
+      b.add('creamTrim', place(box(w + 0.6, 0.45, d + 0.6), cx, H - 0.2, zc));
+      b.add('creamTrim', place(box(w + 0.2, 0.25, d + 0.2), cx, 4.6, zc));
+      b.add('mansard', place(hipRoof(w + 0.4, d + 0.4, 4.2), cx, H, zc));
+      const fR = { x: x1, z: zc, ry: Math.PI / 2 };
+      const us = span(-d / 2 + 2, d / 2 - 2, 3.4);
+      winRows(b, fR, us, [1.4, 5.4, 9.2], 1.5, 2.3, 'glass', 'creamTrim');
+      for (const u of span(-d / 2 + 0.4, d / 2 - 0.4, 6.8)) b.face('creamTrim', box(0.55, H - 1, 0.2), fR, u, H / 2, 0.1);
+      for (const u of span(-d / 2 + 4, d / 2 - 4, 6.8)) { // слуховые окна
+        b.face('creamTrim', box(1.6, 1.8, 1.6), fR, u, H + 1.3, -1.2);
+        b.face('glass', box(0.9, 1.1, 0.05), fR, u, H + 1.25, -0.38);
+        b.face('mansard', extrude(triShape(2.0, 0.8), 1.8).translate(0, 0, -0.9), fR, u, H + 2.2, -1.2);
+      }
+      if (z1 === -4) winRows(b, { x: cx, z: z1, ry: 0 }, span(-w / 2 + 2.5, w / 2 - 2.5, 3.4), [1.4, 5.4, 9.2], 1.5, 2.3, 'glass', 'creamTrim');
+    }
+    g.add(b.build(MK, { noShadow: ['glass', 'creamTrim'] }));
+  }
+
+  /* ---------- Наземный вестибюль метро «Комсомольская» (1952): крест в плане, 6-колонный портик, купол со шпилем и звездой ---------- */
+  const METRO = { x: 53, z: -19 };
+  {
+    const g = featGroup('metro');
+    const b = new Batch();
+    const H = 14;
+    b.add('metroWall', place(box(30, H, 42), 53, H / 2, -19)); // x 38…68, z −40…+2
+    b.add('metroWall', place(box(36, H, 18), 53, H / 2, -19)); // поперечный объём x 35…71
+    b.add('plinth', place(box(36.4, 0.8, 42.4), 53, 0.4, -19));
+    for (const [w, d] of [[30, 42], [36, 18]]) {
+      b.add('trim', place(box(w + 0.8, 0.6, d + 0.8), 53, H - 0.3, -19));
+      b.add('trim', place(box(w + 1.4, 0.4, d + 1.4), 53, H + 0.2, -19));
+      b.add('strip', place(box(w + 0.5, 0.12, d + 0.5), 53, H - 0.95, -19)); // подсветка карниза снизу
+    }
+    for (const [fx, fz, ry, len] of [[53, 2, 0, 30], [71, -19, Math.PI / 2, 18], [35, -19, -Math.PI / 2, 18], [68, -19, Math.PI / 2, 42], [38, -19, -Math.PI / 2, 42]]) {
+      const f = { x: fx, z: fz, ry };
+      for (let u = -len / 2 + 0.4; u <= len / 2 - 0.4; u += 0.6) b.face('trimN', box(0.25, 0.3, 0.3), f, u, H - 0.95, 0.35); // дентикулы
+      if (len === 18 || len === 30) winRows(b, f, span(-len / 2 + 3, len / 2 - 3, 4), [1.5, 7.5], 2.0, 4.5, 'glass', 'trimN');
+    }
+    b.add('metroWall', place(box(26, 1.2, 26), 53, H + 0.9, -19)); // ступенчатая вальма
+    b.add('metroWall', place(cyl(11, 11, 6, 8).rotateY(Math.PI / 8), 53, H + 3, -19)); // восьмигранный барабан
+    b.add('trim', place(cyl(11.6, 11.6, 0.5, 8).rotateY(Math.PI / 8), 53, H + 6.1, -19));
+    for (let k = 0; k < 8; k++) {
+      const a = (k / 8) * Math.PI * 2 + Math.PI / 8;
+      b.add('glass', place(box(2.2, 3.2, 0.1), 53 + Math.sin(a) * 10.66, H + 3, -19 + Math.cos(a) * 10.66, a));
+    }
+    const prof = [];
+    for (let i = 0; i <= 12; i++) {
+      const t = i / 12, ang = t * Math.PI / 2;
+      prof.push(new THREE.Vector2(Math.max(0.01, 11 * Math.cos(ang) * (1 - 0.08 * t)), 10 * Math.pow(Math.sin(ang), 0.9)));
+    }
+    b.add('metroDome', place(new THREE.LatheGeometry(prof, 32), 53, H + 6.3, -19));
+    for (let r = 0; r < 16; r++) { // рёбра купола
+      const a = (r / 16) * Math.PI * 2;
+      for (let i = 0; i < 11; i++) {
+        const p = prof[i], q = prof[i + 1];
+        beam(b, 'trim', V3(53 + Math.sin(a) * (p.x + 0.05), H + 6.3 + p.y, -19 + Math.cos(a) * (p.x + 0.05)),
+          V3(53 + Math.sin(a) * (q.x + 0.05), H + 6.3 + q.y, -19 + Math.cos(a) * (q.x + 0.05)), 0.22);
+      }
+    }
+    b.add('metroWall', place(cyl(1.5, 1.5, 3, 12), 53, H + 6.3 + 10 + 1.4, -19)); // фонарик-ротонда
+    b.add('metroDome', place(new THREE.ConeGeometry(1.8, 1.6, 12), 53, H + 6.3 + 10 + 3.6, -19));
+    b.add('steel', place(new THREE.ConeGeometry(0.3, 9.5, 8), 53, 39.8, -19)); // шпиль
+    const st = extrude(starShape(0.75, 0.3), 0.12, 2).translate(0, 0, -0.06);
+    b.add('star', place(st, 53, 45.1, -19));
+    b.add('star', place(st, 53, 45.1, -19, Math.PI / 2));
+    // портик: 6 колонн Ø 1,4, h 11, шаг 4,6; антаблемент и аттик
+    b.add('plinth', place(box(29, 0.6, 9.5), 53, 0.3, 6.2));
+    for (let k = 0; k < 6; k++) {
+      const x = 41.5 + k * 4.6;
+      b.add('trim', place(box(1.8, 0.4, 1.8), x, 0.8, 8.5));
+      b.add('metroWall', place(cyl(0.62, 0.7, 10.0, 16), x, 6.0, 8.5));
+      b.add('trim', place(box(1.8, 0.6, 1.8), x, 11.3, 8.5));
+    }
+    b.add('metroWall', place(box(28, 1.2, 4.4), 53, 12.2, 8));
+    b.add('trim', place(box(28.6, 0.35, 5.0), 53, 12.95, 8));
+    for (let u = 39.4; u <= 66.6; u += 0.6) b.add('trimN', place(box(0.25, 0.28, 0.3), u, 12.6, 10.25));
+    b.add('metroWall', place(box(27, 1.5, 4.0), 53, 13.9, 7.8)); // аттик
+    b.add('trim', place(box(27.4, 0.25, 4.4), 53, 14.7, 7.8));
+    b.add('metroWall', place(box(28, 1.2, 4.2), 53, 12.2, 4)); // кровля портика
+    b.add('door', place(box(3, 4.2, 0.1), 53, 2.7, 2.06));
+    for (const dx of [-7, 7]) b.add('door', place(box(2.4, 3.8, 0.1), 53 + dx, 2.5, 2.06));
+    const gm = b.build(MK, { noShadow: ['trimN', 'glass', 'strip', 'door'] });
+    contactShadow(gm, 53, -16, 44, 56);
+    g.add(gm);
+  }
+
+  /* ---------- Здание МЖА (Советская): маленькое двухэтажное с арочными окнами и часами, дальше справа ---------- */
+  {
+    const g = featGroup('mzha');
+    const b = new Batch();
+    const x0 = 82, x1 = 102, z0 = -20, z1 = 6, H = 9;
+    const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2, zc = (z0 + z1) / 2;
+    b.add('mzhaWall', place(box(w, H, d), cx, H / 2, zc));
+    b.add('plinth', place(box(w + 0.2, 0.6, d + 0.2), cx, 0.3, zc));
+    b.add('trim', place(box(w + 0.6, 0.45, d + 0.6), cx, H - 0.1, zc));
+    b.add('flatRoof', place(box(w - 0.4, 0.2, d - 0.4), cx, H + 0.2, zc));
+    const fF = { x: cx, z: z1, ry: 0 }, fL = { x: x0, z: zc, ry: -Math.PI / 2 };
+    for (const f of [fF, fL]) {
+      const len = f === fF ? w : d;
+      for (const u of span(-len / 2 + 2, len / 2 - 2, 3)) {
+        b.face('trimN', new THREE.ShapeGeometry(archShape(1.9, 3.3), 8), f, u, 1.0, 0.03);
+        b.face('glass', new THREE.ShapeGeometry(archShape(1.6, 3.1), 8), f, u, 1.1, 0.05);
+        b.face('trimN', new THREE.ShapeGeometry(archShape(1.6, 2.5), 8), f, u, 5.2, 0.03);
+        b.face('glass', new THREE.ShapeGeometry(archShape(1.3, 2.3), 8), f, u, 5.3, 0.05);
+      }
+    }
+    b.face('mzhaWall', box(4.4, 2.4, 0.6), fF, 0, H + 1.1, -0.2);
+    b.face('clockFace', new THREE.CircleGeometry(0.8, 28), fF, 0, H + 1.15, 0.12);
+    b.face('dark', box(0.08, 0.6, 0.03), fF, 0, H + 1.4, 0.15);
+    b.face('dark', box(0.45, 0.1, 0.03), fF, 0.2, H + 1.15, 0.16);
+    g.add(b.build(MK, { noShadow: ['trimN', 'glass', 'clockFace', 'dark'] }));
+  }
+
+  /* ---------- 2026: зал 1970-х со световыми люками, тёмный высокий объём, пристройки, коричневый корпус ---------- */
+  const ledPts = [];
+  const facetLines = [];
+  /** Гранёная поверхность: треугольная сетка с шагом step, узлы смещены по нормали; узлы — точки светодиодов. */
+  function facetFace(b, o, uDir, vDir, nDir, W, H, step = 2.5, amp = 0.35) {
+    const nu = Math.max(1, Math.round(W / step)), nv = Math.max(1, Math.round(H / step));
+    const grid = [];
+    for (let i = 0; i <= nu; i++) {
+      grid.push([]);
+      for (let j = 0; j <= nv; j++) {
+        const edge = i === 0 || i === nu || j === 0 || j === nv;
+        const disp = edge ? 0 : amp * ((((i * 5 + j * 3) % 4) / 3) * 2 - 1);
+        grid[i].push(o.clone().addScaledVector(uDir, (i / nu) * W).addScaledVector(vDir, (j / nv) * H).addScaledVector(nDir, disp));
+        const p = grid[i][j].clone().addScaledVector(nDir, 0.14);
+        ledPts.push(p.x, p.y, p.z);
+      }
+    }
+    const pos = [];
+    const tri = (p, q, r) => {
+      const n = new THREE.Vector3().subVectors(q, p).cross(new THREE.Vector3().subVectors(r, p));
+      const [a, c] = n.dot(nDir) >= 0 ? [q, r] : [r, q];
+      pos.push(p.x, p.y, p.z, a.x, a.y, a.z, c.x, c.y, c.z);
+    };
+    const line = (p, q) => facetLines.push(p.x, p.y, p.z, q.x, q.y, q.z);
+    for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) {
+      const a = grid[i][j], c = grid[i + 1][j], d = grid[i + 1][j + 1], e = grid[i][j + 1];
+      if ((i + j) % 2) { tri(a, c, e); tri(c, d, e); line(c, e); } else { tri(a, c, d); tri(a, d, e); line(a, d); }
+      line(a, c); line(a, e);
+      if (i === nu - 1) line(c, d);
+      if (j === nv - 1) line(e, d);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.computeVertexNormals();
+    b.add('facet', geo);
+  }
+  {
+    const g = featGroup('complex26');
+    const b = new Batch();
+    // D4: плоский зал x −28…+27,4, z −30…−15,6, h 12,5; 6 рядов люков по 8 слева и справа от оси
+    b.add('hallWall', place(box(55.4, 12.5, 14.4), -0.3, 6.25, -22.8));
+    b.add('hallWall', place(box(55.8, 0.6, 14.8), -0.3, 12.8, -22.8)); // светлый парапет
+    b.add('hallRoof', place(box(54.8, 0.2, 13.8), -0.3, 12.6, -22.8));
+    for (let r = 0; r < 6; r++) for (let k = 0; k < 8; k++) for (const s of [-1, 1]) {
+      b.add('skylight', place(box(1.5, 0.5, 1.5), s * (3.2 + k * 3), 12.95, -16.9 - r * 2.3));
+    }
+    for (const s of [-1, 1]) winRows(b, { x: s > 0 ? 27.4 : -28, z: -22.8, ry: (s * Math.PI) / 2 }, [-4, 0, 4], [2, 7], 2.6, 3.2, 'glass', 'trimN');
+    // D5: тёмный высокий объём x −26…+14, z −103…−30, стены h 18, пологая двускатная кровля до 21 (конёк вдоль z)
+    const dx0 = -26, dx1 = 14, dz0 = -103, dz1 = -30, dcx = (dx0 + dx1) / 2, dcz = (dz0 + dz1) / 2, dw = dx1 - dx0, dd = dz1 - dz0;
+    b.add('darkWall', place(box(dw, 18, dd), dcx, 9, dcz));
+    const ra = Math.atan2(3, dw / 2), rl = Math.hypot(dw / 2, 3);
+    for (const s of [-1, 1]) b.add('darkRoof', place(box(rl + 0.4, 0.25, dd + 0.6), dcx + (s * dw) / 4, 19.6, dcz, 0, 0, -s * ra));
+    for (const z of [dz0, dz1 - 0.3]) b.add('darkWall', place(extrude(triShape(dw, 3), 0.3), dcx, 18, z));
+    for (const [vx, vz] of [[-14, -45], [-4, -60], [6, -48], [-16, -80], [2, -90], [-8, -95]]) {
+      b.add('lowWall', place(box(3, 2.2, 4), vx, 18 + 3 * (1 - Math.abs(vx - dcx) / (dw / 2)) + 1.1, vz));
+    }
+    for (const f of [{ x: dx0, z: dcz, ry: -Math.PI / 2 }, { x: dx1, z: dcz, ry: Math.PI / 2 }]) {
+      for (const y of [4, 11]) b.face('glass', box(dd - 6, 2.2, 0.08), f, 0, y, 0.05);
+    }
+    b.face('glass', box(dw - 6, 2.2, 0.08), { x: dcx, z: dz0, ry: Math.PI }, 0, 11, 0.05);
+    // D6: низкие пристройки
+    b.add('lowWall', place(box(6, 8, 60), -29, 4, -60));
+    b.add('lowRoof', place(box(6.2, 0.3, 60.2), -29, 8.1, -60));
+    b.add('lowWall', place(box(13, 9, 70), 20.5, 4.5, -65));
+    b.add('lowRoof', place(box(13.2, 0.3, 70.2), 20.5, 9.1, -65));
+    for (const [ex, ez] of [[18, -40], [23, -55], [19, -75], [24, -90]]) b.add('steel', place(box(3, 1.8, 4), ex, 10.1, ez));
+    // D10: коричневый корпус с вертикальными оконными полосами (за вестибюлем метро)
+    b.add('brown', place(box(26, 25, 40), 61, 12.5, -130));
+    b.add('flatRoof', place(box(25.4, 0.3, 39.4), 61, 25.1, -130));
+    for (const f of [{ x: 48, z: -130, ry: -Math.PI / 2 }, { x: 61, z: -110, ry: 0 }]) {
+      const len = f.ry === 0 ? 26 : 40;
+      for (const u of span(-len / 2 + 2.5, len / 2 - 2.5, 3.5)) b.face('brownGlass', box(1.6, 18, 0.08), f, u, 13, 0.05);
+    }
+    // D7: новый дебаркадер-проход — гранёная галерея x +27,5…+34,5, z −110…+4, h 15
+    b.add('facet', place(box(6.8, 14.8, 113.8), 31, 7.4, -53));
+    facetFace(b, V3(27.5, 0.6, 4.02), V3(1, 0, 0), V3(0, 1, 0), V3(0, 0, 1), 7, 14.4);
+    facetFace(b, V3(34.52, 0.6, 4.0), V3(0, 0, -1), V3(0, 1, 0), V3(1, 0, 0), 114, 14.4);
+    facetFace(b, V3(34.5, 15.02, 4), V3(0, 0, -1), V3(-1, 0, 0), V3(0, 1, 0), 114, 7, 2.5, 0.2);
+    // МЖА, строительный забор — в nowSite; здесь — подсветка люков и окон
+    g.add(b.build(MK, { noShadow: ['glass', 'trimN', 'skylight', 'brownGlass'] }));
+    const lines = new THREE.BufferGeometry();
+    lines.setAttribute('position', new THREE.Float32BufferAttribute(facetLines, 3));
+    g.add(new THREE.LineSegments(lines, new THREE.LineBasicMaterial({ color: '#5a5966' })));
+    // свод над головами правых платформ: x +2…+44, z −106…−160, h ≈15, «парящая» стеклянная кровля на фермах
+    const steel = new Batch();
+    const glass = new Batch();
+    const X0 = 2, X1 = 44, Z0 = -106, Z1 = -160;
+    const W = X1 - X0, D = Z0 - Z1, CX = (X0 + X1) / 2, ZC = (Z0 + Z1) / 2;
+    const NX = 14, NZ = 9;
+    const roofY = (u, v) => 12.2 + 2.8 * Math.sin(Math.PI * u) + 0.6 * Math.sin(Math.PI * v);
+    const P = (u, v) => V3(X0 + W * u, roofY(u, v), Z0 - D * v);
+    const roof = new THREE.PlaneGeometry(W, D, NX * 2, NZ * 2).rotateX(-Math.PI / 2);
+    const pa = roof.attributes.position;
+    for (let i = 0; i < pa.count; i++) {
+      const u = (pa.getX(i) + W / 2) / W, v = (pa.getZ(i) + D / 2) / D;
+      pa.setY(i, roofY(u, v));
+    }
+    roof.computeVertexNormals();
+    glass.add('glassRoof', place(roof, CX, 0, ZC));
+    for (let j = 0; j <= NZ; j += 3) for (let i = 0; i < NX; i++) beam(steel, 'whiteSteel', P(i / NX, j / NZ), P((i + 1) / NX, j / NZ), 0.3, 0.45);
+    for (let i = 0; i <= NX; i += 2) for (let j = 0; j < NZ; j++) beam(steel, 'whiteSteel', P(i / NX, j / NZ), P(i / NX, (j + 1) / NZ), 0.2, 0.3);
+    for (const x of [6.8, 20.4, 34]) for (const z of [-121, -147]) {
+      const u = (x - X0) / W, v = (Z0 - z) / D, top = 9.5;
+      steel.add('whiteSteel', place(cyl(0.3, 0.4, top - 1.1, 12), x, 1.1 + (top - 1.1) / 2, z));
+      for (const [du, dv] of [[-0.07, -0.12], [0.07, -0.12], [-0.07, 0.12], [0.07, 0.12]]) beam(steel, 'whiteSteel', V3(x, top, z), P(u + du, v + dv), 0.18);
+    }
+    g.add(steel.build(MK, { receive: false }));
+    const gmesh = glass.build(MK, { cast: false, receive: false });
+    gmesh.children.forEach((m) => { m.renderOrder = 3; });
+    g.add(gmesh);
+  }
+  const ledTex = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    const gx = c.getContext('2d');
+    const gr = gx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    gr.addColorStop(0, 'rgba(255,255,255,1)');
+    gr.addColorStop(0.3, 'rgba(255,255,255,0.6)');
+    gr.addColorStop(1, 'rgba(255,255,255,0)');
+    gx.fillStyle = gr;
+    gx.fillRect(0, 0, 32, 32);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  })();
+  const PX = 1 / Math.tan(THREE.MathUtils.degToRad(18)); // размер точки в метрах → size PointsMaterial
+  {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(ledPts, 3));
+    const p = new THREE.Points(geo, new THREE.PointsMaterial({ map: ledTex, size: 0.55 * PX, color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    p.userData.glow = { key: 'led', k: 1 };
+    p.renderOrder = 4;
+    feats.complex26.add(p);
+  }
+
+  /* ---------- Фонари (ореолы — одним Points на набор) ---------- */
   const haloTex = (() => {
     const c = document.createElement('canvas');
     c.width = c.height = 64;
@@ -1321,87 +1819,86 @@ function createWorld() {
     return t;
   })();
   const haloMats = [];
-  function halo(scale) {
-    const m = new THREE.SpriteMaterial({ map: haloTex, color: 0xffc070, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, fog: true });
+  function haloPoints(feat, pts, diam, key = 'halo', k = 1) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pts.flat(), 3));
+    const m = new THREE.PointsMaterial({ map: haloTex, size: diam * PX, color: 0xffc070, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
     haloMats.push(m);
-    const s = new THREE.Sprite(m);
-    s.scale.setScalar(scale);
-    return s;
+    const p = new THREE.Points(geo, m);
+    p.userData.glow = { key, k };
+    p.renderOrder = 4;
+    feats[feat].add(p);
   }
-  const SQ_LAMPS = [];
-  for (const x of [-42, -34, -26, -18, -10, 10, 18, 26, 34, 42]) SQ_LAMPS.push([x, 15]);
-  for (const x of [-40, -15, 15, 40]) SQ_LAMPS.push([x, 52]);
-  const PL_LAMPS = [];
-  // между колоннами платформенных навесов (шаг 12 м от z −62)
-  for (const px of PLAT_X) for (const z of [-68, -92, -116, -140]) PL_LAMPS.push([px, z]);
-  const gasProto = (() => {
-    const p = new Batch();
-    p.add('iron', place(box(0.4, 0.5, 0.4), 0, 0.25, 0));
-    p.add('iron', place(cyl(0.07, 0.1, 3.0, 8), 0, 2.0, 0));
-    p.add('iron', place(box(0.6, 0.05, 0.05), 0, 3.2, 0));
-    p.add('lampGlass', place(cyl(0.24, 0.16, 0.55, 6), 0, 3.6, 0));
-    p.add('iron', place(new THREE.ConeGeometry(0.33, 0.35, 6), 0, 4.05, 0));
-    return p.build(MK, { receive: false });
-  })();
-  const elecProto = (() => {
-    const p = new Batch();
-    p.add('iron', place(box(0.45, 0.6, 0.45), 0, 0.3, 0));
-    p.add('iron', place(cyl(0.08, 0.13, 5.6, 8), 0, 3.0, 0));
-    p.add('iron', place(box(1.5, 0.08, 0.08), 0, 5.6, 0));
-    p.add('lampGlass', place(sphere(0.3, 12, 8), -0.72, 5.9, 0));
-    p.add('lampGlass', place(sphere(0.3, 12, 8), 0.72, 5.9, 0));
-    p.add('lampGlass', place(sphere(0.34, 12, 8), 0, 6.3, 0));
-    return p.build(MK, { receive: false });
-  })();
-  function lampSet(name, proto, list, haloY, haloS) {
+  function gasPost(b, x, y, z) {
+    b.add('iron', place(box(0.4, 0.5, 0.4), x, y + 0.25, z));
+    b.add('iron', place(cyl(0.07, 0.1, 3.0, 8), x, y + 2.0, z));
+    b.add('iron', place(box(0.6, 0.05, 0.05), x, y + 3.2, z));
+    b.add('lampGlass', place(cyl(0.24, 0.16, 0.55, 6), x, y + 3.6, z));
+    b.add('iron', place(new THREE.ConeGeometry(0.33, 0.35, 6), x, y + 4.05, z));
+  }
+  function mast12(b, x, y, z) {
+    b.add('steel', place(box(0.5, 0.8, 0.5), x, y + 0.4, z));
+    b.add('steel', place(cyl(0.1, 0.18, 12, 8), x, y + 6, z));
+    b.add('steel', place(box(2.4, 0.1, 0.1), x, y + 11.8, z));
+    for (const s of [-1, 1]) b.add('lampGlass', place(box(0.7, 0.18, 0.35), x + s * 1.1, y + 11.65, z));
+  }
+  function lampSet(name, fn, list, haloY, diam) {
     const g = featGroup(name);
-    for (const [x, z, y] of list) {
-      const l = new THREE.Group();
-      l.position.set(x, y, z);
-      l.add(proto.clone());
-      const h = halo(haloS);
-      h.position.y = haloY;
-      l.add(h);
-      g.add(l);
-    }
+    const b = new Batch();
+    for (const [x, z, y] of list) fn(b, x, y, z);
+    g.add(b.build(MK, { receive: false }));
+    haloPoints(name, list.map(([x, z, y]) => [x, y + haloY, z]), diam);
   }
-  const sq = SQ_LAMPS.map(([x, z]) => [x, z, 0.08]);
-  const plHigh = PL_LAMPS.map(([x, z]) => [x, z, 1.1]);
-  lampSet('gasSq', gasProto, sq, 3.6, 2.8);
-  // 1851: фонари на боковых платформах под дебаркадером
-  lampSet('gasLow', gasProto, [-30, -60, -90].flatMap((z) => [[-9.7, z, 0.45], [9.7, z, 0.45]]), 3.6, 2.8);
-  lampSet('gasHigh', gasProto, plHigh, 3.6, 2.8);
-  lampSet('electric', elecProto, sq, 6.0, 3.6); // на платформах — светильники под навесами
+  lampSet('gasSq', gasPost, [[-30, 26, 0.08], [-10, 32, 0.08], [12, 30, 0.08], [32, 25, 0.08], [-22, 50, 0.08], [6, 54, 0.08], [28, 50, 0.08], [-46, 40, 0.08]], 3.6, 2.6);
+  lampSet('gasLow', gasPost, [-30, -60, -90].flatMap((z) => [[-9.7, z, 0.45], [9.7, z, 0.45]]), 3.6, 2.6);
+  lampSet('lamp26', gasPost, [-34, -22, -10, 10, 22, 34].map((x) => [x, 15.5, 0.08]).concat([[-40, 52, 0.08], [-15, 52, 0.08], [15, 52, 0.08], [40, 52, 0.08]]), 3.6, 2.8);
+  lampSet('electric', mast12, [-60, -30, 0, 30, 60].flatMap((x) => [[x, 45, 0.08], [x, 80, 0.08]]), 11.6, 4.5);
+  {
+    // 2026: настенные фонари-торшеры у полуколонн 1-го этажа и синие указатели над входами
+    const g = featGroup('wallLamps');
+    const b = new Batch();
+    const pts = [];
+    for (const { f, cols, corn } of FACES) {
+      if (f.z === TON.zb) continue;
+      for (const u of [...cols, corn[1], -corn[1]]) {
+        const c = Math.cos(f.ry), s = Math.sin(f.ry);
+        const d = 1.15, y = 3.3;
+        b.face('iron', box(0.08, 0.08, 0.7), f, u, y - 0.45, 0.85);
+        b.face('lampGlass', cyl(0.17, 0.12, 0.42, 6), f, u, y, d);
+        b.face('iron', new THREE.ConeGeometry(0.24, 0.24, 6), f, u, y + 0.33, d);
+        pts.push([f.x + u * c + d * s, y, f.z - u * s + d * c]);
+      }
+    }
+    for (const u of DOOR_AX) b.face('blueSign', box(1.2, 0.4, 0.08), FACES[0].f, u, 3.6, 0.42);
+    g.add(b.build(MK, { cast: false }));
+    haloPoints('wallLamps', pts, 1.6);
+  }
 
-  /* ---------- Извозчики (1851) ---------- */
+  /* ---------- Извозчики (царская): ряд вдоль фасада и отдельные экипажи ---------- */
   {
     const g = featGroup('carriages');
-    const p = new Batch();
-    p.add('coach', place(box(1.5, 1.05, 2.0), 0, 1.25, 0));
-    p.add('dark', place(box(1.6, 0.1, 2.2), 0, 1.82, 0));
-    p.add('dark', place(box(1.3, 0.12, 0.9), 0, 1.5, 1.5));
-    p.add('glass', place(box(1.52, 0.4, 0.8), 0, 1.45, 0));
+    const parts = [];
+    const p = (key, geo) => parts.push([key, geo]);
+    p('coach', place(box(1.5, 1.05, 2.0), 0, 1.25, 0));
+    p('dark', place(box(1.6, 0.1, 2.2), 0, 1.82, 0));
+    p('dark', place(box(1.3, 0.12, 0.9), 0, 1.5, 1.5));
     for (const [zz, r] of [[0.75, 0.42], [-0.75, 0.55]]) {
-      p.add('wheelW', place(wheel(r, 0.08), 0.8, r, zz));
-      p.add('wheelW', place(wheel(r, 0.08), -0.8, r, zz));
+      p('wheelW', place(wheel(r, 0.08), 0.8, r, zz));
+      p('wheelW', place(wheel(r, 0.08), -0.8, r, zz));
     }
-    p.add('dark', place(box(0.05, 0.05, 2.0), 0.35, 0.95, 2.6));
-    p.add('dark', place(box(0.05, 0.05, 2.0), -0.35, 0.95, 2.6));
-    p.add('horse', place(box(0.55, 0.65, 1.5), 0, 1.35, 3.0));
-    for (const [lx, lz] of [[0.18, 2.5], [-0.18, 2.5], [0.18, 3.55], [-0.18, 3.55]]) p.add('horse', place(box(0.13, 1.05, 0.13), lx, 0.52, lz));
-    p.add('horse', place(box(0.32, 0.85, 0.35), 0, 1.9, 3.75, 0, 0.5));
-    p.add('horse', place(box(0.28, 0.3, 0.65), 0, 2.25, 4.05, 0, 0.5));
-    const coach = p.build(MK);
-    for (const [x, z, ry] of [[-22, 22, 1.7], [9, 30, -1.4], [31, 21, 2.7], [-36, 40, 0.4], [20, 46, 1.2], [-5, 38, -0.3]]) {
-      const w = new THREE.Group();
-      w.position.set(x, 0.08, z);
-      w.rotation.y = ry;
-      w.add(coach.clone());
-      g.add(w);
-    }
+    p('horse', place(box(0.55, 0.65, 1.5), 0, 1.35, 3.0));
+    for (const [lx, lz] of [[0.18, 2.5], [-0.18, 2.5], [0.18, 3.55], [-0.18, 3.55]]) p('horse', place(box(0.13, 1.05, 0.13), lx, 0.52, lz));
+    p('horse', place(box(0.32, 0.85, 0.35), 0, 1.9, 3.75, 0, 0.5));
+    p('horse', place(box(0.28, 0.3, 0.65), 0, 2.25, 4.05, 0, 0.5));
+    const b = new Batch();
+    const spots = [[-36, 40, 0.4], [20, 46, 1.2], [36, 20, 2.7], [-30, 30, 1.7], [44, 34, -1.4]];
+    for (let i = 0; i < 11; i++) spots.push([-20 + i * 3.1, 24, Math.PI / 2]);
+    for (const [x, z, ry] of spots) for (const [key, geo] of parts) b.add(key, place(geo, x, 0.08, z, ry));
+    parts.forEach(([, geo]) => geo.dispose());
+    g.add(b.build(MK));
   }
 
-  /* ---------- Легковые машины и автобус (Советская) ---------- */
+  /* ---------- Советская площадь: «Волги», автобус, трамваи КТМ-2 ---------- */
   {
     const g = featGroup('cars');
     const b = new Batch();
@@ -1414,43 +1911,45 @@ function createWorld() {
         b.add('dark', place(wheel(0.34, 0.2), x + dx * c + dz * s, 0.34, z - dx * s + dz * c, ry));
       }
     };
-    auto(-30, 62, Math.PI / 2, 'car1');
-    auto(-12, 69.5, -Math.PI / 2, 'car2');
-    auto(8, 62, Math.PI / 2, 'car3');
-    auto(26, 69.5, -Math.PI / 2, 'car4');
-    auto(-46, 69.5, -Math.PI / 2, 'car2');
-    auto(40, 62, Math.PI / 2, 'car1');
-    b.add('busC', place(box(2.5, 2.4, 11), -2, 1.6, 62, Math.PI / 2));
-    b.add('glass', place(box(2.54, 0.9, 9.6), -2, 2.15, 62, Math.PI / 2));
-    for (const dx of [-3.5, 3.5]) for (const dz of [-1.1, 1.1]) b.add('dark', place(wheel(0.5, 0.3), -2 + dx, 0.5, 62 + dz, Math.PI / 2));
+    [[-30, 64, 1], [-12, 72, -1], [8, 64, 1], [26, 72, -1], [-46, 72, -1], [40, 64, 1], [-20, 26, 0.3], [-6, 24, 1], [10, 27, -1], [18, 24, 1]]
+      .forEach(([x, z, d], i) => auto(x, z, (Math.PI / 2) * d, ['car1', 'car2', 'car3', 'car4'][i % 4]));
+    b.add('busC', place(box(2.5, 1.6, 11), 54, 2.0, 64, Math.PI / 2));
+    b.add('busR', place(box(2.52, 0.9, 11.02), 54, 0.85, 64, Math.PI / 2));
+    b.add('glass', place(box(2.54, 0.9, 9.6), 54, 2.15, 64, Math.PI / 2));
+    // трамвайные пути и два КТМ-2 (красный низ, кремовый верх)
+    for (const z of [49, 53]) for (const s of [-0.76, 0.76]) b.add('rail', place(box(300, 0.06, 0.08), 0, 0.08, z + s));
+    for (const [x, z] of [[-14, 49], [34, 53]]) {
+      b.add('tramR', place(box(15, 1.3, 2.6), x, 1.05, z));
+      b.add('tramC', place(box(15, 1.5, 2.6), x, 2.45, z));
+      b.add('glass', place(box(13.4, 0.9, 2.64), x, 2.5, z));
+      b.add('tramR', place(box(15.02, 0.18, 2.62), x, 1.8, z));
+      b.add('flatRoof', place(box(14.4, 0.3, 2.3), x, 3.35, z));
+      b.add('dark', place(box(0.06, 1.6, 0.06), x - 2, 4.1, z, 0, 0, 0.6));
+    }
     g.add(b.build(MK));
   }
 
-  /* ---------- Деревья ---------- */
+  /* ---------- Деревья (Советская, Настоящее) ---------- */
   {
     const g = featGroup('trees');
     const r = rng(7);
+    const tb = new Batch();
     const spotsT = [];
-    for (const z of [16, 26, 36, 46]) spotsT.push([-62, z], [62, z]);
-    for (const x of [-50, -30, 30, 50]) spotsT.push([x, 56]);
+    for (const z of [20, 30, 42]) spotsT.push([-66, z], [-78, z], [80, z], [92, z]);
+    for (const x of [-58, -46, 48, 60, 72]) spotsT.push([x, 58]);
     for (const [x, z] of spotsT) {
-      const tb = new Batch();
       const h = 7 + r() * 3;
-      tb.add('trunk', place(cyl(0.22, 0.32, h * 0.5, 6), 0, h * 0.25, 0));
-      tb.add('tree', place(new THREE.IcosahedronGeometry(2.8 + r() * 0.8, 1), 0, h * 0.62, 0, 0, 0, 0, 1, 1.15, 1));
-      tb.add('tree', place(new THREE.IcosahedronGeometry(2.0, 1), 0.8, h * 0.85, 0.5));
-      const t = new THREE.Group();
-      t.position.set(x, 0.08, z);
-      t.add(tb.build(MK));
-      g.add(t);
+      tb.add('trunk', place(cyl(0.22, 0.32, h * 0.5, 6), x, h * 0.25, z));
+      tb.add('tree', place(new THREE.IcosahedronGeometry(2.8 + r() * 0.8, 1), x, h * 0.62, z, 0, 0, 0, 1, 1.15, 1));
+      tb.add('tree', place(new THREE.IcosahedronGeometry(2.0, 1), x + 0.8, h * 0.85, z + 0.5));
     }
+    g.add(tb.build(MK));
   }
 
   /* ---------- Город: дома с текстурой окон (по эпохам) ---------- */
   function avoid(x, z) {
-    if (x > -66 && x < 62 && z < 30) return true; // вокзал, крыло, МЖА и пути
-    if (x > -70 && x < 70 && z > -10 && z < 80) return true; // площадь
-    if (x > 85 && x < 160 && z > -40 && z < 15) return true; // Ярославский
+    if (x > -125 && x < 185 && z < 40 && z > -470) return true; // вокзал, соседи, пути
+    if (x > -80 && x < 80 && z > -10 && z < 90) return true; // площадь
     if (x > -85 && x < 65 && z > 195 && z < 245) return true; // Казанский
     return false;
   }
@@ -1459,7 +1958,7 @@ function createWorld() {
     const r = rng(seed);
     const b = new Batch();
     let n = 0, guard = 0;
-    while (n < count && guard++ < 2000) {
+    while (n < count && guard++ < 3000) {
       const a = r() * Math.PI * 2, d = rMin + r() * (rMax - rMin);
       const x = Math.cos(a) * d, z = Math.sin(a) * d;
       if (avoid(x, z)) continue;
@@ -1471,73 +1970,40 @@ function createWorld() {
     }
     g.add(b.build(MK, { cast: false, receive: false }));
   }
-  cityBlocks('cityLow', 1851, SMALL ? 10 : 16, 190, 380, 6, 10, true);
-  cityBlocks('cityMid', 1960, SMALL ? 22 : 32, 170, 420, 15, 28, false);
-  cityBlocks('cityHigh', 2026, 3, 330, 480, 70, 110, false);
+  cityBlocks('cityLow', 1851, SMALL ? 10 : 16, 190, 420, 6, 10, true);
+  cityBlocks('cityMid', 1960, SMALL ? 22 : 32, 170, 460, 15, 28, false);
+  cityBlocks('cityHigh', 2026, 3, 360, 520, 70, 110, false);
 
-  /* ---------- Соседи: Ярославский и Казанский вокзалы (схематично) ---------- */
+  /* ---------- Соседи (Советская, Настоящее): Ярославский вокзал справа, Казанский напротив ---------- */
   {
     const g = featGroup('neighbors');
     const b = new Batch();
-    // Ярославский — справа при взгляде с площади: светлые стены, высокая шатровая кровля
-    b.add('trim', place(box(48, 14, 22), 122, 7, -12));
-    b.add('roof', place(hipRoof(30, 18, 11), 126, 14, -12));
-    b.add('wallB', place(box(48.4, 1.2, 22.4), 122, 9.5, -12));
-    b.add('trim', place(box(9, 13, 9), 100, 13.5, -8));
-    b.add('roof', place(new THREE.ConeGeometry(7, 14, 4).rotateY(Math.PI / 4), 100, 27, -8));
-    // Казанский — напротив через площадь, с ярусной башней
+    b.add('yar', place(box(60, 15, 32), 142, 7.5, -6));
+    b.add('yarGreen', place(box(60.4, 1.2, 32.4), 142, 12.2, -6));
+    b.add('yarRoof', place(hipRoof(60.6, 32.6, 8), 142, 15, -6));
+    b.add('yar', place(box(12, 22, 12), 124, 11, 6));
+    b.add('yarGreen', place(box(12.4, 1.4, 12.4), 124, 19.5, 6));
+    b.add('yarRoof', place(new THREE.ConeGeometry(9, 14, 4).rotateY(Math.PI / 4), 124, 29, 6));
     b.add('trim', place(box(120, 13, 22), -8, 6.5, 222));
-    b.add('wallB', place(box(120.4, 1.0, 22.4), -8, 11.5, 222));
-    b.add('roof', place(hipRoof(118, 20, 5), -8, 13, 222));
+    b.add('yarRoof', place(hipRoof(118, 20, 5), -8, 13, 222));
     b.add('trim', place(box(14, 22, 14), -26, 11, 214));
     b.add('trim', place(box(10, 14, 10), -26, 29, 214));
     b.add('trim', place(box(7, 10, 7), -26, 41, 214));
-    b.add('roof', place(new THREE.ConeGeometry(4.6, 16, 8), -26, 54, 214));
+    b.add('yarRoof', place(new THREE.ConeGeometry(4.6, 16, 8), -26, 54, 214));
     g.add(b.build(MK, { cast: false }));
   }
 
-  /* ---------- Царская эпоха: первый Ярославский (1862) справа и старый Рязанский (1864) напротив — скромные здания ---------- */
+  /* ---------- Царская: первый Ярославский (1862) справа и Рязанский (1864) напротив — скромные здания ---------- */
   {
     const g = featGroup('oldNeighbors');
     const b = new Batch();
-    // Ярославский: двухэтажный корпус с невысоким центральным объёмом
-    b.add('wallA', place(box(34, 9.5, 14), 116, 4.75, -8));
-    b.add('trim', place(box(34.4, 0.4, 14.4), 116, 9.5, -8));
-    b.add('roof', place(hipRoof(34.4, 14.4, 3.6), 116, 9.7, -8));
-    b.add('wallB', place(box(9, 11.2, 15), 116, 5.6, -7.5));
-    b.add('roof', place(hipRoof(9.4, 15.4, 2.6), 116, 11.2, -7.5));
-    // Рязанский: вытянутое двухэтажное здание с центральной частью
-    b.add('wallA', place(box(58, 9, 14), -10, 4.5, 222));
-    b.add('trim', place(box(58.4, 0.4, 14.4), -10, 9, 222));
-    b.add('roof', place(hipRoof(58.4, 14.4, 3.4), -10, 9.2, 222));
-    b.add('wallB', place(box(12, 11.5, 15), -10, 5.75, 221.5));
-    b.add('roof', place(hipRoof(12.4, 15.4, 3.2), -10, 11.5, 221.5));
+    b.add('fence', place(box(34, 9.5, 14), 122, 4.75, -8));
+    b.add('debTrim', place(box(34.4, 0.4, 14.4), 122, 9.5, -8));
+    b.add('debRoof', place(hipRoof(34.4, 14.4, 3.6), 122, 9.7, -8));
+    b.add('fence', place(box(58, 9, 14), -10, 4.5, 222));
+    b.add('debTrim', place(box(58.4, 0.4, 14.4), -10, 9, 222));
+    b.add('debRoof', place(hipRoof(58.4, 14.4, 3.4), -10, 9.2, 222));
     g.add(b.build(MK, { cast: false }));
-  }
-
-  /* ---------- Здание МЖА (бывшие кассы Московского железнодорожного агентства): справа, между вокзалом и Ярославским ---------- */
-  {
-    const g = featGroup('mzha');
-    const b = new Batch();
-    const x0 = 37, x1 = 57, z0 = -7, z1 = 8.6, H = 8.6;
-    const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2, zc = (z0 + z1) / 2;
-    b.add('sovWall', place(box(w, H, d), cx, H / 2, zc));
-    b.add('plinth', place(box(w + 0.2, 0.7, d + 0.2), cx, 0.35, zc));
-    b.add('concrete', place(box(w + 0.5, 0.5, d + 0.5), cx, H - 0.05, zc));
-    b.add('flatRoof', place(box(w - 0.4, 0.2, d - 0.4), cx, H + 0.25, zc));
-    const fF = { x: cx, z: z1, ry: 0 }, fL = { x: x0, z: zc, ry: -Math.PI / 2 }, fR = { x: x1, z: zc, ry: Math.PI / 2 };
-    const us = span(-w / 2 + 2.2, w / 2 - 2.2, 3.3);
-    sovWindows(b, fF, us.filter((u) => Math.abs(u) > 2.5), [1.2], 2.4, 3.0); // кассовый зал — крупные окна
-    sovWindows(b, fF, us, [5.6], 1.8, 2.0);
-    b.face('door', box(3.2, 3.0, 0.1), fF, 0, 1.2 + 1.5, 0.06);
-    for (const f of [fL, fR]) sovWindows(b, f, span(-d / 2 + 2.4, d / 2 - 2.4, 3.6), [1.2, 5.6], 1.8, 2.2);
-    // часы над входом на аттике
-    b.face('concrete', box(5.2, 3.0, 1.0), fF, 0, H + 1.3, -0.3);
-    b.face('clockFace', new THREE.CircleGeometry(1.0, 32), fF, 0, H + 1.35, 0.25);
-    b.face('bronze', new THREE.TorusGeometry(1.05, 0.07, 6, 32), fF, 0, H + 1.35, 0.27);
-    b.face('dark', box(0.1, 0.7, 0.03), fF, 0.0, H + 1.35 + 0.3, 0.29);
-    b.face('dark', box(0.5, 0.12, 0.03), fF, 0.22, H + 1.35, 0.3);
-    g.add(b.build(MK, { noShadow: ['trimN', 'glass', 'door', 'clockFace', 'dark', 'bronze'] }));
   }
 
   /* ---------- Люди (InstancedMesh, по эпохам) ---------- */
@@ -1554,7 +2020,8 @@ function createWorld() {
     return merge(parts.map((p) => { const q = p.toNonIndexed(); p.dispose(); return q; }));
   }
   const PEOPLE_N = SMALL ? 60 : 110;
-  function peopleSet(name, seed, palette, femalePal, platY) {
+  /** plats: [{x, z0, z1, y}] — где стоят пассажиры вне площади. */
+  function peopleSet(name, seed, palette, femalePal, plats) {
     const g = featGroup(name);
     const r = rng(seed);
     const make = (geo, count, pal) => {
@@ -1562,11 +2029,10 @@ function createWorld() {
       const c = new THREE.Color();
       for (let i = 0; i < count; i++) {
         let x, z, y = 0.08;
-        if (r() < 0.72) { x = -55 + r() * 110; z = 14 + r() * 40; }
+        if (r() < 0.72) { x = -36 + r() * 66; z = 15 + r() * 40; }
         else {
-          if (platY > 0.5) { x = PLAT_X[Math.floor(r() * 3)] + (r() - 0.5) * 3.2; z = Z_BUF - 4 - r() * 110; }
-          else { x = (r() < 0.5 ? -9.7 : 9.7) + (r() - 0.5) * 4; z = -18 - r() * 80; }
-          y = platY;
+          const p = plats[Math.floor(r() * plats.length)];
+          x = p.x + (r() - 0.5) * 3.6; z = p.z0 - r() * (p.z0 - p.z1); y = p.y;
         }
         const s = 0.92 + r() * 0.14;
         _o.position.set(x, y, z); _o.rotation.set(0, r() * 6.28, 0); _o.scale.set(s, s, s); _o.updateMatrix();
@@ -1580,11 +2046,18 @@ function createWorld() {
     make(peopleGeo(false), PEOPLE_N - nf, palette);
     if (nf) make(peopleGeo(true), nf, femalePal);
   }
-  peopleSet('people1', 1, ['#2a2622', '#3a3028', '#4a3b2c', '#26303a', '#5a4a38'], ['#5c2a2e', '#2f3a52', '#6b5a3e', '#3b2f2a', '#7a6650'], 0.4);
-  peopleSet('people2', 2, ['#3c4250', '#4a4d52', '#5a5048', '#2f3540', '#6a6458', '#56423a'], null, 1.1);
-  peopleSet('people3', 3, ['#2b2f38', '#c23b3b', '#3f6aa8', '#e2d9c6', '#4b6b4a', '#d9a441', '#6a4a7a', '#1f1f22'], null, 1.1);
+  peopleSet('people1', 1, ['#2a2622', '#3a3028', '#4a3b2c', '#26303a', '#5a4a38'], ['#5c2a2e', '#2f3a52', '#6b5a3e', '#3b2f2a', '#7a6650'],
+    [{ x: -9.7, z0: -20, z1: -100, y: 0.45 }, { x: 9.7, z0: -20, z1: -100, y: 0.45 }]);
+  peopleSet('people2', 2, ['#3c4250', '#4a4d52', '#5a5048', '#2f3540', '#6a6458', '#56423a'], null,
+    [-32.2, -17.6, 17.6, 32.2].map((x) => ({ x, z0: -30, z1: -140, y: 1.1 })));
+  peopleSet('people3', 3, ['#2b2f38', '#c23b3b', '#3f6aa8', '#e2d9c6', '#4b6b4a', '#d9a441', '#6a4a7a', '#1f1f22'], null,
+    PLAT26.map(({ x, z0 }) => ({ x, z0: z0 - 2, z1: -240, y: 1.1 })));
 
   for (const f of FEATS) makeFadeable(f);
+
+  /* ---------- Поезда: пути и точки остановки по эпохам ---------- */
+  const TRACK_OF = { steam51: 4.2, electro: 22.6, sapsan: 11.4 };
+  const STOP_OF = { steam51: Z_BUF51 - 1.2, electro: -28 - 1.2, sapsan: -130 - 1.2 };
 
   /* ---------- Поезда ---------- */
   const FAR_Z = -720;
@@ -1953,11 +2426,13 @@ function createWorld() {
   }
 
   /* ---------- Переходы «вида» эпохи ---------- */
+  let dayOverride = false;
   function lookOf(i) {
     const e = ERAS[i];
+    const look = dayOverride && i === N - 1 ? { ...e.look, ...DAY26 } : e.look;
     const o = {};
-    for (const k of COLOR_KEYS) o[k] = new THREE.Color(e.look[k]);
-    for (const k of NUM_KEYS) o[k] = e.look[k];
+    for (const k of COLOR_KEYS) o[k] = new THREE.Color(look[k]);
+    for (const k of NUM_KEYS) o[k] = look[k];
     for (const f of FEATS) o['f_' + f] = e.feat[f] ? 1 : 0;
     return o;
   }
@@ -1972,7 +2447,6 @@ function createWorld() {
   let tStart = 0;
   const LOOK_DUR = 2.4;
   const tmpV = new THREE.Vector3();
-  const haloFeats = ['gasSq', 'gasLow', 'gasHigh', 'electric'];
 
   function applyLook(l) {
     skyU.top.value.copy(l.skyTop);
@@ -2000,29 +2474,52 @@ function createWorld() {
     hemi.groundColor.copy(l.hemiGround);
     hemi.intensity = l.hemiInt;
 
-    for (const k of ['ground', 'paving', 'road', 'wallA', 'wallB', 'trim', 'plinth', 'roof', 'city']) M[k].color.copy(l[k]);
-    M.rustA.color.copy(l.wallA);
-    M.rustB.color.copy(l.wallB);
+    for (const k of ['ground', 'paving', 'wallA', 'trim', 'plinth', 'roof', 'dome', 'debWall', 'customsRoof', 'city']) M[k].color.copy(l[k]);
+    M.road.color.copy(l.road);
+    M.colLit.color.copy(l.trim);
+    M.signL.color.copy(l.signC);
+    M.signR.color.copy(l.signC);
     M.edge.color.copy(l.edgeC);
-    M.cityRoof.color.copy(l.roof).multiplyScalar(0.9);
+    M.cityRoof.color.copy(l.roof).multiplyScalar(0.7);
     M.city.emissiveIntensity = l.cityGlow * 0.9;
+    // ночь 2026: стены мягче, колонны и пилястры ярче (свет снизу), окна 2-го этажа ровно-тёплые, циферблаты холодно-белые
+    M.wallA.emissiveIntensity = l.wallGlow;
+    M.trim.emissiveIntensity = l.wallGlow * 1.15;
+    M.colLit.emissiveIntensity = l.colLit;
+    M.balcony.emissiveIntensity = l.wallGlow * 1.2;
+    M.metroWall.emissiveIntensity = l.wallGlow * 0.45;
     M.glass.emissive.copy(l.winGlow);
     M.glass.emissiveIntensity = l.win;
+    M.glassUp.emissive.copy(l.winGlow);
+    M.glassUp.emissiveIntensity = l.glassUp;
     M.door.emissive.copy(l.winGlow);
-    M.door.emissiveIntensity = l.win * 0.7;
-    M.clockFace.emissiveIntensity = l.win * 0.8;
+    M.door.emissiveIntensity = l.win * 0.5;
+    M.brownGlass.emissiveIntensity = l.win * 0.6;
+    M.clockFace.emissiveIntensity = l.clock;
+    M.signL.emissiveIntensity = l.signGlow;
+    M.signR.emissiveIntensity = l.signGlow;
+    M.haloL.opacity = M.haloR.opacity = l.signHalo;
+    M.skylight.emissiveIntensity = l.led * 0.55;
+    M.facet.emissiveIntensity = l.led * 0.07;
+    M.blueSign.emissiveIntensity = l.led * 2.2;
+    M.board.emissiveIntensity = 0;
+    for (const m of [M.flagW, M.flagB, M.flagR]) m.emissiveIntensity = l.facade * 0.35;
     M.lampGlass.emissive.copy(l.lampColor);
     M.lampGlass.emissiveIntensity = l.lamp;
-    M.strip.emissiveIntensity = l.lamp * 0.5;
+    M.strip.emissiveIntensity = l.facade * 1.4;
     for (const m of haloMats) m.color.copy(l.lampColor);
     for (const [m, base] of ENV) m.envMapIntensity = base * l.env * 1.6;
     spots.forEach((s) => { s.intensity = l.facade * s.userData.base; });
 
     for (const f of FEATS) applyFade(f, l['f_' + f]);
-    for (const f of haloFeats) {
+    // ореолы фонарей, светодиоды, свечение вывески — прозрачность по «виду» и по появлению группы
+    for (const f of FEATS) {
       if (!feats[f].visible) continue;
       const v = l['f_' + f];
-      feats[f].traverse((o) => { if (o.isSprite) o.material.opacity = Math.min(1, l.halo * v); });
+      feats[f].traverse((o) => {
+        const gl = o.userData.glow;
+        if (gl) o.material.opacity = Math.min(1, l[gl.key] * gl.k * v);
+      });
     }
   }
 
@@ -2136,7 +2633,7 @@ function createWorld() {
       const p = g.attributes.position.array, b = g.userData.base;
       for (let i = 0; i < p.length; i += 3) {
         const x = b[i] - 0.08;
-        p[i + 2] = b[i + 2] + Math.sin(x * 2.2 - t * (reduce ? 0 : 3.2)) * 0.12 * x / 2.7;
+        p[i + 2] = b[i + 2] + Math.sin(x * 2.2 - t * (reduce ? 0 : 3.2)) * 0.1 * x / 2.0;
       }
       g.attributes.position.needsUpdate = true;
       g.computeVertexNormals();
@@ -2163,6 +2660,7 @@ function createWorld() {
 
   setEra(0, true);
   requestAnimationFrame(frame);
+  window.__dbg = { feats, scene, spots, renderer };
 
   return {
     setEra,
@@ -2178,6 +2676,8 @@ function createWorld() {
       controls.target.set(tx2, ty, tz);
       controls.update();
     },
+    /** Для сравнительных снимков: дневной свет в «Настоящем». */
+    day(on) { dayOverride = !!on; setEra(targetIdx, true); },
     stats() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; },
   };
 }
@@ -2215,6 +2715,7 @@ window.leningradCarousel = {
   pause: () => setPaused(true),
   play: () => setPaused(false),
   view: (...a) => world && world.view(...a),
+  day: (on) => world && world.day(on),
   stats: () => world && world.stats(),
   get index() { return ui.idx; },
   get webgl() { return !!world; },
