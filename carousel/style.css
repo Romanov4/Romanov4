@@ -21,6 +21,7 @@
   --fb-wall: #c9a879;
   --fb-wall2: #b9966a;
   --fb-glow: #3a3128;
+  --fb-dome: #a9b2b2;
 }
 
 /* Тёмная тема UI (палитра design-system/tokens.css); 3D-сцена не меняется */
@@ -340,14 +341,28 @@ button:focus-visible,
 .fb-ground { fill: #8e826c; }
 .fb-wall { fill: var(--fb-wall); transition: fill var(--fade); }
 .fb-wall2 { fill: var(--fb-wall2); transition: fill var(--fade); }
-.fb-roof { fill: #4c4a44; }
-.fb-trim { fill: #f3ead6; }
+.fb-trim { fill: #f6f2e6; }
 .fb-win { fill: var(--fb-glow); transition: fill var(--fade); }
-.fb-annex { display: none; }
+.fb-arch { fill: none; stroke: #f6f2e6; stroke-width: 2; }
+.fb-roofgrey { fill: #aeb8b6; }
+.fb-dome { fill: var(--fb-dome, #6e9a86); transition: fill var(--fade); }
+.fb-side { fill: #e3cf9a; }
+.fb-sideroof { fill: #8c9496; }
+.fb-fence { fill: #e6dcc4; }
+.fb-booth-b { fill: #151515; }
+.fb-booth-w { fill: #eeeeea; }
+.fb-metro { fill: #eef0ec; }
+.fb-col { stroke: #c9ccc6; stroke-width: 1; }
+.fb-metrodome { fill: #aeb9be; }
+.fb-star { fill: #c8302a; }
+.fb-dark { fill: #2f3036; }
+.fb-led { fill: #ffffff; }
+.fb-sign { font: 700 10px "Cormorant Garamond", Georgia, serif; fill: #1f3e8c; }
+.stage[data-era="2"] .fb-sign { fill: #f0f6ff; }
+.fb-annex, .fb-e0, .fb-e1, .fb-e2, .fb-e12 { display: none; }
+.stage[data-era="0"] .fb-e0, .stage[data-era="1"] .fb-e1, .stage[data-era="2"] .fb-e2,
+.stage[data-era="1"] .fb-e12, .stage[data-era="2"] .fb-e12,
 .stage[data-era="1"] .fb-annex, .stage[data-era="2"] .fb-annex { display: inline; }
-.fb-annex-wall { fill: #c6bca8; }
-.fb-hall-wall { fill: #b9b5ab; }
-.fb-annex-win { fill: var(--fb-glow); transition: fill var(--fade); }
 .fb-clock { fill: #f8f2e2; stroke: var(--gold); stroke-width: 2; }
 .fb-hand { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
 .fallback-note {
@@ -425,7 +440,7 @@ button:focus-visible,
 
 @media (prefers-reduced-motion: reduce) {
   :root { --fade: 0s; }
-  #scene, .vignette, .fallback, .fb-wall, .fb-wall2, .fb-win, .fb-annex-win { transition: none; }
+  #scene, .vignette, .fallback, .fb-wall, .fb-wall2, .fb-win, .fb-dome { transition: none; }
   .card.is-changing .card-year,
   .card.is-changing .card-title,
   .card.is-changing .card-text { animation: none; }

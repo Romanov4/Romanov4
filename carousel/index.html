@@ -27,37 +27,40 @@
 
     <!-- Фолбэк без WebGL: иллюстрация-силуэт вместо 3D -->
     <div class="fallback" id="fallback" hidden>
-      <svg class="fallback-art" viewBox="-130 0 770 260" aria-hidden="true" focusable="false">
-        <rect x="-130" y="236" width="770" height="24" class="fb-ground"/>
-        <!-- кассовый зал 1975–77 за зданием (выглядывает над кровлей) и крыло 1960-х слева в линию фасада: эпохи 2 и 3 -->
-        <g class="fb-annex">
-          <rect x="140" y="102" width="360" height="40" class="fb-hall-wall"/>
-          <rect x="140" y="99" width="360" height="5" class="fb-trim"/>
-          <rect x="150" y="110" width="340" height="9" class="fb-annex-win"/>
-          <rect x="-114" y="104" width="144" height="132" class="fb-annex-wall"/>
-          <rect x="-118" y="100" width="152" height="6" class="fb-trim"/>
-          <path d="M-104 128h22v-16h-22z M-74 128h22v-16h-22z M-44 128h22v-16h-22z M-14 128h22v-16h-22z M-104 170h22v-16h-22z M-74 170h22v-16h-22z M-44 170h22v-16h-22z M-14 170h22v-16h-22z M-104 212h22v-16h-22z M-74 212h22v-16h-22z M-14 212h22v-16h-22z" class="fb-annex-win"/>
-          <rect x="-50" y="198" width="34" height="38" class="fb-annex-win"/>
-        </g>
-        <rect x="40" y="132" width="560" height="104" class="fb-wall"/>
-        <rect x="30" y="118" width="70" height="118" class="fb-wall2"/>
-        <rect x="540" y="118" width="70" height="118" class="fb-wall2"/>
-        <rect x="245" y="100" width="150" height="136" class="fb-wall2"/>
-        <rect x="285" y="60" width="70" height="40" class="fb-wall"/>
-        <rect x="295" y="22" width="50" height="40" class="fb-wall2"/>
-        <polygon points="300,22 320,2 340,22" class="fb-roof"/>
-        <circle cx="320" cy="42" r="13" class="fb-clock"/>
-        <line x1="320" y1="42" x2="320" y2="33" class="fb-hand"/>
-        <line x1="320" y1="42" x2="327" y2="45" class="fb-hand"/>
-        <rect x="36" y="128" width="568" height="5" class="fb-trim"/>
-        <rect x="36" y="182" width="568" height="4" class="fb-trim"/>
-        <g class="fb-win">
-          <path d="M60 230v-30a8 8 0 0 1 16 0v30z M92 230v-30a8 8 0 0 1 16 0v30z M130 230v-30a8 8 0 0 1 16 0v30z M164 230v-30a8 8 0 0 1 16 0v30z M198 230v-30a8 8 0 0 1 16 0v30z M426 230v-30a8 8 0 0 1 16 0v30z M460 230v-30a8 8 0 0 1 16 0v30z M494 230v-30a8 8 0 0 1 16 0v30z M532 230v-30a8 8 0 0 1 16 0v30z M564 230v-30a8 8 0 0 1 16 0v30z"/>
-          <path d="M60 172v-26a8 8 0 0 1 16 0v26z M92 172v-26a8 8 0 0 1 16 0v26z M130 172v-26a8 8 0 0 1 16 0v26z M164 172v-26a8 8 0 0 1 16 0v26z M198 172v-26a8 8 0 0 1 16 0v26z M426 172v-26a8 8 0 0 1 16 0v26z M460 172v-26a8 8 0 0 1 16 0v26z M494 172v-26a8 8 0 0 1 16 0v26z M532 172v-26a8 8 0 0 1 16 0v26z M564 172v-26a8 8 0 0 1 16 0v26z"/>
-          <path d="M262 236v-44a12 12 0 0 1 24 0v44z M308 236v-44a12 12 0 0 1 24 0v44z M354 236v-44a12 12 0 0 1 24 0v44z"/>
-          <path d="M264 174v-36a10 10 0 0 1 20 0v36z M310 174v-36a10 10 0 0 1 20 0v36z M356 174v-36a10 10 0 0 1 20 0v36z"/>
-        </g>
-      </svg>
+      <svg class="fallback-art" viewBox="-150 -24 860 284" aria-hidden="true" focusable="false">
+        <rect x="-150" y="236" width="860" height="24" class="fb-ground"/>
+        <rect x="-150" y="140" width="166" height="96" class="fb-side"/>
+        <polygon points="-150,140 16,140 -2,119.0 -150,119.0" class="fb-sideroof"/>
+        <path d="M-120 227.6v-12a4 4 0 0 1 8 0v12z M-120 196.4v-14h8v14z M-96 227.6v-12a4 4 0 0 1 8 0v12z M-96 196.4v-14h8v14z M-72 227.6v-12a4 4 0 0 1 8 0v12z M-72 196.4v-14h8v14z M-48 227.6v-12a4 4 0 0 1 8 0v12z M-48 196.4v-14h8v14z M-24 227.6v-12a4 4 0 0 1 8 0v12z M-24 196.4v-14h8v14z" class="fb-win"/>
+        <g class="fb-e2"><rect x="124" y="110" width="240" height="18" class="fb-dark"/><rect x="445.0" y="146" width="42" height="90" class="fb-dark"/><circle cx="448.0" cy="230.0" r="1.4" class="fb-led"/><circle cx="448.0" cy="215.0" r="1.4" class="fb-led"/><circle cx="448.0" cy="200.0" r="1.4" class="fb-led"/><circle cx="448.0" cy="185.0" r="1.4" class="fb-led"/><circle cx="448.0" cy="170.0" r="1.4" class="fb-led"/><circle cx="448.0" cy="155.0" r="1.4" class="fb-led"/><circle cx="463.0" cy="230.0" r="1.4" class="fb-led"/><circle cx="463.0" cy="215.0" r="1.4" class="fb-led"/><circle cx="463.0" cy="200.0" r="1.4" class="fb-led"/><circle cx="463.0" cy="185.0" r="1.4" class="fb-led"/><circle cx="463.0" cy="170.0" r="1.4" class="fb-led"/><circle cx="463.0" cy="155.0" r="1.4" class="fb-led"/><circle cx="478.0" cy="230.0" r="1.4" class="fb-led"/><circle cx="478.0" cy="215.0" r="1.4" class="fb-led"/><circle cx="478.0" cy="200.0" r="1.4" class="fb-led"/><circle cx="478.0" cy="185.0" r="1.4" class="fb-led"/><circle cx="478.0" cy="170.0" r="1.4" class="fb-led"/><circle cx="478.0" cy="155.0" r="1.4" class="fb-led"/></g>
+        <g class="fb-e0"><rect x="16" y="212" width="105.0" height="24" class="fb-fence"/><path d="M65.5 236v-16.5a10.5 10.5 0 0 1 21 0v16.5z" class="fb-win"/><rect x="439.0" y="212" width="291.0" height="24" class="fb-fence"/><path d="M485.5 236v-16.5a10.5 10.5 0 0 1 21 0v16.5z" class="fb-win"/><rect x="514" y="233.0" width="6" height="3" class="fb-booth-b"/><rect x="514" y="230.0" width="6" height="3" class="fb-booth-w"/><rect x="514" y="227.0" width="6" height="3" class="fb-booth-b"/><rect x="514" y="224.0" width="6" height="3" class="fb-booth-w"/><rect x="514" y="221.0" width="6" height="3" class="fb-booth-b"/></g>
+        <g class="fb-annex"><rect x="37" y="215.0" width="6" height="21.0" class="fb-metro"/><rect x="61" y="215.0" width="6" height="21.0" class="fb-metro"/><rect x="91" y="215.0" width="6" height="21.0" class="fb-metro"/><rect x="109" y="215.0" width="6" height="21.0" class="fb-metro"/><rect x="508" y="152" width="180" height="84" class="fb-metro"/><rect x="532" y="116" width="132" height="36" class="fb-metro"/><path d="M532 116 Q532 56 598 56 Q664 56 664 116z" class="fb-metrodome"/><rect x="589.0" y="38" width="18" height="18" class="fb-metro"/><line x1="598" y1="38" x2="598" y2="-28" class="fb-hand"/><rect x="514" y="152" width="168" height="18" class="fb-trim"/><rect x="525.0" y="170" width="8" height="66" class="fb-metro fb-col"/><rect x="552.6" y="170" width="8" height="66" class="fb-metro fb-col"/><rect x="580.2" y="170" width="8" height="66" class="fb-metro fb-col"/><rect x="607.8" y="170" width="8" height="66" class="fb-metro fb-col"/><rect x="635.4" y="170" width="8" height="66" class="fb-metro fb-col"/><rect x="663.0" y="170" width="8" height="66" class="fb-metro fb-col"/><polygon points="598,-38.8 601,-30.4 595,-30.4" class="fb-star"/></g>
+        <polygon points="136,126.2 424,126.2 364,110 196,110" class="fb-roofgrey"/>
+        <rect x="121.0" y="134" width="318" height="102" class="fb-wall"/>
+        <rect x="121.0" y="126.2" width="318" height="7.8" class="fb-trim"/>
+        <rect x="116.8" y="132.8" width="326.4" height="6" class="fb-trim"/>
+        <rect x="118.6" y="183.2" width="322.8" height="3" class="fb-trim"/>
+        <rect x="120.4" y="231.2" width="319.2" height="4.8" class="fb-trim"/>
+        <path d="M121.1 138.8h4v92.4h-4z M126.2 138.8h4v92.4h-4z M156.2 138.8h4v92.4h-4z M191.0 138.8h4v92.4h-4z M225.8 138.8h4v92.4h-4z M260.6 138.8h4v92.4h-4z M295.4 138.8h4v92.4h-4z M330.2 138.8h4v92.4h-4z M365.0 138.8h4v92.4h-4z M399.8 138.8h4v92.4h-4z M429.8 138.8h4v92.4h-4z M434.9 138.8h4v92.4h-4z" class="fb-trim"/>
+        <g class="fb-win"><path d="M133.0 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M144.4 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M165.4 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M176.8 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M200.2 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M211.6 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M235.0 236V203.3a4.5 4.5 0 0 1 9 0V236z M246.4 236V203.3a4.5 4.5 0 0 1 9 0V236z M269.8 236V203.3a4.5 4.5 0 0 1 9 0V236z M281.2 236V203.3a4.5 4.5 0 0 1 9 0V236z M304.6 236V203.3a4.5 4.5 0 0 1 9 0V236z M316.0 236V203.3a4.5 4.5 0 0 1 9 0V236z M339.4 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M350.8 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M374.2 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M385.6 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M406.6 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z M418.0 230.0V203.3a4.5 4.5 0 0 1 9 0V230.0z"/><path d="M134.2 158h7.8v18h-7.8z M144.4 158h7.8v18h-7.8z M166.6 158h7.8v18h-7.8z M176.8 158h7.8v18h-7.8z M201.4 158h7.8v18h-7.8z M211.6 158h7.8v18h-7.8z M236.2 158h7.8v18h-7.8z M246.4 158h7.8v18h-7.8z M271.0 158h7.8v18h-7.8z M281.2 158h7.8v18h-7.8z M305.8 158h7.8v18h-7.8z M316.0 158h7.8v18h-7.8z M340.6 158h7.8v18h-7.8z M350.8 158h7.8v18h-7.8z M375.4 158h7.8v18h-7.8z M385.6 158h7.8v18h-7.8z M407.8 158h7.8v18h-7.8z M418.0 158h7.8v18h-7.8z"/></g>
+        <path d="M130.6 203.0a12.6 12.6 0 0 1 25.2 0 M163.0 203.0a12.6 12.6 0 0 1 25.2 0 M197.8 203.0a12.6 12.6 0 0 1 25.2 0 M232.6 203.0a12.6 12.6 0 0 1 25.2 0 M267.4 203.0a12.6 12.6 0 0 1 25.2 0 M302.2 203.0a12.6 12.6 0 0 1 25.2 0 M337.0 203.0a12.6 12.6 0 0 1 25.2 0 M371.8 203.0a12.6 12.6 0 0 1 25.2 0 M404.2 203.0a12.6 12.6 0 0 1 25.2 0" class="fb-arch"/>
+        <rect x="257.5" y="86" width="45.0" height="40.2" class="fb-wall"/>
+        <rect x="258.1" y="47.0" width="43.8" height="39.0" class="fb-wall"/>
+        <rect x="253.9" y="42.2" width="52.2" height="4.8" class="fb-trim"/>
+        <rect x="255.7" y="84.2" width="48.6" height="3" class="fb-trim"/>
+        <rect x="259.6" y="35.0" width="40.8" height="7.2" class="fb-wall"/>
+        <path d="M260.5 35.0 Q262 20 280 17.0 Q298 20 299.5 35.0z" class="fb-dome"/>
+        <rect x="275.8" y="99.8" width="8.4" height="15.6" class="fb-win"/>
+        <polygon points="273,98.6 287,98.6 280,94.4" class="fb-trim"/>
+        <circle cx="280" cy="65.6" r="7.8" class="fb-clock"/>
+        <line x1="280" y1="65.6" x2="280" y2="59.6" class="fb-hand"/>
+        <line x1="280" y1="65.6" x2="285" y2="67.6" class="fb-hand"/>
+        <line x1="280" y1="17.0" x2="280" y2="-13.0" class="fb-hand fb-e0"/>
+        <g class="fb-e1"><line x1="280" y1="17.0" x2="280" y2="-19.0" class="fb-hand"/><polygon points="280,-25.6 283.5,-17.8 276.5,-17.8" class="fb-star"/></g>
+        <g class="fb-e2"><line x1="280" y1="17.0" x2="280" y2="-22" class="fb-hand"/><rect x="281" y="-22" width="12" height="2.7" fill="#f4f4f4"/><rect x="281" y="-19.3" width="12" height="2.7" fill="#1c3f94"/><rect x="281" y="-16.6" width="12" height="2.7" fill="#c01c28"/></g>
+        <text x="190" y="123.8" text-anchor="middle" textLength="108" lengthAdjust="spacingAndGlyphs" class="fb-sign fb-e12">ЛЕНИНГРАДСКИЙ</text>
+        <text x="334" y="123.8" text-anchor="middle" textLength="48" lengthAdjust="spacingAndGlyphs" class="fb-sign fb-e2">ВОКЗАЛ</text>
+        </svg>
       <p class="fallback-note">3D-модель недоступна в этом браузере — показана текстовая версия карусели.</p>
     </div>
 
@@ -66,7 +69,7 @@
     <header class="brand">
       <p class="brand-kicker">Москва · Комсомольская площадь</p>
       <h1 class="brand-title">Ленинградский вокзал</h1>
-      <p class="brand-sub">Три эпохи: 1851 — XX век — 2026</p>
+      <p class="brand-sub">Три эпохи: 1851 — 1960-е — 2026</p>
     </header>
 
     <section class="panel" id="panel" aria-roledescription="карусель" aria-label="Эпохи Ленинградского вокзала">
@@ -76,7 +79,7 @@
         <p class="card-period" id="eraPeriod">1851–1917</p>
         <h2 class="card-title" id="eraTitle">Царская эпоха</h2>
         <button type="button" class="more-btn" id="moreBtn" aria-expanded="false" aria-controls="eraText">Подробнее</button>
-        <p class="card-text" id="eraText">Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона. С 1855 года он называется Николаевским. За зданием — металлический дебаркадер над двумя тупиковыми путями. Поезда водили американские паровозы типа 2-2-0 Александровского завода.</p>
+        <p class="card-text" id="eraText">Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона; с 1855 года он называется Николаевским. Двухэтажное здание в девять осей с башней-часами стоит на немощёной площади. За ним — дебаркадер с каменными стенами-аркадами и металлической кровлей, по бокам — ограды с арочными воротами, слева — здание таможни того же Тона.</p>
       </div>
 
       <div class="controls">
@@ -105,9 +108,9 @@
     <div class="noscript">
       <h2>Ленинградский вокзал: эпохи</h2>
       <ol>
-        <li><b>Царская эпоха, 1851–1917.</b> Петербургский вокзал (с 1855 года — Николаевский) открыт в 1851 году по проекту Константина Тона; это первый вокзал Москвы. За зданием — металлический дебаркадер над двумя тупиковыми путями.</li>
-        <li><b>Советская эпоха, 1920–1970-е.</b> В 1923 году вокзал стал Октябрьским, затем Ленинградским; на рубеже 1940–1950-х интерьеры реставрированы по проекту Алексея Душкина; в 1960-е слева появилась трёхэтажная пристройка, в 1975–1977 годах за зданием, на месте дебаркадера, построен главный кассовый зал (архитектор В. И. Кузнецов).</li>
-        <li><b>Настоящее, 2026.</b> Закрыт 11 августа 2024 года, открыт 22 мая 2026 года; фасаду вернули цвета по снимку 1873 года, восстановлен флагшток, советские крыло и кассовый зал реконструированы, выход к поездам за кассовым залом накрыт стеклянным дебаркадером.</li>
+        <li><b>Царская эпоха, 1851–1917.</b> Петербургский вокзал (с 1855 года — Николаевский) открыт в 1851 году по проекту Константина Тона; это первый вокзал Москвы. Двухэтажное здание в девять осей с башней-часами; за ним — дебаркадер с каменными стенами-аркадами и металлической кровлей; по бокам — ограды с арочными воротами, слева — здание таможни того же Тона.</li>
+        <li><b>Советская эпоха, 1960-е — начало 1970-х.</b> В 1923 году вокзал стал Октябрьским, затем Ленинградским. Фасад белый, на кровле — буквы «ЛЕНИНГРАДСКИЙ», на шпиле башни — звезда; за зданием ещё стоит старый дебаркадер с надписью «МОСКВА» на торце к путям. Справа — наземный вестибюль метро «Комсомольская» (1952, архитектор А. В. Щусев), слева вдоль путей — длинный белый трёхэтажный корпус.</li>
+        <li><b>Настоящее, 2026.</b> Закрыт 11 августа 2024 года, открыт 22 мая 2026 года. Фасаду вернули кремовый цвет с белыми деталями по снимку 1873 года, на башне — флагшток с флагом, на кровле — новая вывеска с логотипами. За зданием — зал 1970-х со световыми люками и тёмный высокий объём, справа — новый гранёный дебаркадер из металла и стекла.</li>
       </ol>
     </div>
   </noscript>

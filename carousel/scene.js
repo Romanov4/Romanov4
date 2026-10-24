@@ -21,8 +21,8 @@ const ERAS = [
   {
     era: 'Царская', short: '1851', year: '1851', period: '1851–1917',
     title: 'Царская эпоха',
-    text: 'Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона; с 1855 года он называется Николаевским. Двухэтажное здание в девять осей с башней-часами стоит на немощёной площади. За ним по оси — дебаркадер с каменными стенами-аркадами и металлической кровлей, по бокам — ограды с арочными воротами, слева — здание таможни того же Тона.',
-    desc: 'утро на немощёной площади, ряды извозчиков и чугунные фонари, двухэтажное здание Тона в девять осей с коринфским ордером, башней-часами и шпилем, за ним по оси — дебаркадер с каменными аркадами и двускатной металлической кровлей, под ним паровоз 2-2-0 и вагоны трёх классов, по бокам — ограды с арочными воротами и полосатая будка, слева — трёхэтажное здание таможни',
+    text: 'Петербургский вокзал — первый вокзал Москвы — открыт в 1851 году по проекту архитектора Константина Тона; с 1855 года он называется Николаевским. Двухэтажное здание в девять осей с башней-часами стоит на немощёной площади. За ним — дебаркадер с каменными стенами-аркадами и металлической кровлей, по бокам — ограды с арочными воротами, слева — здание таможни того же Тона.',
+    desc: 'утро на немощёной площади, ряды извозчиков и чугунные фонари, двухэтажное здание Тона в девять осей с коринфским ордером, башней-часами и шпилем, за ним — дебаркадер с каменными аркадами и двускатной металлической кровлей, под ним паровоз 2-2-0 и вагоны трёх классов, по бокам — ограды с арочными воротами и полосатая будка, слева — трёхэтажное здание таможни',
     train: 'steam51',
     filter: 'sepia(0.2) saturate(0.9) contrast(1.02)',
     vignette: 0.3,
@@ -52,7 +52,7 @@ const ERAS = [
       skyTop: '#7f9fc0', skyHorizon: '#dfe4e4', skyBottom: '#b9b5aa', fog: '#d9dcda', fogNear: 150, fogFar: 600, cloudC: '#f2f2f0', cloud: 0.3,
       sun: '#fff1dc', sunInt: 2.7, sunAz: 2.05, sunEl: 0.55,
       hemiSky: '#e4e8ec', hemiGround: '#6a6458', hemiInt: 1.05,
-      ground: '#76735f', paving: '#77787a', road: '#58595c', edgeC: '#ece7da',
+      ground: '#6b7550', paving: '#77787a', road: '#58595c', edgeC: '#ece7da',
       wallA: '#dcdfd8', trim: '#eaece7', plinth: '#c9ccc6', roof: '#b5bbb8', dome: '#b4bdbd', debWall: '#c9a77a', customsRoof: '#8a5a44', signC: '#2f3f6a',
       city: '#c6c0b4', winGlow: '#fff0c8', win: 0.05, glassUp: 0.04, lampColor: '#fff3d8', lamp: 0.4, halo: 0.08,
       facade: 0, wallGlow: 0, colLit: 0, signGlow: 0, signHalo: 0, clock: 0, led: 0,
@@ -79,7 +79,7 @@ const ERAS = [
       ground: '#3a3a40', paving: '#8a7f72', road: '#2f2f34', edgeC: '#e3c13a',
       wallA: '#e8d9ae', trim: '#f3f0e6', plinth: '#cfc6b0', roof: '#aeb8b6', dome: '#6e9a86', debWall: '#d9c9a4', customsRoof: '#8c9496', signC: '#1f3e8c',
       city: '#4a4658', winGlow: '#f6d9a0', win: 0.55, glassUp: 1.25, lampColor: '#ffe2b4', lamp: 2.6, halo: 0.75,
-      facade: 1, wallGlow: 0.3, colLit: 1.7, signGlow: 2.0, signHalo: 0.95, clock: 1.3, led: 1,
+      facade: 1, wallGlow: 0.16, colLit: 1.9, signGlow: 2.6, signHalo: 1.0, clock: 1.3, led: 1,
       exposure: 1.05, sunGlow: 0, env: 0.3, cityGlow: 1.0,
     },
     feat: {
@@ -588,6 +588,8 @@ function wordTex(word, w, h, blur = 0) {
     g.textAlign = 'center'; g.textBaseline = 'middle';
     g.font = `700 ${Math.round(h * 0.86)}px ${SERIF}`;
     g.fillText(word, w / 2, h * 0.54, w * 0.98);
+    g.strokeStyle = '#fff'; g.lineWidth = h * 0.07; g.lineJoin = 'round';
+    g.strokeText(word, w / 2, h * 0.54, w * 0.98);
   });
 }
 /** Правая часть вывески 2026: «ВОКЗАЛ» + логотип РЖД + «Московский транспорт» (x +5…+22 м). */
@@ -599,12 +601,15 @@ function rightSignTex(w, h, blur = 0) {
     g.textAlign = 'center'; g.textBaseline = 'middle';
     g.font = `700 ${Math.round(h * 0.86)}px ${SERIF}`;
     g.fillText('ВОКЗАЛ', pxm * 4, h * 0.54, pxm * 7.8);
+    g.lineWidth = h * 0.07; g.lineJoin = 'round';
+    g.strokeText('ВОКЗАЛ', pxm * 4, h * 0.54, pxm * 7.8);
     // РЖД: курсивные слитные буквы
     g.save();
     g.translate(pxm * 10, h * 0.55);
     g.transform(1, 0, -0.25, 1, 0, 0);
     g.font = `700 ${Math.round(h * 0.78)}px ${SANS}`;
     g.fillText('РЖД', 0, 0, pxm * 2.9);
+    g.lineWidth = h * 0.05; g.strokeText('РЖД', 0, 0, pxm * 2.9);
     g.restore();
     // «Московский транспорт»: знак-капля и две строки
     const cx = pxm * 12.9, cy = h * 0.5, r = h * 0.4;
@@ -749,6 +754,7 @@ function createWorld() {
     brownGlass: M_('#9fb3bf', 0.15, 0.3, { emissive: C('#f6d9a0'), emissiveIntensity: 0 }, 1.0),
     facet: M_('#2a2a32', 0.22, 0.65, { flatShading: true, emissive: C('#b4c6ea'), emissiveIntensity: 0 }, 1.2),
     whiteSteel: M_('#e9ecee', 0.35, 0.55, {}, 0.9),
+    vaultSteel: M_('#e9ecee', 0.35, 0.55, { emissive: C('#dfeaff'), emissiveIntensity: 0 }, 0.9),
     canopy26: M_('#dadddc', 0.6, 0.3, {}, 0.6),
     truss: M_('#9aa0a2', 0.5, 0.6, {}, 0.7),
     canopySov: M_('#4e5250', 0.8, 0.2, {}, 0.4),
@@ -756,7 +762,7 @@ function createWorld() {
     fence: M_('#e6dcc4', 0.92, 0, plasterMap(0.4), 0.4, 3),
     balcony: M_('#ede6d0', 0.8, 0, { side: THREE.DoubleSide, emissive: C(WARM), emissiveIntensity: 0 }, 0.5),
     blueSign: M_('#1d4fd8', 0.4, 0, { emissive: C('#3d6bff'), emissiveIntensity: 0 }, 0.3),
-    rose: M_('#4a4440', 0.9, 0, {}, 0.3),
+    rose: M_('#6a625a', 0.9, 0, {}, 0.3),
     glassRoof: new THREE.MeshStandardMaterial({
       color: '#b9d2e2', roughness: 0.05, metalness: 0.2, transparent: true, opacity: 0.34,
       side: THREE.DoubleSide, depthWrite: false, envMapIntensity: 1.6,
@@ -867,8 +873,8 @@ function createWorld() {
   // Ночная архитектурная подсветка 2026: тёплый белый ≈3000 K снизу (без теней)
   const spots = [];
   for (const [x, y, z, tx2, ty, tz, base, ang] of [
-    [-15, 0.4, 24, -14, 9, 10, 650, 0.8], [15, 0.4, 24, 14, 9, 10, 650, 0.8],
-    [39, 0.4, 13, 26.5, 9, -4, 520, 0.75], [-40, 0.4, 13, -26.5, 9, -4, 520, 0.75],
+    [-15, 0.4, 24, -14, 9, 10, 420, 0.8], [15, 0.4, 24, 14, 9, 10, 420, 0.8],
+    [39, 0.4, 13, 26.5, 9, -4, 340, 0.75], [-40, 0.4, 13, -26.5, 9, -4, 340, 0.75],
     [0, 17.5, 26, 0, 28, 3.2, 700, 0.32],
   ]) {
     const s = new THREE.SpotLight(WARM, 0, 70, ang, 0.85, 1.4);
@@ -1215,21 +1221,20 @@ function createWorld() {
 
   /* ---------- Царская и советская: пути под старым дебаркадером (упоры у здания) ---------- */
   const Z_BUF51 = -19.3;
-  trackSet([{ x: -4.2, head: Z_BUF51 }, { x: 4.2, head: Z_BUF51 }], featGroup('tracks51'));
-  platformSet(featGroup('platLow'), [{ x: -9.7, z0: -18.6, z1: -121, w: 6.2 }, { x: 9.7, z0: -18.6, z1: -121, w: 6.2 }],
-    [{ x0: -12.9, x1: 12.9, z0: -15.6, z1: -18.6 }], 0.45);
+  // старый дебаркадер стоит за левой половиной здания (ось x −26,5): так его аркада видна слева от здания на фото 1860-х
+  const DCX = -26.5;
+  trackSet([{ x: DCX - 4.2, head: Z_BUF51 }, { x: DCX + 4.2, head: Z_BUF51 }], featGroup('tracks51'));
+  platformSet(featGroup('platLow'), [{ x: DCX - 9.7, z0: -18.6, z1: -121, w: 6.2 }, { x: DCX + 9.7, z0: -18.6, z1: -121, w: 6.2 }],
+    [{ x0: DCX - 12.9, x1: DCX + 12.9, z0: -16.1, z1: -18.6 }], 0.45);
 
   /* ---------- Советская 1960-е: пути по сторонам дебаркадера, низкие навесы ---------- */
   const SOV_PLAT = [
-    { x: -32.2, z0: -27.5, z1: -260 }, { x: -17.6, z0: -16, z1: -260 }, { x: 17.6, z0: -16, z1: -260 },
-    { x: 32.2, z0: -27.5, z1: -260 }, { x: 46.8, z0: -46, z1: -260 },
+    { x: DCX - 9.7, z0: -123.2, z1: -260, w: 6.2 }, { x: DCX + 9.7, z0: -123.2, z1: -260, w: 6.2 },
+    { x: -9.4, z0: -16, z1: -260 }, { x: 5.2, z0: -27.5, z1: -260 }, { x: 19.8, z0: -27.5, z1: -260 }, { x: 34.4, z0: -46, z1: -260 },
   ];
-  const SOV_TRACKS = [
-    { x: -37.2, head: -28 }, { x: -27.2, head: -28 }, { x: -22.6, head: -28 }, { x: 22.6, head: -28 }, { x: 27.2, head: -28 },
-    { x: 37.2, head: -46.5 }, { x: 41.8, head: -46.5 }, { x: 51.8, head: -46.5 },
-  ];
+  const SOV_TRACKS = [-4.4, 0.2, 10.2, 14.8, 24.8, 29.4, 39.4, 44].map((x) => ({ x, head: x < 33 ? -28 : -46.5 }));
   trackSet(SOV_TRACKS, featGroup('tracksSov'));
-  platformSet(featGroup('platSov'), SOV_PLAT, [{ x0: -40, x1: -14.1, z0: -16, z1: -27.5 }, { x0: 14.1, x1: 35, z0: -16, z1: -27.5 }]);
+  platformSet(featGroup('platSov'), SOV_PLAT, [{ x0: -12.4, x1: 35, z0: -16, z1: -27.5 }]);
   {
     const g = featGroup('canopySov');
     const b = new Batch();
@@ -1244,17 +1249,15 @@ function createWorld() {
   {
     const g = featGroup('catSov');
     const b = new Batch();
+    const WIRED = [...SOV_TRACKS, { x: DCX - 4.2, head: -124 }, { x: DCX + 4.2, head: -124 }];
     for (let z = -55; z > -420; z -= 50) {
       const nearDeb = z > -125;
-      const segs = nearDeb ? [[-40.5, -15], [15, 55]] : [[-40.5, 55]];
-      for (const [a, c] of segs) {
-        for (const x of [a, c]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
-        b.add('steel', place(box(c - a, 0.35, 0.35), (a + c) / 2, 10.6, z));
-      }
-      if (!nearDeb) b.add('steel', place(box(0.5, 11, 0.5), 0, 5.5, z));
-      for (const t of SOV_TRACKS) if (z < t.head) b.add('steel', place(box(0.05, 4.1, 0.05), t.x, 8.5, z));
+      const [a, c] = nearDeb ? [-11.9, 49] : [-40.5, 49];
+      for (const x of nearDeb ? [a, 17.3, c] : [a, DCX, 17.3, c]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
+      b.add('steel', place(box(c - a, 0.35, 0.35), (a + c) / 2, 10.6, z));
+      for (const t of WIRED) if (z < t.head) b.add('steel', place(box(0.05, 4.1, 0.05), t.x, 8.5, z));
     }
-    for (const t of SOV_TRACKS) {
+    for (const t of WIRED) {
       const wl = t.head - 1 + 420;
       b.add('dark', place(box(0.04, 0.04, wl), t.x, 6.5, t.head - 1 - wl / 2));
       b.add('dark', place(box(0.04, 0.04, wl), t.x, 7.6, t.head - 1 - wl / 2));
@@ -1264,10 +1267,10 @@ function createWorld() {
 
   /* ---------- 2026: 12 путей, левые (x < −5) с упорами у z −108, правые — у z −130 ---------- */
   const P26 = [-34, -20.4, -6.8, 6.8, 20.4, 34];
-  const TRACKS26 = P26.flatMap((p) => [p - 4.6, p + 4.6]).map((x) => ({ x, head: x < -5 ? -108 : -130 }));
+  const TRACKS26 = P26.flatMap((p) => [p - 4.6, p + 4.6]).map((x) => ({ x, head: x < -5 ? -115 : -130 }));
   trackSet(TRACKS26, featGroup('tracks26'));
-  const PLAT26 = P26.map((x) => ({ x, z0: x < 0 ? -104 : -129.5, z1: -400 }));
-  platformSet(featGroup('plat26'), PLAT26, [{ x0: -40, x1: -3.8, z0: -103.5, z1: -107.5 }, { x0: -3.8, x1: 40, z0: -104, z1: -129.5 }]);
+  const PLAT26 = P26.map((x) => ({ x, z0: x < 0 ? -111 : -129.5, z1: -400 }));
+  platformSet(featGroup('plat26'), PLAT26, [{ x0: -40, x1: -3.8, z0: -110.5, z1: -114.5 }, { x0: -3.8, x1: 40, z0: -110.5, z1: -129.5 }]);
   {
     const g = featGroup('canopy26');
     const b = new Batch();
@@ -1305,7 +1308,7 @@ function createWorld() {
   }
 
   /* ---------- Старый дебаркадер ≈27 × 107 м по оси за зданием: стены-аркады, двускатная металлическая кровля ---------- */
-  const DEB = { hx: 13.5, z0: TON.zb, z1: -122.6, t: 1.2 };
+  const DEB = { cx: -26.5, hx: 13.5, z0: TON.zb, z1: -122.6, t: 1.2 };
   {
     const g = featGroup('debark');
     const b = new Batch();
@@ -1346,6 +1349,20 @@ function createWorld() {
     gs.moveTo(-14.1, 0); gs.lineTo(-6.5, 0); gs.lineTo(-6.5, 6); gs.absarc(0, 6, 6.5, Math.PI, 0, true);
     gs.lineTo(6.5, 0); gs.lineTo(14.1, 0); gs.lineTo(14.1, 11); gs.lineTo(0, 16); gs.lineTo(-14.1, 11); gs.lineTo(-14.1, 0);
     b.add('debWall', place(extrude(gs, 1.0, 28), 0, 0, z1 - 0.5));
+    // торец к площади (за левой оградой): аркада из 5 арок и фронтон
+    const fb = new THREE.Shape();
+    fb.moveTo(-2.82, 5.7); fb.lineTo(-1.8, 5.7); fb.absarc(0, 5.7, 1.8, Math.PI, 0, true);
+    fb.lineTo(2.82, 5.7); fb.lineTo(2.82, 9.5); fb.lineTo(-2.82, 9.5); fb.lineTo(-2.82, 5.7);
+    const fbGeo = extrude(fb, t, 10).translate(0, 0, -t / 2);
+    for (let i = 0; i < 5; i++) {
+      const x = -11.28 + i * 5.64;
+      b.add('debWall', place(fbGeo, x, 0, z0 - 0.1));
+      b.add('debWall', place(box(1.6, 5.7, t), x - 2.82, 2.85, z0 - 0.1));
+      b.add('debTrim', place(box(1.76, 0.22, t + 0.16), x - 2.82, 5.75, z0 - 0.1));
+    }
+    b.add('debWall', place(box(1.6, 5.7, t), 14.1 - 0.8, 2.85, z0 - 0.1));
+    b.add('debWall', place(extrude(triShape(28.2, 5.2), t), 0, 9.5, z0 - 0.1 - t / 2));
+    b.add('debTrim', place(box(28.6, 0.35, t + 0.4), 0, 9.6, z0 - 0.1));
     const fg = { x: 0, z: z1 - 0.5, ry: Math.PI };
     b.face('debTrim', halfRing(6.5, 7.1, 0.25, 28), fg, 0, 6, 0);
     for (const s of [-1, 1]) {
@@ -1355,6 +1372,7 @@ function createWorld() {
       b.face('debTrim', box(0.9, 11, 0.4), fg, s * 13.65, 5.5, 0.2);
     }
     g.add(b.build(MK, { noShadow: ['debTrim', 'iron', 'dark'] }));
+    g.position.x = DEB.cx;
   }
   {
     // Советская: надпись «МОСКВА» на щипце и табло «Московское время» в проёме
@@ -1370,6 +1388,7 @@ function createWorld() {
     board.position.set(0, 9.5, z1 + 0.08);
     board.rotation.y = Math.PI;
     g.add(letters, board, b.build(MK, { cast: false }));
+    g.position.x = DEB.cx;
   }
 
   /* ---------- Царская: ограды с арочными воротами, полосатая будка, служебные домики, трубы, шпиль ---------- */
@@ -1399,8 +1418,8 @@ function createWorld() {
     for (let i = 0; i < 5; i++) b.add(i % 2 ? 'stripeW' : 'stripeB', place(box(1, 0.5, 1), 39.5, 0.25 + i * 0.5, 10.3));
     b.add('stripeB', place(new THREE.ConeGeometry(0.8, 0.6, 4).rotateY(Math.PI / 4), 39.5, 2.8, 10.3));
     // одноэтажный служебный домик за левой оградой и дом с фронтоном за правой
-    b.add('fence', place(box(12, 5, 14), -34, 2.5, -3));
-    b.add('debRoof', place(hipRoof(14, 12.6, 3), -34, 5, -3, Math.PI / 2));
+    b.add('fence', place(box(9, 4, 10), -33.5, 2, -1));
+    b.add('debRoof', place(hipRoof(10.6, 9.6, 2.2), -33.5, 4, -1, Math.PI / 2));
     b.add('fence', place(box(25, 5, 15), 67.5, 2.5, -12.5));
     b.add('debRoof', place(hipRoof(25.6, 15.6, 3), 67.5, 5, -12.5));
     // трубы на кровле Тона
@@ -1443,17 +1462,17 @@ function createWorld() {
   {
     const g = featGroup('sign26');
     const b = new Batch();
-    signTruss(b, -24, -6, 18.6, 20.2);
-    signTruss(b, 5, 22, 18.6, 20.2);
+    signTruss(b, -24, -6, 18.6, 20.6);
+    signTruss(b, 5, 22, 18.6, 20.6);
     g.add(b.build(MK, { cast: false }));
-    const l = new THREE.Mesh(new THREE.PlaneGeometry(18, 1.6), M.signL);
-    l.position.set(-15, 19.4, 7.42);
-    const r = new THREE.Mesh(new THREE.PlaneGeometry(17, 1.6), M.signR);
-    r.position.set(13.5, 19.4, 7.42);
-    const hl = new THREE.Mesh(new THREE.PlaneGeometry(19.5, 3.0), M.haloL);
-    hl.position.set(-15, 19.4, 7.47);
-    const hr = new THREE.Mesh(new THREE.PlaneGeometry(18.4, 3.0), M.haloR);
-    hr.position.set(13.5, 19.4, 7.47);
+    const l = new THREE.Mesh(new THREE.PlaneGeometry(18.4, 2.0), M.signL);
+    l.position.set(-15, 19.6, 7.42);
+    const r = new THREE.Mesh(new THREE.PlaneGeometry(17.4, 2.0), M.signR);
+    r.position.set(13.5, 19.6, 7.42);
+    const hl = new THREE.Mesh(new THREE.PlaneGeometry(20, 3.6), M.haloL);
+    hl.position.set(-15, 19.6, 7.47);
+    const hr = new THREE.Mesh(new THREE.PlaneGeometry(18.9, 3.6), M.haloR);
+    hr.position.set(13.5, 19.6, 7.47);
     hl.renderOrder = hr.renderOrder = 5;
     hl.userData.glow = hr.userData.glow = { key: 'signHalo', k: 1 };
     g.add(l, r, hl, hr);
@@ -1471,23 +1490,13 @@ function createWorld() {
     }
     b.add('rose', place(new THREE.CircleGeometry(7, 40).rotateX(-Math.PI / 2), 0, 0.1, 30));
     b.add('debTrim', place(new THREE.RingGeometry(7, 7.4, 40).rotateX(-Math.PI / 2), 0, 0.11, 30));
-    for (const x of [-19, 19]) { // стеклянные навесы над выходами метро
-      b.add('whiteSteel', place(box(6.4, 0.25, 4.4), x, 3.0, 25));
-      for (const [dx, dz] of [[-3, -2], [3, -2], [-3, 2], [3, 2]]) b.add('whiteSteel', place(box(0.15, 3, 0.15), x + dx, 1.5, 25 + dz));
-    }
     b.add('iron', place(box(14, 2.6, 0.2), 30, 1.3, 13.5)); // строительный забор
     b.add('iron', place(box(0.2, 2.6, 12), 37, 1.3, 7.5));
-    b.add('blueSign', place(box(3, 2.6, 2.4), 24, 1.3, 15.5)); // бытовка
     // МЖА: в 2026 частично разобрано, за строительным забором
     b.add('mzhaWall', place(box(20, 5, 26), 92, 2.5, -7));
     b.add('iron', place(box(24, 2.6, 0.2), 92, 1.3, 8.5));
     b.add('iron', place(box(0.2, 2.6, 30), 79.5, 1.3, -7));
     g.add(b.build(MK));
-    const gl = new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.06, 4.2), M.glassRoof);
-    const gr = gl.clone();
-    gl.position.set(-19, 3.15, 25);
-    gr.position.set(19, 3.15, 25);
-    g.add(gl, gr);
   }
 
   /* ---------- Флагшток с флагом России (2026) ---------- */
@@ -1708,32 +1717,32 @@ function createWorld() {
     const g = featGroup('complex26');
     const b = new Batch();
     // D4: плоский зал x −28…+27,4, z −30…−15,6, h 12,5; 6 рядов люков по 8 слева и справа от оси
-    b.add('hallWall', place(box(55.4, 12.5, 14.4), -0.3, 6.25, -22.8));
-    b.add('hallWall', place(box(55.8, 0.6, 14.8), -0.3, 12.8, -22.8)); // светлый парапет
-    b.add('hallRoof', place(box(54.8, 0.2, 13.8), -0.3, 12.6, -22.8));
-    for (let r = 0; r < 6; r++) for (let k = 0; k < 8; k++) for (const s of [-1, 1]) {
-      b.add('skylight', place(box(1.5, 0.5, 1.5), s * (3.2 + k * 3), 12.95, -16.9 - r * 2.3));
+    b.add('hallWall', place(box(55.4, 12.5, 29.4), -0.3, 6.25, -30.3));
+    for (const [w, d, x, z] of [[55.8, 0.4, -0.3, -15.8], [55.8, 0.4, -0.3, -44.8], [0.4, 29.4, -28, -30.3], [0.4, 29.4, 27.4, -30.3]]) b.add('hallWall', place(box(w, 0.7, d), x, 12.85, z)); // светлый парапет
+    b.add('hallRoof', place(box(54.8, 0.2, 28.8), -0.3, 12.6, -30.3));
+    for (let r = 0; r < 6; r++) for (let k = 0; k < 9; k++) for (const s of [-1, 1]) {
+      b.add('skylight', place(box(1.2, 0.18, 1.2), s * (2.8 + k * 2.75), 12.79, -19.6 - r * 4.4));
     }
-    for (const s of [-1, 1]) winRows(b, { x: s > 0 ? 27.4 : -28, z: -22.8, ry: (s * Math.PI) / 2 }, [-4, 0, 4], [2, 7], 2.6, 3.2, 'glass', 'trimN');
+    for (const s of [-1, 1]) winRows(b, { x: s > 0 ? 27.4 : -28, z: -30.3, ry: (s * Math.PI) / 2 }, [-10, -5, 0, 5, 10], [2, 7], 2.6, 3.2, 'glass', 'trimN');
     // D5: тёмный высокий объём x −26…+14, z −103…−30, стены h 18, пологая двускатная кровля до 21 (конёк вдоль z)
-    const dx0 = -26, dx1 = 14, dz0 = -103, dz1 = -30, dcx = (dx0 + dx1) / 2, dcz = (dz0 + dz1) / 2, dw = dx1 - dx0, dd = dz1 - dz0;
+    const dx0 = -26, dx1 = 14, dz0 = -110, dz1 = -45, dcx = (dx0 + dx1) / 2, dcz = (dz0 + dz1) / 2, dw = dx1 - dx0, dd = dz1 - dz0;
     b.add('darkWall', place(box(dw, 18, dd), dcx, 9, dcz));
     const ra = Math.atan2(3, dw / 2), rl = Math.hypot(dw / 2, 3);
     for (const s of [-1, 1]) b.add('darkRoof', place(box(rl + 0.4, 0.25, dd + 0.6), dcx + (s * dw) / 4, 19.6, dcz, 0, 0, -s * ra));
     for (const z of [dz0, dz1 - 0.3]) b.add('darkWall', place(extrude(triShape(dw, 3), 0.3), dcx, 18, z));
-    for (const [vx, vz] of [[-14, -45], [-4, -60], [6, -48], [-16, -80], [2, -90], [-8, -95]]) {
-      b.add('lowWall', place(box(3, 2.2, 4), vx, 18 + 3 * (1 - Math.abs(vx - dcx) / (dw / 2)) + 1.1, vz));
+    for (const [vx, vz] of [[-14, -58], [-4, -72], [6, -60], [-16, -88], [2, -96], [-8, -104]]) {
+      b.add('lowWall', place(box(2, 1.4, 2.6), vx, 18 + 3 * (1 - Math.abs(vx - dcx) / (dw / 2)) + 0.6, vz));
     }
     for (const f of [{ x: dx0, z: dcz, ry: -Math.PI / 2 }, { x: dx1, z: dcz, ry: Math.PI / 2 }]) {
       for (const y of [4, 11]) b.face('glass', box(dd - 6, 2.2, 0.08), f, 0, y, 0.05);
     }
     b.face('glass', box(dw - 6, 2.2, 0.08), { x: dcx, z: dz0, ry: Math.PI }, 0, 11, 0.05);
     // D6: низкие пристройки
-    b.add('lowWall', place(box(6, 8, 60), -29, 4, -60));
-    b.add('lowRoof', place(box(6.2, 0.3, 60.2), -29, 8.1, -60));
-    b.add('lowWall', place(box(13, 9, 70), 20.5, 4.5, -65));
-    b.add('lowRoof', place(box(13.2, 0.3, 70.2), 20.5, 9.1, -65));
-    for (const [ex, ez] of [[18, -40], [23, -55], [19, -75], [24, -90]]) b.add('steel', place(box(3, 1.8, 4), ex, 10.1, ez));
+    b.add('lowWall', place(box(6, 8, 50), -29, 4, -70));
+    b.add('lowRoof', place(box(6.2, 0.3, 50.2), -29, 8.1, -70));
+    b.add('lowWall', place(box(13, 9, 60), 20.5, 4.5, -75));
+    b.add('lowRoof', place(box(13.2, 0.3, 60.2), 20.5, 9.1, -75));
+    for (const [ex, ez] of [[18, -52], [23, -66], [19, -84], [24, -98]]) b.add('steel', place(box(3, 1.8, 4), ex, 10.1, ez));
     // D10: коричневый корпус с вертикальными оконными полосами (за вестибюлем метро)
     b.add('brown', place(box(26, 25, 40), 61, 12.5, -130));
     b.add('flatRoof', place(box(25.4, 0.3, 39.4), 61, 25.1, -130));
@@ -1741,11 +1750,11 @@ function createWorld() {
       const len = f.ry === 0 ? 26 : 40;
       for (const u of span(-len / 2 + 2.5, len / 2 - 2.5, 3.5)) b.face('brownGlass', box(1.6, 18, 0.08), f, u, 13, 0.05);
     }
-    // D7: новый дебаркадер-проход — гранёная галерея x +27,5…+34,5, z −110…+4, h 15
-    b.add('facet', place(box(6.8, 14.8, 113.8), 31, 7.4, -53));
-    facetFace(b, V3(27.5, 0.6, 4.02), V3(1, 0, 0), V3(0, 1, 0), V3(0, 0, 1), 7, 14.4);
-    facetFace(b, V3(34.52, 0.6, 4.0), V3(0, 0, -1), V3(0, 1, 0), V3(1, 0, 0), 114, 14.4);
-    facetFace(b, V3(34.5, 15.02, 4), V3(0, 0, -1), V3(-1, 0, 0), V3(0, 1, 0), 114, 7, 2.5, 0.2);
+    // D7: новый дебаркадер-проход — гранёная галерея x +27,5…+34,5, z −110…−12 (за правым торцом Тона, как на ночном фото), h 15
+    b.add('facet', place(box(6.8, 14.8, 97.8), 31, 7.4, -61));
+    facetFace(b, V3(27.5, 0.6, -11.98), V3(1, 0, 0), V3(0, 1, 0), V3(0, 0, 1), 7, 14.4);
+    facetFace(b, V3(34.52, 0.6, -12.0), V3(0, 0, -1), V3(0, 1, 0), V3(1, 0, 0), 98, 14.4);
+    facetFace(b, V3(34.5, 15.02, -12), V3(0, 0, -1), V3(-1, 0, 0), V3(0, 1, 0), 98, 7, 2.5, 0.2);
     // МЖА, строительный забор — в nowSite; здесь — подсветка люков и окон
     g.add(b.build(MK, { noShadow: ['glass', 'trimN', 'skylight', 'brownGlass'] }));
     const lines = new THREE.BufferGeometry();
@@ -1754,7 +1763,7 @@ function createWorld() {
     // свод над головами правых платформ: x +2…+44, z −106…−160, h ≈15, «парящая» стеклянная кровля на фермах
     const steel = new Batch();
     const glass = new Batch();
-    const X0 = 2, X1 = 44, Z0 = -106, Z1 = -160;
+    const X0 = 2, X1 = 44, Z0 = -111, Z1 = -162;
     const W = X1 - X0, D = Z0 - Z1, CX = (X0 + X1) / 2, ZC = (Z0 + Z1) / 2;
     const NX = 14, NZ = 9;
     const roofY = (u, v) => 12.2 + 2.8 * Math.sin(Math.PI * u) + 0.6 * Math.sin(Math.PI * v);
@@ -1767,8 +1776,8 @@ function createWorld() {
     }
     roof.computeVertexNormals();
     glass.add('glassRoof', place(roof, CX, 0, ZC));
-    for (let j = 0; j <= NZ; j += 3) for (let i = 0; i < NX; i++) beam(steel, 'whiteSteel', P(i / NX, j / NZ), P((i + 1) / NX, j / NZ), 0.3, 0.45);
-    for (let i = 0; i <= NX; i += 2) for (let j = 0; j < NZ; j++) beam(steel, 'whiteSteel', P(i / NX, j / NZ), P(i / NX, (j + 1) / NZ), 0.2, 0.3);
+    for (let j = 0; j <= NZ; j += 3) for (let i = 0; i < NX; i++) beam(steel, 'vaultSteel', P(i / NX, j / NZ), P((i + 1) / NX, j / NZ), 0.3, 0.45);
+    for (let i = 0; i <= NX; i += 2) for (let j = 0; j < NZ; j++) beam(steel, 'vaultSteel', P(i / NX, j / NZ), P(i / NX, (j + 1) / NZ), 0.2, 0.3);
     for (const x of [6.8, 20.4, 34]) for (const z of [-121, -147]) {
       const u = (x - X0) / W, v = (Z0 - z) / D, top = 9.5;
       steel.add('whiteSteel', place(cyl(0.3, 0.4, top - 1.1, 12), x, 1.1 + (top - 1.1) / 2, z));
@@ -1797,7 +1806,7 @@ function createWorld() {
   {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(ledPts, 3));
-    const p = new THREE.Points(geo, new THREE.PointsMaterial({ map: ledTex, size: 0.55 * PX, color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const p = new THREE.Points(geo, new THREE.PointsMaterial({ map: ledTex, size: 0.38 * PX, color: '#ffffff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
     p.userData.glow = { key: 'led', k: 1 };
     p.renderOrder = 4;
     feats.complex26.add(p);
@@ -1850,7 +1859,7 @@ function createWorld() {
     haloPoints(name, list.map(([x, z, y]) => [x, y + haloY, z]), diam);
   }
   lampSet('gasSq', gasPost, [[-30, 26, 0.08], [-10, 32, 0.08], [12, 30, 0.08], [32, 25, 0.08], [-22, 50, 0.08], [6, 54, 0.08], [28, 50, 0.08], [-46, 40, 0.08]], 3.6, 2.6);
-  lampSet('gasLow', gasPost, [-30, -60, -90].flatMap((z) => [[-9.7, z, 0.45], [9.7, z, 0.45]]), 3.6, 2.6);
+  lampSet('gasLow', gasPost, [-30, -60, -90].flatMap((z) => [[DCX - 9.7, z, 0.45], [DCX + 9.7, z, 0.45]]), 3.6, 2.6);
   lampSet('lamp26', gasPost, [-34, -22, -10, 10, 22, 34].map((x) => [x, 15.5, 0.08]).concat([[-40, 52, 0.08], [-15, 52, 0.08], [15, 52, 0.08], [40, 52, 0.08]]), 3.6, 2.8);
   lampSet('electric', mast12, [-60, -30, 0, 30, 60].flatMap((x) => [[x, 45, 0.08], [x, 80, 0.08]]), 11.6, 4.5);
   {
@@ -1871,7 +1880,7 @@ function createWorld() {
     }
     for (const u of DOOR_AX) b.face('blueSign', box(1.2, 0.4, 0.08), FACES[0].f, u, 3.6, 0.42);
     g.add(b.build(MK, { cast: false }));
-    haloPoints('wallLamps', pts, 1.6);
+    haloPoints('wallLamps', pts, 0.9);
   }
 
   /* ---------- Извозчики (царская): ряд вдоль фасада и отдельные экипажи ---------- */
@@ -2047,16 +2056,16 @@ function createWorld() {
     if (nf) make(peopleGeo(true), nf, femalePal);
   }
   peopleSet('people1', 1, ['#2a2622', '#3a3028', '#4a3b2c', '#26303a', '#5a4a38'], ['#5c2a2e', '#2f3a52', '#6b5a3e', '#3b2f2a', '#7a6650'],
-    [{ x: -9.7, z0: -20, z1: -100, y: 0.45 }, { x: 9.7, z0: -20, z1: -100, y: 0.45 }]);
+    [{ x: DCX - 9.7, z0: -20, z1: -100, y: 0.45 }, { x: DCX + 9.7, z0: -20, z1: -100, y: 0.45 }]);
   peopleSet('people2', 2, ['#3c4250', '#4a4d52', '#5a5048', '#2f3540', '#6a6458', '#56423a'], null,
-    [-32.2, -17.6, 17.6, 32.2].map((x) => ({ x, z0: -30, z1: -140, y: 1.1 })));
+    [-9.4, 5.2, 19.8, DCX + 9.7].map((x) => ({ x, z0: x === DCX + 9.7 ? -125 : -30, z1: -140, y: 1.1 })));
   peopleSet('people3', 3, ['#2b2f38', '#c23b3b', '#3f6aa8', '#e2d9c6', '#4b6b4a', '#d9a441', '#6a4a7a', '#1f1f22'], null,
     PLAT26.map(({ x, z0 }) => ({ x, z0: z0 - 2, z1: -240, y: 1.1 })));
 
   for (const f of FEATS) makeFadeable(f);
 
   /* ---------- Поезда: пути и точки остановки по эпохам ---------- */
-  const TRACK_OF = { steam51: 4.2, electro: 22.6, sapsan: 11.4 };
+  const TRACK_OF = { steam51: DCX + 4.2, electro: 10.2, sapsan: 11.4 };
   const STOP_OF = { steam51: Z_BUF51 - 1.2, electro: -28 - 1.2, sapsan: -130 - 1.2 };
 
   /* ---------- Поезда ---------- */
@@ -2484,7 +2493,7 @@ function createWorld() {
     M.city.emissiveIntensity = l.cityGlow * 0.9;
     // ночь 2026: стены мягче, колонны и пилястры ярче (свет снизу), окна 2-го этажа ровно-тёплые, циферблаты холодно-белые
     M.wallA.emissiveIntensity = l.wallGlow;
-    M.trim.emissiveIntensity = l.wallGlow * 1.15;
+    M.trim.emissiveIntensity = l.wallGlow * 2.2;
     M.colLit.emissiveIntensity = l.colLit;
     M.balcony.emissiveIntensity = l.wallGlow * 1.2;
     M.metroWall.emissiveIntensity = l.wallGlow * 0.45;
@@ -2501,6 +2510,7 @@ function createWorld() {
     M.haloL.opacity = M.haloR.opacity = l.signHalo;
     M.skylight.emissiveIntensity = l.led * 0.55;
     M.facet.emissiveIntensity = l.led * 0.07;
+    M.vaultSteel.emissiveIntensity = l.led * 0.9;
     M.blueSign.emissiveIntensity = l.led * 2.2;
     M.board.emissiveIntensity = 0;
     for (const m of [M.flagW, M.flagB, M.flagR]) m.emissiveIntensity = l.facade * 0.35;
@@ -2586,7 +2596,7 @@ function createWorld() {
   function initialCamera(aspect) {
     const portrait = aspect < 0.8;
     if (portrait) controls.target.set(4, 8, -16);
-    const r = portrait ? 168 : aspect < 1.2 ? 150 : 118;
+    const r = portrait ? 175 : aspect < 1.2 ? 158 : 134;
     const sph = new THREE.Spherical(r, portrait ? 1.3 : 1.38, portrait ? 0.95 : 0.74);
     camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
     controls.update();
@@ -2600,7 +2610,7 @@ function createWorld() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(W, H, false);
     camera.aspect = W / H;
-    camera.fov = W / H < 0.8 ? 46 : 36;
+    if (!viewLocked) camera.fov = W / H < 0.8 ? 46 : 36;
     if (!viewLocked) {
       if (W < 721) camera.setViewOffset(W, H, 0, Math.round(H * 0.12), W, H);
       else camera.setViewOffset(W, H, -Math.round(W * 0.1), Math.round(H * 0.06), W, H);
@@ -2660,14 +2670,14 @@ function createWorld() {
 
   setEra(0, true);
   requestAnimationFrame(frame);
-  window.__dbg = { feats, scene, spots, renderer };
 
   return {
     setEra,
     setReduce(r) { controls.autoRotate = !r && !viewLocked; if (r) setEra(targetIdx, true); },
     /** Для тестов/скриншотов: зафиксировать ракурс. */
-    view(px, py, pz, tx2, ty, tz) {
+    view(px, py, pz, tx2, ty, tz, fov) {
       viewLocked = true;
+      if (fov) { camera.fov = fov; camera.updateProjectionMatrix(); }
       controls.autoRotate = false;
       controls.minDistance = 2;
       controls.maxPolarAngle = 1.56;
