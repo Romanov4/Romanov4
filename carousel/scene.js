@@ -42,8 +42,8 @@ const ERAS = [
   {
     era: 'Советская', short: '1960-е', year: '1960-е', period: '1960-е — начало 1970-х',
     title: 'Советская эпоха',
-    text: 'В 1923 году вокзал переименовали в Октябрьский, затем — в Ленинградский. В 1960-е фасад окрашен в белый цвет, на кровле стоят буквы «ЛЕНИНГРАДСКИЙ», шпиль башни венчает звезда. За зданием ещё стоит старый дебаркадер: его торец к путям — охристый щипец с надписью «МОСКВА». Справа — наземный вестибюль метро «Комсомольская» (1952, архитектор А. В. Щусев), слева за проездом вдоль путей — длинный белый трёхэтажный корпус.',
-    desc: 'ясный осенний день, асфальт, «Волги», трамваи и автобус на площади, белый фасад здания Тона, буквы «ЛЕНИНГРАДСКИЙ» на кровле, звезда на шпиле башни, за зданием — старый дебаркадер с охристым щипцом «МОСКВА» к путям, низкие навесы над платформами и контактная сеть, электровоз и тёмно-красные вагоны, справа — купольный вестибюль метро с шестиколонным портиком и шпилем со звездой, дальше — небольшое двухэтажное здание касс и Ярославский вокзал, слева за проездом с пилонами — длинный белый трёхэтажный корпус, на углу — таможня',
+    text: 'В 1923 году вокзал переименовали в Октябрьский, затем — в Ленинградский. В 1960-е фасад окрашен в белый цвет, на кровле стоят буквы «ЛЕНИНГРАДСКИЙ ВОКЗАЛ», шпиль башни венчает звезда. За зданием ещё стоит старый дебаркадер: его торец к путям — охристый щипец с надписью «МОСКВА». Справа — наземный вестибюль метро «Комсомольская» (1952, архитектор А. В. Щусев), слева за проездом вдоль путей — длинный белый трёхэтажный корпус.',
+    desc: 'ясный осенний день, асфальт, «Волги», трамваи и автобус на площади, белый фасад здания Тона, буквы «ЛЕНИНГРАДСКИЙ ВОКЗАЛ» на кровле, звезда на шпиле башни, за зданием — старый дебаркадер с охристым щипцом «МОСКВА» к путям, низкие навесы над платформами и контактная сеть, электровоз и тёмно-красные вагоны, справа — купольный вестибюль метро с шестиколонным портиком и шпилем со звездой, дальше — небольшое двухэтажное здание касс и Ярославский вокзал, слева за проездом с пилонами — длинный белый трёхэтажный корпус, на углу — таможня',
     train: 'electro',
     filter: 'sepia(0.05) saturate(0.86) contrast(1.02)',
     vignette: 0.16,
@@ -786,12 +786,14 @@ function createWorld() {
   // вывески: буквы белые на прозрачном, цвет днём задаёт material.color, ночью — emissive
   const wordL = wordTex('ЛЕНИНГРАДСКИЙ', 2048, 182);
   const wordLHalo = wordTex('ЛЕНИНГРАДСКИЙ', 1024, 140, 9);
+  const wordV = wordTex('ВОКЗАЛ', 1024, 182);
   const signR = rightSignTex(2048, 192);
   const signRHalo = rightSignTex(1024, 150, 9);
   const signMat = (map) => M_('#1f3e8c', 0.55, 0, { map, alphaTest: 0.4, emissive: C('#f0f6ff'), emissiveMap: map, emissiveIntensity: 0 }, 0.5);
   const haloMat = (map) => new THREE.MeshBasicMaterial({ map, color: '#3d6bff', transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
   Object.assign(M, {
     signL: signMat(wordL), signR: signMat(signR), signSov: M_('#2f3f6a', 0.6, 0, { map: wordL, alphaTest: 0.4 }, 0.5),
+    signSovV: M_('#2f3f6a', 0.6, 0, { map: wordV, alphaTest: 0.4 }, 0.5),
     haloL: haloMat(wordLHalo), haloR: haloMat(signRHalo),
     moskva: M_('#b0332a', 0.6, 0, { map: moskvaTex(), alphaTest: 0.4 }, 0.4),
     board: new THREE.MeshStandardMaterial({ map: boardTex(), roughness: 0.6, emissive: C('#ffffff'), emissiveMap: null, emissiveIntensity: 0 }),
@@ -1167,15 +1169,15 @@ function createWorld() {
     const fF = { x: cx, z: z1, ry: 0 }, fR = { x: x1, z: zc, ry: Math.PI / 2 };
     const us = span(-w / 2 + 2.4, w / 2 - 2.4, 3.6);
     for (const u of us) {
-      b.face('customsTrim', new THREE.ShapeGeometry(archShape(1.7, 3.0), 8), fF, u, 1.3, 0.03);
-      b.face('glass', new THREE.ShapeGeometry(archShape(1.4, 2.8), 8), fF, u, 1.4, 0.05);
+      b.face('customsTrim', new THREE.ShapeGeometry(archShape(1.7, 3.0), 8), fF, u, 1.3, 0.09);
+      b.face('glass', new THREE.ShapeGeometry(archShape(1.4, 2.8), 8), fF, u, 1.4, 0.11);
     }
     winRows(b, fF, us, [6.6, 11.6], 1.3, 2.3, 'glass', 'customsTrim');
     for (const u of span(-w / 2 + 0.6, w / 2 - 0.6, 7.2)) b.face('customsTrim', box(0.6, 10.1, 0.25), fF, u, 10.6, 0.12);
     const rs = span(-d / 2 + 2.4, d / 2 - 2.4, 3.6);
     for (const u of rs) {
-      b.face('customsTrim', new THREE.ShapeGeometry(archShape(1.7, 3.0), 8), fR, u, 1.3, 0.03);
-      b.face('glass', new THREE.ShapeGeometry(archShape(1.4, 2.8), 8), fR, u, 1.4, 0.05);
+      b.face('customsTrim', new THREE.ShapeGeometry(archShape(1.7, 3.0), 8), fR, u, 1.3, 0.09);
+      b.face('glass', new THREE.ShapeGeometry(archShape(1.4, 2.8), 8), fR, u, 1.4, 0.11);
     }
     winRows(b, fR, rs, [6.6, 11.6], 1.3, 2.3, 'glass', 'customsTrim');
     const g = b.build(MK, { noShadow: ['glass', 'customsTrim'] });
@@ -1299,7 +1301,7 @@ function createWorld() {
     const g = featGroup('cat26');
     const b = new Batch();
     for (let z = -165; z > -420; z -= 50) {
-      for (const x of [-41.2, -20.4, 20.4, 41.6]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
+      for (const x of [-41.2, -27.2, 27.2, 41.6]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
       b.add('steel', place(box(82.8, 0.35, 0.35), 0.2, 10.6, z));
       for (const t of TRACKS26) b.add('steel', place(box(0.05, 4.1, 0.05), t.x, 8.5, z));
     }
@@ -1353,20 +1355,7 @@ function createWorld() {
     gs.moveTo(-14.1, 0); gs.lineTo(-6.5, 0); gs.lineTo(-6.5, 6); gs.absarc(0, 6, 6.5, Math.PI, 0, true);
     gs.lineTo(6.5, 0); gs.lineTo(14.1, 0); gs.lineTo(14.1, 11); gs.lineTo(0, 16); gs.lineTo(-14.1, 11); gs.lineTo(-14.1, 0);
     b.add('debWall', place(extrude(gs, 1.0, 28), 0, 0, z1 - 0.5));
-    // торец к площади (за левой оградой): аркада из 5 арок и фронтон
-    const fb = new THREE.Shape();
-    fb.moveTo(-2.82, 5.7); fb.lineTo(-1.8, 5.7); fb.absarc(0, 5.7, 1.8, Math.PI, 0, true);
-    fb.lineTo(2.82, 5.7); fb.lineTo(2.82, 9.5); fb.lineTo(-2.82, 9.5); fb.lineTo(-2.82, 5.7);
-    const fbGeo = extrude(fb, t, 10).translate(0, 0, -t / 2);
-    for (let i = 0; i < 5; i++) {
-      const x = -11.28 + i * 5.64;
-      b.add('debWall', place(fbGeo, x, 0, z0 - 0.1));
-      b.add('debWall', place(box(1.6, 5.7, t), x - 2.82, 2.85, z0 - 0.1));
-      b.add('debTrim', place(box(1.76, 0.22, t + 0.16), x - 2.82, 5.75, z0 - 0.1));
-    }
-    b.add('debWall', place(box(1.6, 5.7, t), 14.1 - 0.8, 2.85, z0 - 0.1));
-    b.add('debWall', place(extrude(triShape(28.2, 5.2), t), 0, 9.5, z0 - 0.1 - t / 2));
-    b.add('debTrim', place(box(28.6, 0.35, t + 0.4), 0, 9.6, z0 - 0.1));
+    // передний торец примыкает к тыльному фасаду Тона — отдельной аркады нет
     const fg = { x: 0, z: z1 - 0.5, ry: Math.PI };
     b.face('debTrim', halfRing(6.5, 7.1, 0.25, 28), fg, 0, 6, 0);
     for (const s of [-1, 1]) {
@@ -1438,7 +1427,7 @@ function createWorld() {
     g.add(b.build(MK));
   }
 
-  /* ---------- Советская: шпиль со звездой, буквы «ЛЕНИНГРАДСКИЙ» на ферме за аттиком ---------- */
+  /* ---------- Советская: шпиль со звездой, буквы «ЛЕНИНГРАДСКИЙ ВОКЗАЛ» на фермах за аттиком ---------- */
   function signTruss(b, x0, x1, y0, y1) {
     const z = 7.35;
     b.add('dark', place(box(x1 - x0, 0.08, 0.08), (x0 + x1) / 2, y1 + 0.05, z));
@@ -1459,7 +1448,10 @@ function createWorld() {
     signTruss(b, -24, -6, 18.6, 20.0);
     const m = new THREE.Mesh(new THREE.PlaneGeometry(18, 1.6), M.signSov);
     m.position.set(-15, 19.3, 7.42);
-    g.add(b.build(MK, { cast: false }), m);
+    signTruss(b, 6, 15, 18.6, 20.0);
+    const mv = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.6), M.signSovV);
+    mv.position.set(10.5, 19.3, 7.42);
+    g.add(b.build(MK, { cast: false }), m, mv);
   }
 
   /* ---------- 2026: вывеска «ЛЕНИНГРАДСКИЙ ВОКЗАЛ» + РЖД + «Московский транспорт» (светится ночью) ---------- */
@@ -1534,8 +1526,8 @@ function createWorld() {
     const gp = new THREE.Shape();
     gp.moveTo(-2, 0); gp.lineTo(-1.1, 0); gp.lineTo(-1.1, 2.6); gp.absarc(0, 2.6, 1.1, Math.PI, 0, true);
     gp.lineTo(1.1, 0); gp.lineTo(2, 0); gp.lineTo(2, 5); gp.lineTo(-2, 5); gp.lineTo(-2, 0);
-    b.add('white', place(extrude(gp, 3, 10), -29, 0, 6.5));
-    b.add('white', place(box(4.4, 0.3, 3.4), -29, 5.15, 8));
+    b.add('white', place(extrude(gp, 3, 10), -30, 0, 6.5));
+    b.add('white', place(box(4.4, 0.3, 3.4), -30, 5.15, 8));
     // второй ряд служебных корпусов (3–4 этажа) за длинным корпусом
     for (const [cx, cz, w, d, h, key] of [[-84, -32, 34, 40, 15, 'block'], [-88, -92, 38, 46, 17, 'brick'], [-84, -150, 32, 44, 14, 'block']]) {
       b.add(key, place(box(w, h, d), cx, h / 2, cz));
@@ -1554,7 +1546,7 @@ function createWorld() {
     const w = x1 - x0, d = z1 - z0, cx = (x0 + x1) / 2, zc = (z0 + z1) / 2;
     b.add('white', place(box(w, H, d), cx, H / 2, zc));
     b.add('white', place(box(w + 0.4, 0.5, d + 0.4), cx, H + 0.1, zc));
-    b.add('flatRoof', place(box(w - 0.4, 0.2, d - 0.4), cx, H + 0.25, zc));
+    b.add('flatRoof', place(box(w - 0.4, 0.2, d - 0.4), cx, H + 0.32, zc));
     b.add('plinth', place(box(w + 0.2, 0.7, d + 0.2), cx, 0.35, zc));
     const fR = { x: x1, z: zc, ry: Math.PI / 2 }, fF = { x: cx, z: z1, ry: 0 };
     winRows(b, fR, span(-d / 2 + 2, d / 2 - 2, 3.2), [1.3, 5.2, 9.0], 1.7, 2.1, 'glass', 'trimN');
@@ -1905,7 +1897,7 @@ function createWorld() {
     p('horse', place(box(0.28, 0.3, 0.65), 0, 2.25, 4.05, 0, 0.5));
     const b = new Batch();
     const spots = [[-36, 40, 0.4], [20, 46, 1.2], [36, 20, 2.7], [-30, 30, 1.7], [44, 34, -1.4]];
-    for (let i = 0; i < 11; i++) spots.push([-20 + i * 3.1, 24, Math.PI / 2]);
+    for (let i = 0; i < 6; i++) spots.push([-22 + i * 5.8, 24, Math.PI / 2]);
     for (const [x, z, ry] of spots) for (const [key, geo] of parts) b.add(key, place(geo, x, 0.08, z, ry));
     parts.forEach(([, geo]) => geo.dispose());
     g.add(b.build(MK));

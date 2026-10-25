@@ -338,6 +338,11 @@ button:focus-visible,
 }
 .fallback[hidden] { display: none; }
 .fallback-art { width: min(760px, 92%); height: auto; }
+@media (min-width: 721px) {
+  .no-webgl .fallback { justify-content: flex-start; }
+  .fallback-art { width: min(760px, 92%, max(320px, calc((100vh - 620px) * 2.8))); }
+  .fallback-note { order: -1; margin: 0 0 10px; }
+}
 .fb-ground { fill: #8e826c; }
 .fb-wall { fill: var(--fb-wall); transition: fill var(--fade); }
 .fb-wall2 { fill: var(--fb-wall2); transition: fill var(--fade); }
