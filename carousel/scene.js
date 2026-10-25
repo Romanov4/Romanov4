@@ -1221,20 +1221,21 @@ function createWorld() {
 
   /* ---------- Царская и советская: пути под старым дебаркадером (упоры у здания) ---------- */
   const Z_BUF51 = -19.3;
-  // старый дебаркадер стоит за левой половиной здания (ось x −26,5): так его аркада видна слева от здания на фото 1860-х
-  const DCX = -26.5;
+  // старый дебаркадер стоит за зданием строго по оси (x = 0)
+  const DCX = 0;
   trackSet([{ x: DCX - 4.2, head: Z_BUF51 }, { x: DCX + 4.2, head: Z_BUF51 }], featGroup('tracks51'));
   platformSet(featGroup('platLow'), [{ x: DCX - 9.7, z0: -18.6, z1: -121, w: 6.2 }, { x: DCX + 9.7, z0: -18.6, z1: -121, w: 6.2 }],
     [{ x0: DCX - 12.9, x1: DCX + 12.9, z0: -16.1, z1: -18.6 }], 0.45);
 
   /* ---------- Советская 1960-е: пути по сторонам дебаркадера, низкие навесы ---------- */
+  // пути и платформы по обе стороны дебаркадера (он стоит по оси x −13,5…+13,5); правее x 28 — за вестибюлем метро
   const SOV_PLAT = [
     { x: DCX - 9.7, z0: -123.2, z1: -260, w: 6.2 }, { x: DCX + 9.7, z0: -123.2, z1: -260, w: 6.2 },
-    { x: -9.4, z0: -16, z1: -260 }, { x: 5.2, z0: -27.5, z1: -260 }, { x: 19.8, z0: -27.5, z1: -260 }, { x: 34.4, z0: -46, z1: -260 },
+    { x: -21.5, z0: -19, z1: -260 }, { x: 21.5, z0: -19, z1: -260 }, { x: 35.4, z0: -46, z1: -260 },
   ];
-  const SOV_TRACKS = [-4.4, 0.2, 10.2, 14.8, 24.8, 29.4, 39.4, 44].map((x) => ({ x, head: x < 33 ? -28 : -46.5 }));
+  const SOV_TRACKS = [-26.1, -16.9, 16.9, 26.1, 30.8, 40].map((x) => ({ x, head: x > 28 ? -46.5 : -19.5 }));
   trackSet(SOV_TRACKS, featGroup('tracksSov'));
-  platformSet(featGroup('platSov'), SOV_PLAT, [{ x0: -12.4, x1: 35, z0: -16, z1: -27.5 }]);
+  platformSet(featGroup('platSov'), SOV_PLAT, [{ x0: -27.5, x1: -14.6, z0: -16, z1: -19 }, { x0: 14.6, x1: 27.5, z0: -16, z1: -19 }]);
   {
     const g = featGroup('canopySov');
     const b = new Batch();
@@ -1251,10 +1252,13 @@ function createWorld() {
     const b = new Batch();
     const WIRED = [...SOV_TRACKS, { x: DCX - 4.2, head: -124 }, { x: DCX + 4.2, head: -124 }];
     for (let z = -55; z > -420; z -= 50) {
+      // у дебаркадера — два отдельных портала по сторонам, дальше — общий над всеми путями
       const nearDeb = z > -125;
-      const [a, c] = nearDeb ? [-11.9, 49] : [-40.5, 49];
-      for (const x of nearDeb ? [a, 17.3, c] : [a, DCX, 17.3, c]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
-      b.add('steel', place(box(c - a, 0.35, 0.35), (a + c) / 2, 10.6, z));
+      const portals = nearDeb ? [[-29.5, -15], [15, 43.6]] : [[-29.5, 43.6]];
+      for (const [a, c] of portals) {
+        for (const x of nearDeb ? [a, c] : [a, DCX, 14.9, c]) b.add('steel', place(box(0.5, 11, 0.5), x, 5.5, z));
+        b.add('steel', place(box(c - a, 0.35, 0.35), (a + c) / 2, 10.6, z));
+      }
       for (const t of WIRED) if (z < t.head) b.add('steel', place(box(0.05, 4.1, 0.05), t.x, 8.5, z));
     }
     for (const t of WIRED) {
@@ -1308,7 +1312,7 @@ function createWorld() {
   }
 
   /* ---------- Старый дебаркадер ≈27 × 107 м по оси за зданием: стены-аркады, двускатная металлическая кровля ---------- */
-  const DEB = { cx: -26.5, hx: 13.5, z0: TON.zb, z1: -122.6, t: 1.2 };
+  const DEB = { cx: DCX, hx: 13.5, z0: TON.zb, z1: -122.6, t: 1.2 };
   {
     const g = featGroup('debark');
     const b = new Batch();
@@ -2058,15 +2062,15 @@ function createWorld() {
   peopleSet('people1', 1, ['#2a2622', '#3a3028', '#4a3b2c', '#26303a', '#5a4a38'], ['#5c2a2e', '#2f3a52', '#6b5a3e', '#3b2f2a', '#7a6650'],
     [{ x: DCX - 9.7, z0: -20, z1: -100, y: 0.45 }, { x: DCX + 9.7, z0: -20, z1: -100, y: 0.45 }]);
   peopleSet('people2', 2, ['#3c4250', '#4a4d52', '#5a5048', '#2f3540', '#6a6458', '#56423a'], null,
-    [-9.4, 5.2, 19.8, DCX + 9.7].map((x) => ({ x, z0: x === DCX + 9.7 ? -125 : -30, z1: -140, y: 1.1 })));
+    [-21.5, 21.5, 35.4, DCX + 9.7].map((x) => ({ x, z0: x === DCX + 9.7 ? -125 : x > 30 ? -48 : -21, z1: -140, y: 1.1 })));
   peopleSet('people3', 3, ['#2b2f38', '#c23b3b', '#3f6aa8', '#e2d9c6', '#4b6b4a', '#d9a441', '#6a4a7a', '#1f1f22'], null,
     PLAT26.map(({ x, z0 }) => ({ x, z0: z0 - 2, z1: -240, y: 1.1 })));
 
   for (const f of FEATS) makeFadeable(f);
 
   /* ---------- Поезда: пути и точки остановки по эпохам ---------- */
-  const TRACK_OF = { steam51: DCX + 4.2, electro: 10.2, sapsan: 11.4 };
-  const STOP_OF = { steam51: Z_BUF51 - 1.2, electro: -28 - 1.2, sapsan: -130 - 1.2 };
+  const TRACK_OF = { steam51: DCX + 4.2, electro: 16.9, sapsan: 11.4 };
+  const STOP_OF = { steam51: Z_BUF51 - 1.2, electro: -19.5 - 1.2, sapsan: -130 - 1.2 };
 
   /* ---------- Поезда ---------- */
   const FAR_Z = -720;
