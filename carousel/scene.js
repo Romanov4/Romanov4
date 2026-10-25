@@ -2591,9 +2591,10 @@ function createWorld() {
 
   function initialCamera(aspect) {
     const portrait = aspect < 0.8;
-    if (portrait) controls.target.set(4, 8, -16);
+    // ракурс как на фото 1860-х и 1970-х: спереди-слева, дебаркадер выглядывает слева от здания
+    if (portrait) controls.target.set(-4, 8, -16);
     const r = portrait ? 175 : aspect < 1.2 ? 158 : 134;
-    const sph = new THREE.Spherical(r, portrait ? 1.3 : 1.38, portrait ? 0.95 : 0.74);
+    const sph = new THREE.Spherical(r, portrait ? 1.3 : 1.38, portrait ? -0.6 : -0.5);
     camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(sph));
     controls.update();
   }
